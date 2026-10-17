@@ -183,7 +183,10 @@ export function GitHubMark({ className = "size-3.5" }: { className?: string }) {
 export function Logo() {
   return (
     <Link href="/" className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight">
-      <span className="grid size-6 place-items-center rounded-md bg-human text-[11px] font-bold text-black">?</span>
+      <span className="grid size-8 place-items-center rounded-md bg-human">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/human_vs_ai.svg" alt="" className="size-7" />
+      </span>
       <span>
         areyoubetterthan<span className="text-ai">.ai</span>
       </span>
