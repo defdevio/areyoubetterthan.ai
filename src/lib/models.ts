@@ -1,0 +1,135 @@
+import "server-only";
+import modelsJson from "../../data/models.json";
+import type { ModelEntry, ModelsFile } from "@/lib/data-types";
+import { FIXTURES, taskIds } from "@/lib/tasks";
+import { rate, type Rate } from "@/lib/stats";
+
+export type ComparisonMode = "default" | "all";
+
+export interface ModelRow {
+  id: string;
+  name: string;
+  model: string;
+  org: string | null;
+  agent: string;
+  bashOnly: boolean;
+  date: string;
+  verifiedPct: number | null;
+}
+
+const file = modelsJson as unknown as ModelsFile;
+
+/** instance id -> set of entry ids that resolved it */
+let solvedBy: Map<string, Set<string>> | null = null;
+
+function fixtureSolved(entry: ModelEntry, instanceId: string) {
+  // Fixture tasks are synthetic; give each entry a deterministic pseudo-result.
+  let h = 0;
+  for (const c of entry.id + instanceId) h = (h * 31 + c.charCodeAt(0)) | 0;
+  return Math.abs(h) % 100 < 70;
+}
+
+function index() {
+  if (solvedBy) return solvedBy;
+  solvedBy = new Map();
+  for (const id of taskIds) solvedBy.set(id, new Set());
+  for (const e of file.entries) {
+    if (FIXTURES) {
+      for (const id of taskIds) if (fixtureSolved(e, id)) solvedBy.get(id)!.add(e.id);
+      continue;
+    }
+    for (const idx of e.resolved) {
+      const iid = file.pool[idx];
+      solvedBy.get(iid)?.add(e.id);
+    }
+  }
+  return solvedBy;
+}
+
+function toRow(e: ModelEntry): ModelRow {
+  return {
+    id: e.id,
+    name: e.name,
+    model: e.model,
+    org: e.model_org,
+    agent: e.agent,
+    bashOnly: e.bash_only,
+    date: e.date,
+    verifiedPct: e.verified_resolved_pct,
+  };
+}
+
+/** "Claude Opus 4.5" and "Claude 4.5 Opus" are the same model: compare sorted tokens. */
+export function modelKey(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9.]+/g, " ")
+    .trim()
+    .split(" ")
+    .sort()
+    .join(" ");
+}
+
+let defaultEntries: ModelEntry[] | null = null;
+
+/**
+ * Default comparison set: one row per model, its most recent result, preferring the
+ * bash-only mini-SWE-agent scaffold (closest to apples-to-apples across models).
+ * Multi-model agent systems have no single model, so they only appear in "all".
+ */
+export function comparisonEntries(mode: ComparisonMode): ModelEntry[] {
+  if (mode === "all") return file.entries;
+  if (defaultEntries) return defaultEntries;
+  const best = new Map<string, ModelEntry>();
+  for (const e of file.entries) {
+    if (e.multi_model) continue;
+    const key = modelKey(e.model);
+    const cur = best.get(key);
+    if (
+      !cur ||
+      (e.bash_only && !cur.bash_only) ||
+      (e.bash_only === cur.bash_only && (e.date > cur.date || (e.date === cur.date && e.id > cur.id)))
+    ) {
+      best.set(key, e);
+    }
+  }
+  defaultEntries = [...best.values()];
+  return defaultEntries;
+}
+
+export interface ModelSubsetResult {
+  row: ModelRow;
+  rate: Rate;
+}
+
+/** Each model's resolve rate on exactly the given subset of tasks. */
+export function modelRatesOn(instanceIds: string[], mode: ComparisonMode): ModelSubsetResult[] {
+  const idx = index();
+  return comparisonEntries(mode)
+    .map((e) => {
+      const k = instanceIds.filter((iid) => idx.get(iid)?.has(e.id)).length;
+      return { row: toRow(e), rate: rate(k, instanceIds.length) };
+    })
+    .sort(
+      (a, b) =>
+        (b.rate.p ?? 0) - (a.rate.p ?? 0) ||
+        (b.row.verifiedPct ?? 0) - (a.row.verifiedPct ?? 0) ||
+        a.row.name.localeCompare(b.row.name),
+    );
+}
+
+/** For one task: which comparison models solved it. */
+export function solversOf(instanceId: string, mode: ComparisonMode) {
+  const set = index().get(instanceId) ?? new Set<string>();
+  const entries = comparisonEntries(mode);
+  const solved = entries.filter((e) => set.has(e.id));
+  return { solved: solved.length, total: entries.length, names: solved.map((e) => e.model) };
+}
+
+export function modelsSource() {
+  return { ...file.source, entries: file.entries.length, default_entries: comparisonEntries("default").length };
+}
+
+export function bestModelOnTaskSet(mode: ComparisonMode = "default") {
+  return modelRatesOn([...taskIds], mode)[0] ?? null;
+}

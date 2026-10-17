@@ -1,0 +1,19 @@
+import { eq } from "drizzle-orm";
+import { getCurrentUser, handle } from "@/lib/auth/session";
+import { config } from "@/lib/config";
+import { getDb } from "@/lib/db";
+import { shares } from "@/lib/db/schema";
+
+export async function GET() {
+  return handle(async () => {
+    const user = await getCurrentUser();
+    if (!user) return { user: null, dev_login: config.devLogin };
+    const db = await getDb();
+    const [share] = await db.select().from(shares).where(eq(shares.userId, user.id));
+    return {
+      user: { id: user.id, login: user.login, name: user.name, avatar_url: user.avatarUrl },
+      share: share ? { id: share.id, display_name: share.displayName, public: share.public } : null,
+      dev_login: config.devLogin,
+    };
+  });
+}

@@ -1,0 +1,3480 @@
+{
+  "harness_version": "5.0.2",
+  "updated_at": "2026-10-17T18:34:51.644Z",
+  "records": {
+    "astropy__astropy-14309": {
+      "instance_id": "astropy__astropy-14309",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 85
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 48
+      },
+      "image_size_bytes": 2888942219,
+      "disk_free_bytes_after": 120223793152,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:14.926100+00:00"
+    },
+    "astropy__astropy-14995": {
+      "instance_id": "astropy__astropy-14995",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 90
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 57
+      },
+      "image_size_bytes": 2894208388,
+      "disk_free_bytes_after": 120216330240,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:43.056391+00:00"
+    },
+    "astropy__astropy-7166": {
+      "instance_id": "astropy__astropy-7166",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 56
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2864348794,
+      "disk_free_bytes_after": 120254328832,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:21.133542+00:00"
+    },
+    "astropy__astropy-7336": {
+      "instance_id": "astropy__astropy-7336",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2865028632,
+      "disk_free_bytes_after": 120253411328,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:31.001393+00:00"
+    },
+    "django__django-10097": {
+      "instance_id": "django__django-10097",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 352
+      },
+      "noop": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 314
+      },
+      "image_size_bytes": 3002191229,
+      "disk_free_bytes_after": 120054857728,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:18:53.934128+00:00"
+    },
+    "django__django-10880": {
+      "instance_id": "django__django-10880",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2871436972,
+      "disk_free_bytes_after": 120225595392,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:09.061599+00:00"
+    },
+    "django__django-10914": {
+      "instance_id": "django__django-10914",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2873102701,
+      "disk_free_bytes_after": 120207613952,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:29.403956+00:00"
+    },
+    "django__django-10999": {
+      "instance_id": "django__django-10999",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2871444726,
+      "disk_free_bytes_after": 120225730560,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:11.814313+00:00"
+    },
+    "django__django-11066": {
+      "instance_id": "django__django-11066",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2873042597,
+      "disk_free_bytes_after": 120224251904,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:16.313103+00:00"
+    },
+    "django__django-11099": {
+      "instance_id": "django__django-11099",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2873382095,
+      "disk_free_bytes_after": 120207347712,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:10:19.916409+00:00"
+    },
+    "django__django-11119": {
+      "instance_id": "django__django-11119",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2871634883,
+      "disk_free_bytes_after": 120225472512,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:08:52.102525+00:00"
+    },
+    "django__django-11133": {
+      "instance_id": "django__django-11133",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2873394666,
+      "disk_free_bytes_after": 120207138816,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:13.313852+00:00"
+    },
+    "django__django-11163": {
+      "instance_id": "django__django-11163",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2872655803,
+      "disk_free_bytes_after": 120224460800,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:08:24.249367+00:00"
+    },
+    "django__django-11179": {
+      "instance_id": "django__django-11179",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2874307104,
+      "disk_free_bytes_after": 120206299136,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:33.625453+00:00"
+    },
+    "django__django-11239": {
+      "instance_id": "django__django-11239",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2872542535,
+      "disk_free_bytes_after": 120224546816,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:11:21.823870+00:00"
+    },
+    "django__django-11299": {
+      "instance_id": "django__django-11299",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2872742627,
+      "disk_free_bytes_after": 120224366592,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:26.592261+00:00"
+    },
+    "django__django-11433": {
+      "instance_id": "django__django-11433",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2872840194,
+      "disk_free_bytes_after": 120224219136,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:30.649647+00:00"
+    },
+    "django__django-11451": {
+      "instance_id": "django__django-11451",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2872984216,
+      "disk_free_bytes_after": 120224075776,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:17.158013+00:00"
+    },
+    "django__django-11490": {
+      "instance_id": "django__django-11490",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2873147157,
+      "disk_free_bytes_after": 120224030720,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:08:22.843459+00:00"
+    },
+    "django__django-11555": {
+      "instance_id": "django__django-11555",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2873538942,
+      "disk_free_bytes_after": 120223506432,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:09:03.271901+00:00"
+    },
+    "django__django-11603": {
+      "instance_id": "django__django-11603",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2873605686,
+      "disk_free_bytes_after": 120223227904,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:12:26.063548+00:00"
+    },
+    "django__django-11820": {
+      "instance_id": "django__django-11820",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2874189981,
+      "disk_free_bytes_after": 120222752768,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:12:17.999725+00:00"
+    },
+    "django__django-11880": {
+      "instance_id": "django__django-11880",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2874089634,
+      "disk_free_bytes_after": 120222609408,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:11:51.195110+00:00"
+    },
+    "django__django-11951": {
+      "instance_id": "django__django-11951",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2874375156,
+      "disk_free_bytes_after": 120222498816,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:12:46.360574+00:00"
+    },
+    "django__django-11964": {
+      "instance_id": "django__django-11964",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2876127493,
+      "disk_free_bytes_after": 120204279808,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:15.171447+00:00"
+    },
+    "django__django-12125": {
+      "instance_id": "django__django-12125",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2876296669,
+      "disk_free_bytes_after": 120203792384,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:12:25.893754+00:00"
+    },
+    "django__django-12193": {
+      "instance_id": "django__django-12193",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 2875438913,
+      "disk_free_bytes_after": 120221184000,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:40.790755+00:00"
+    },
+    "django__django-12209": {
+      "instance_id": "django__django-12209",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2875590714,
+      "disk_free_bytes_after": 120221175808,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:06.891585+00:00"
+    },
+    "django__django-12276": {
+      "instance_id": "django__django-12276",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2875588066,
+      "disk_free_bytes_after": 120220983296,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:12:33.556410+00:00"
+    },
+    "django__django-12304": {
+      "instance_id": "django__django-12304",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2875726967,
+      "disk_free_bytes_after": 120220864512,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:42.758976+00:00"
+    },
+    "django__django-12308": {
+      "instance_id": "django__django-12308",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2879303679,
+      "disk_free_bytes_after": 120200630272,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:02.863464+00:00"
+    },
+    "django__django-12419": {
+      "instance_id": "django__django-12419",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2876142682,
+      "disk_free_bytes_after": 120220512256,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:23.776625+00:00"
+    },
+    "django__django-12741": {
+      "instance_id": "django__django-12741",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2876907475,
+      "disk_free_bytes_after": 120219590656,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:25.404698+00:00"
+    },
+    "django__django-13023": {
+      "instance_id": "django__django-13023",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2879752699,
+      "disk_free_bytes_after": 120213504000,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:27.032241+00:00"
+    },
+    "django__django-13089": {
+      "instance_id": "django__django-13089",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 133
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 96
+      },
+      "image_size_bytes": 2880288073,
+      "disk_free_bytes_after": 120212688896,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:45.704329+00:00"
+    },
+    "django__django-13109": {
+      "instance_id": "django__django-13109",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2879785619,
+      "disk_free_bytes_after": 120213372928,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:13:32.142788+00:00"
+    },
+    "django__django-13112": {
+      "instance_id": "django__django-13112",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2880052811,
+      "disk_free_bytes_after": 120213196800,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:12:56.450611+00:00"
+    },
+    "django__django-13297": {
+      "instance_id": "django__django-13297",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 84
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2882014944,
+      "disk_free_bytes_after": 120210391040,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:59.493612+00:00"
+    },
+    "django__django-13363": {
+      "instance_id": "django__django-13363",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2882262645,
+      "disk_free_bytes_after": 120210116608,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:14:34.567290+00:00"
+    },
+    "django__django-13406": {
+      "instance_id": "django__django-13406",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2881964386,
+      "disk_free_bytes_after": 120210501632,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:42.903068+00:00"
+    },
+    "django__django-13410": {
+      "instance_id": "django__django-13410",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2882424379,
+      "disk_free_bytes_after": 120210165760,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:31.855435+00:00"
+    },
+    "django__django-13417": {
+      "instance_id": "django__django-13417",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2882318411,
+      "disk_free_bytes_after": 120210178048,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:20.650545+00:00"
+    },
+    "django__django-13512": {
+      "instance_id": "django__django-13512",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2882525221,
+      "disk_free_bytes_after": 120210051072,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:26.378544+00:00"
+    },
+    "django__django-13551": {
+      "instance_id": "django__django-13551",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2884518262,
+      "disk_free_bytes_after": 120190844928,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:52.973119+00:00"
+    },
+    "django__django-13741": {
+      "instance_id": "django__django-13741",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2883107512,
+      "disk_free_bytes_after": 120209379328,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:07.170080+00:00"
+    },
+    "django__django-13794": {
+      "instance_id": "django__django-13794",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2883176115,
+      "disk_free_bytes_after": 120209342464,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:48.862311+00:00"
+    },
+    "django__django-13807": {
+      "instance_id": "django__django-13807",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2883234064,
+      "disk_free_bytes_after": 120209317888,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:15:33.191668+00:00"
+    },
+    "django__django-13821": {
+      "instance_id": "django__django-13821",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2883369493,
+      "disk_free_bytes_after": 120207204352,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:17:50.758426+00:00"
+    },
+    "django__django-13933": {
+      "instance_id": "django__django-13933",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2975889602,
+      "disk_free_bytes_after": 120090136576,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:56.276916+00:00"
+    },
+    "django__django-14089": {
+      "instance_id": "django__django-14089",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2974492076,
+      "disk_free_bytes_after": 120108503040,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:17:23.064659+00:00"
+    },
+    "django__django-14315": {
+      "instance_id": "django__django-14315",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2975605350,
+      "disk_free_bytes_after": 120107515904,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:41.534811+00:00"
+    },
+    "django__django-14373": {
+      "instance_id": "django__django-14373",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2975536483,
+      "disk_free_bytes_after": 120107601920,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:16:14.967306+00:00"
+    },
+    "django__django-14376": {
+      "instance_id": "django__django-14376",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2975601834,
+      "disk_free_bytes_after": 120107528192,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:17:35.880107+00:00"
+    },
+    "django__django-14404": {
+      "instance_id": "django__django-14404",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 91
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 53
+      },
+      "image_size_bytes": 2975688936,
+      "disk_free_bytes_after": 120107261952,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:18:27.470808+00:00"
+    },
+    "django__django-14493": {
+      "instance_id": "django__django-14493",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2975781012,
+      "disk_free_bytes_after": 120107204608,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:17:51.369777+00:00"
+    },
+    "django__django-14534": {
+      "instance_id": "django__django-14534",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2977924727,
+      "disk_free_bytes_after": 120087633920,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:19:23.867395+00:00"
+    },
+    "django__django-14539": {
+      "instance_id": "django__django-14539",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2976158078,
+      "disk_free_bytes_after": 120106717184,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:31.938549+00:00"
+    },
+    "django__django-14580": {
+      "instance_id": "django__django-14580",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2977585885,
+      "disk_free_bytes_after": 120088162304,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:19:44.757491+00:00"
+    },
+    "django__django-14608": {
+      "instance_id": "django__django-14608",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 94
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 55
+      },
+      "image_size_bytes": 2977910829,
+      "disk_free_bytes_after": 120087588864,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:35.535657+00:00"
+    },
+    "django__django-14752": {
+      "instance_id": "django__django-14752",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 28
+      },
+      "image_size_bytes": 2978367530,
+      "disk_free_bytes_after": 120087388160,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:19.364587+00:00"
+    },
+    "django__django-14765": {
+      "instance_id": "django__django-14765",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2976632686,
+      "disk_free_bytes_after": 120106385408,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:19:49.709764+00:00"
+    },
+    "django__django-14787": {
+      "instance_id": "django__django-14787",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3007585517,
+      "disk_free_bytes_after": 120053501952,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:16.926933+00:00"
+    },
+    "django__django-14792": {
+      "instance_id": "django__django-14792",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 73
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2976852358,
+      "disk_free_bytes_after": 120104845312,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:45.981935+00:00"
+    },
+    "django__django-14855": {
+      "instance_id": "django__django-14855",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 81
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 41
+      },
+      "image_size_bytes": 2978683112,
+      "disk_free_bytes_after": 120086822912,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:21:02.607815+00:00"
+    },
+    "django__django-14915": {
+      "instance_id": "django__django-14915",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3007515328,
+      "disk_free_bytes_after": 120053706752,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:08.226639+00:00"
+    },
+    "django__django-14999": {
+      "instance_id": "django__django-14999",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3007660295,
+      "disk_free_bytes_after": 120053338112,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:21:00.788607+00:00"
+    },
+    "django__django-15104": {
+      "instance_id": "django__django-15104",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3006308559,
+      "disk_free_bytes_after": 120072028160,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:21:12.522075+00:00"
+    },
+    "django__django-15127": {
+      "instance_id": "django__django-15127",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 3006033532,
+      "disk_free_bytes_after": 120072351744,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:19:42.083039+00:00"
+    },
+    "django__django-15277": {
+      "instance_id": "django__django-15277",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 3007581840,
+      "disk_free_bytes_after": 120070660096,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:20:51.574890+00:00"
+    },
+    "django__django-15315": {
+      "instance_id": "django__django-15315",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3007383574,
+      "disk_free_bytes_after": 120070864896,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:21:24.872643+00:00"
+    },
+    "django__django-15368": {
+      "instance_id": "django__django-15368",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3007655958,
+      "disk_free_bytes_after": 120070447104,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:00.933119+00:00"
+    },
+    "django__django-15380": {
+      "instance_id": "django__django-15380",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 3007621605,
+      "disk_free_bytes_after": 120069238784,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:22:19.295799+00:00"
+    },
+    "django__django-15467": {
+      "instance_id": "django__django-15467",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3010207014,
+      "disk_free_bytes_after": 120067997696,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:22:02.389751+00:00"
+    },
+    "django__django-15499": {
+      "instance_id": "django__django-15499",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3010298875,
+      "disk_free_bytes_after": 120067936256,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:21:35.363087+00:00"
+    },
+    "django__django-15569": {
+      "instance_id": "django__django-15569",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3010910517,
+      "disk_free_bytes_after": 120067198976,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:38.414326+00:00"
+    },
+    "django__django-15572": {
+      "instance_id": "django__django-15572",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3010913259,
+      "disk_free_bytes_after": 120067383296,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:59.604244+00:00"
+    },
+    "django__django-15741": {
+      "instance_id": "django__django-15741",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3011734667,
+      "disk_free_bytes_after": 120066510848,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:53.137915+00:00"
+    },
+    "django__django-15851": {
+      "instance_id": "django__django-15851",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 3013738517,
+      "disk_free_bytes_after": 120046989312,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:46.593277+00:00"
+    },
+    "django__django-15863": {
+      "instance_id": "django__django-15863",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3012479334,
+      "disk_free_bytes_after": 120065642496,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:36.142262+00:00"
+    },
+    "django__django-15930": {
+      "instance_id": "django__django-15930",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3012532324,
+      "disk_free_bytes_after": 120065445888,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:23:41.877615+00:00"
+    },
+    "django__django-15987": {
+      "instance_id": "django__django-15987",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3012369947,
+      "disk_free_bytes_after": 120065806336,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:14.681764+00:00"
+    },
+    "django__django-16100": {
+      "instance_id": "django__django-16100",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3012420923,
+      "disk_free_bytes_after": 120065576960,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:01.977652+00:00"
+    },
+    "django__django-16116": {
+      "instance_id": "django__django-16116",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 71
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 32
+      },
+      "image_size_bytes": 3012448898,
+      "disk_free_bytes_after": 120065658880,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:45.426703+00:00"
+    },
+    "django__django-16139": {
+      "instance_id": "django__django-16139",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 3014447253,
+      "disk_free_bytes_after": 120046006272,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:18.263374+00:00"
+    },
+    "django__django-16145": {
+      "instance_id": "django__django-16145",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 88
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 47
+      },
+      "image_size_bytes": 3012488132,
+      "disk_free_bytes_after": 120065626112,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:49.905076+00:00"
+    },
+    "django__django-16255": {
+      "instance_id": "django__django-16255",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3014590609,
+      "disk_free_bytes_after": 120046006272,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:13.837819+00:00"
+    },
+    "django__django-16333": {
+      "instance_id": "django__django-16333",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3012734862,
+      "disk_free_bytes_after": 120065257472,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:24:13.426047+00:00"
+    },
+    "django__django-16429": {
+      "instance_id": "django__django-16429",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3013503947,
+      "disk_free_bytes_after": 120064569344,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:25:06.911815+00:00"
+    },
+    "django__django-16569": {
+      "instance_id": "django__django-16569",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3072426325,
+      "disk_free_bytes_after": 120007782400,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:25:24.899510+00:00"
+    },
+    "django__django-16595": {
+      "instance_id": "django__django-16595",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3074290663,
+      "disk_free_bytes_after": 119988350976,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:25:33.841973+00:00"
+    },
+    "django__django-16642": {
+      "instance_id": "django__django-16642",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3072840157,
+      "disk_free_bytes_after": 120006057984,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:26:25.459237+00:00"
+    },
+    "django__django-16801": {
+      "instance_id": "django__django-16801",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3074107575,
+      "disk_free_bytes_after": 120005947392,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:25:06.479595+00:00"
+    },
+    "django__django-16899": {
+      "instance_id": "django__django-16899",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3074091834,
+      "disk_free_bytes_after": 120005992448,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:26:54.329944+00:00"
+    },
+    "django__django-17029": {
+      "instance_id": "django__django-17029",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3074560980,
+      "disk_free_bytes_after": 120005345280,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:26:33.064490+00:00"
+    },
+    "django__django-17087": {
+      "instance_id": "django__django-17087",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 74
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3076186795,
+      "disk_free_bytes_after": 119986085888,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:28:19.225102+00:00"
+    },
+    "django__django-9296": {
+      "instance_id": "django__django-9296",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2874433438,
+      "disk_free_bytes_after": 120222429184,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:26:53.881874+00:00"
+    },
+    "matplotlib__matplotlib-13989": {
+      "instance_id": "matplotlib__matplotlib-13989",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 117
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 64
+      },
+      "image_size_bytes": 3887126803,
+      "disk_free_bytes_after": 119202570240,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:30:03.322109+00:00"
+    },
+    "matplotlib__matplotlib-20676": {
+      "instance_id": "matplotlib__matplotlib-20676",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 97
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 30
+      },
+      "image_size_bytes": 5116449769,
+      "disk_free_bytes_after": 117778014208,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:27:38.465016+00:00"
+    },
+    "matplotlib__matplotlib-20859": {
+      "instance_id": "matplotlib__matplotlib-20859",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 107
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 40
+      },
+      "image_size_bytes": 5117423029,
+      "disk_free_bytes_after": 117776183296,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:28:09.970155+00:00"
+    },
+    "matplotlib__matplotlib-22719": {
+      "instance_id": "matplotlib__matplotlib-22719",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 121
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 7036469125,
+      "disk_free_bytes_after": 115707535360,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056561111",
+      "validated_at": "2026-10-17T18:28:19.044269+00:00"
+    },
+    "matplotlib__matplotlib-23476": {
+      "instance_id": "matplotlib__matplotlib-23476",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 118
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 39
+      },
+      "image_size_bytes": 7007021263,
+      "disk_free_bytes_after": 115727470592,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:10:23.550040+00:00"
+    },
+    "matplotlib__matplotlib-24149": {
+      "instance_id": "matplotlib__matplotlib-24149",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 232
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 141
+      },
+      "image_size_bytes": 7126125365,
+      "disk_free_bytes_after": 115606163456,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:13:53.958096+00:00"
+    },
+    "matplotlib__matplotlib-24177": {
+      "instance_id": "matplotlib__matplotlib-24177",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 229
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 137
+      },
+      "image_size_bytes": 7124767544,
+      "disk_free_bytes_after": 115611586560,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:13:11.992787+00:00"
+    },
+    "matplotlib__matplotlib-24570": {
+      "instance_id": "matplotlib__matplotlib-24570",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 147
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 50
+      },
+      "image_size_bytes": 7125501633,
+      "disk_free_bytes_after": 115610845184,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:11:32.272682+00:00"
+    },
+    "matplotlib__matplotlib-25122": {
+      "instance_id": "matplotlib__matplotlib-25122",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 180
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 86
+      },
+      "image_size_bytes": 7128293387,
+      "disk_free_bytes_after": 115606249472,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:12:05.516383+00:00"
+    },
+    "matplotlib__matplotlib-25287": {
+      "instance_id": "matplotlib__matplotlib-25287",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 242
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 146
+      },
+      "image_size_bytes": 7135271965,
+      "disk_free_bytes_after": 115599966208,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:13:39.090363+00:00"
+    },
+    "matplotlib__matplotlib-25311": {
+      "instance_id": "matplotlib__matplotlib-25311",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 174
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 79
+      },
+      "image_size_bytes": 7137061634,
+      "disk_free_bytes_after": 115594149888,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:12:00.167941+00:00"
+    },
+    "matplotlib__matplotlib-25332": {
+      "instance_id": "matplotlib__matplotlib-25332",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 172
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 78
+      },
+      "image_size_bytes": 7138726692,
+      "disk_free_bytes_after": 115597148160,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:11:55.873035+00:00"
+    },
+    "matplotlib__matplotlib-25479": {
+      "instance_id": "matplotlib__matplotlib-25479",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 176
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 82
+      },
+      "image_size_bytes": 7137740794,
+      "disk_free_bytes_after": 115597332480,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:12:10.698839+00:00"
+    },
+    "matplotlib__matplotlib-26113": {
+      "instance_id": "matplotlib__matplotlib-26113",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 221
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 121
+      },
+      "image_size_bytes": 7140460612,
+      "disk_free_bytes_after": 115594338304,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:40.515221+00:00"
+    },
+    "matplotlib__matplotlib-26208": {
+      "instance_id": "matplotlib__matplotlib-26208",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 217
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 120
+      },
+      "image_size_bytes": 7138745121,
+      "disk_free_bytes_after": 115596115968,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:11.185595+00:00"
+    },
+    "pallets__flask-5014": {
+      "instance_id": "pallets__flask-5014",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 54
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2934811245,
+      "disk_free_bytes_after": 120166313984,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:08:39.906625+00:00"
+    },
+    "psf__requests-1142": {
+      "instance_id": "psf__requests-1142",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 54
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 20
+      },
+      "image_size_bytes": 2673456749,
+      "disk_free_bytes_after": 120451833856,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:08:17.830938+00:00"
+    },
+    "psf__requests-1724": {
+      "instance_id": "psf__requests-1724",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 30
+      },
+      "image_size_bytes": 2549130821,
+      "disk_free_bytes_after": 120578547712,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:08:39.934858+00:00"
+    },
+    "psf__requests-1766": {
+      "instance_id": "psf__requests-1766",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 78
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2674610932,
+      "disk_free_bytes_after": 120450646016,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:09:51.030433+00:00"
+    },
+    "psf__requests-1921": {
+      "instance_id": "psf__requests-1921",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2674795477,
+      "disk_free_bytes_after": 120450256896,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:08:54.130475+00:00"
+    },
+    "psf__requests-5414": {
+      "instance_id": "psf__requests-5414",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 56
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2686260511,
+      "disk_free_bytes_after": 120438370304,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:09:29.196870+00:00"
+    },
+    "pydata__xarray-4075": {
+      "instance_id": "pydata__xarray-4075",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 96
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 5101006779,
+      "disk_free_bytes_after": 117725093888,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:10:05.575250+00:00"
+    },
+    "pydata__xarray-4094": {
+      "instance_id": "pydata__xarray-4094",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 108
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 32
+      },
+      "image_size_bytes": 5102537706,
+      "disk_free_bytes_after": 117723283456,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:10:25.628674+00:00"
+    },
+    "pydata__xarray-4356": {
+      "instance_id": "pydata__xarray-4356",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 105
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 32
+      },
+      "image_size_bytes": 5101411884,
+      "disk_free_bytes_after": 117724880896,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:12:14.633854+00:00"
+    },
+    "pydata__xarray-4629": {
+      "instance_id": "pydata__xarray-4629",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 101
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 5101814470,
+      "disk_free_bytes_after": 117724893184,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:13:17.292190+00:00"
+    },
+    "pydata__xarray-6461": {
+      "instance_id": "pydata__xarray-6461",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 103
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 31
+      },
+      "image_size_bytes": 4749320640,
+      "disk_free_bytes_after": 118105239552,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:12:26.171822+00:00"
+    },
+    "pylint-dev__pylint-4970": {
+      "instance_id": "pylint-dev__pylint-4970",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 20
+      },
+      "image_size_bytes": 2823920287,
+      "disk_free_bytes_after": 120282292224,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:11:53.128538+00:00"
+    },
+    "pylint-dev__pylint-6903": {
+      "instance_id": "pylint-dev__pylint-6903",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 70
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 32
+      },
+      "image_size_bytes": 2802234004,
+      "disk_free_bytes_after": 120292986880,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:13:40.110611+00:00"
+    },
+    "pylint-dev__pylint-7277": {
+      "instance_id": "pylint-dev__pylint-7277",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 79
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 44
+      },
+      "image_size_bytes": 2804368039,
+      "disk_free_bytes_after": 120290078720,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:07.498326+00:00"
+    },
+    "pytest-dev__pytest-10081": {
+      "instance_id": "pytest-dev__pytest-10081",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 2685767102,
+      "disk_free_bytes_after": 120439128064,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:13:52.327372+00:00"
+    },
+    "pytest-dev__pytest-5262": {
+      "instance_id": "pytest-dev__pytest-5262",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 28
+      },
+      "image_size_bytes": 2684378976,
+      "disk_free_bytes_after": 120440504320,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:06.353020+00:00"
+    },
+    "pytest-dev__pytest-5809": {
+      "instance_id": "pytest-dev__pytest-5809",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2680180396,
+      "disk_free_bytes_after": 120444841984,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:18.795965+00:00"
+    },
+    "pytest-dev__pytest-6202": {
+      "instance_id": "pytest-dev__pytest-6202",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2680586081,
+      "disk_free_bytes_after": 120443891712,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:48.758954+00:00"
+    },
+    "pytest-dev__pytest-7205": {
+      "instance_id": "pytest-dev__pytest-7205",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 56
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2682447049,
+      "disk_free_bytes_after": 120442863616,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:14:54.023174+00:00"
+    },
+    "pytest-dev__pytest-7432": {
+      "instance_id": "pytest-dev__pytest-7432",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2684028981,
+      "disk_free_bytes_after": 120440233984,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:15:17.731104+00:00"
+    },
+    "pytest-dev__pytest-7521": {
+      "instance_id": "pytest-dev__pytest-7521",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 30
+      },
+      "image_size_bytes": 2682756035,
+      "disk_free_bytes_after": 120442314752,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:15:29.023020+00:00"
+    },
+    "pytest-dev__pytest-7982": {
+      "instance_id": "pytest-dev__pytest-7982",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2682912873,
+      "disk_free_bytes_after": 120441688064,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:16:31.692700+00:00"
+    },
+    "scikit-learn__scikit-learn-11310": {
+      "instance_id": "scikit-learn__scikit-learn-11310",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3678288887,
+      "disk_free_bytes_after": 119386267648,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:16:30.012010+00:00"
+    },
+    "scikit-learn__scikit-learn-12585": {
+      "instance_id": "scikit-learn__scikit-learn-12585",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 20
+      },
+      "image_size_bytes": 3689986895,
+      "disk_free_bytes_after": 119374893056,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:16:02.164678+00:00"
+    },
+    "scikit-learn__scikit-learn-13135": {
+      "instance_id": "scikit-learn__scikit-learn-13135",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 3697158041,
+      "disk_free_bytes_after": 119367827456,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:16:11.985669+00:00"
+    },
+    "scikit-learn__scikit-learn-13142": {
+      "instance_id": "scikit-learn__scikit-learn-13142",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 76
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 30
+      },
+      "image_size_bytes": 3698520921,
+      "disk_free_bytes_after": 119364808704,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:16:28.715447+00:00"
+    },
+    "scikit-learn__scikit-learn-13328": {
+      "instance_id": "scikit-learn__scikit-learn-13328",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3715478427,
+      "disk_free_bytes_after": 119349608448,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:17:09.569607+00:00"
+    },
+    "scikit-learn__scikit-learn-13439": {
+      "instance_id": "scikit-learn__scikit-learn-13439",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3717012506,
+      "disk_free_bytes_after": 119346470912,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:14.547191+00:00"
+    },
+    "scikit-learn__scikit-learn-13496": {
+      "instance_id": "scikit-learn__scikit-learn-13496",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 70
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3719759284,
+      "disk_free_bytes_after": 119343542272,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:17:55.002488+00:00"
+    },
+    "scikit-learn__scikit-learn-13779": {
+      "instance_id": "scikit-learn__scikit-learn-13779",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 73
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 3747884219,
+      "disk_free_bytes_after": 119314653184,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:06.520770+00:00"
+    },
+    "scikit-learn__scikit-learn-14141": {
+      "instance_id": "scikit-learn__scikit-learn-14141",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 3746806945,
+      "disk_free_bytes_after": 119317225472,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:04.334663+00:00"
+    },
+    "scikit-learn__scikit-learn-14496": {
+      "instance_id": "scikit-learn__scikit-learn-14496",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 25
+      },
+      "image_size_bytes": 3747553917,
+      "disk_free_bytes_after": 119316574208,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:27.314773+00:00"
+    },
+    "scikit-learn__scikit-learn-14983": {
+      "instance_id": "scikit-learn__scikit-learn-14983",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 69
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 3750435137,
+      "disk_free_bytes_after": 119311851520,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:13.968876+00:00"
+    },
+    "scikit-learn__scikit-learn-25232": {
+      "instance_id": "scikit-learn__scikit-learn-25232",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 123
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 52
+      },
+      "image_size_bytes": 4763423624,
+      "disk_free_bytes_after": 118240854016,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:55.555305+00:00"
+    },
+    "scikit-learn__scikit-learn-25973": {
+      "instance_id": "scikit-learn__scikit-learn-25973",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 88
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 29
+      },
+      "image_size_bytes": 4773336190,
+      "disk_free_bytes_after": 118230941696,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:40.370423+00:00"
+    },
+    "sphinx-doc__sphinx-10323": {
+      "instance_id": "sphinx-doc__sphinx-10323",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2817560238,
+      "disk_free_bytes_after": 120286142464,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:19:54.988768+00:00"
+    },
+    "sphinx-doc__sphinx-10435": {
+      "instance_id": "sphinx-doc__sphinx-10435",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 64
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 29
+      },
+      "image_size_bytes": 2815729121,
+      "disk_free_bytes_after": 120287748096,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:05.889954+00:00"
+    },
+    "sphinx-doc__sphinx-10449": {
+      "instance_id": "sphinx-doc__sphinx-10449",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2816034145,
+      "disk_free_bytes_after": 120288337920,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:18:46.822275+00:00"
+    },
+    "sphinx-doc__sphinx-7440": {
+      "instance_id": "sphinx-doc__sphinx-7440",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2810061755,
+      "disk_free_bytes_after": 120294318080,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:19:24.765282+00:00"
+    },
+    "sphinx-doc__sphinx-7454": {
+      "instance_id": "sphinx-doc__sphinx-7454",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2810064081,
+      "disk_free_bytes_after": 120293146624,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:19:51.996993+00:00"
+    },
+    "sphinx-doc__sphinx-7462": {
+      "instance_id": "sphinx-doc__sphinx-7462",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2810154587,
+      "disk_free_bytes_after": 120294297600,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:19:36.862787+00:00"
+    },
+    "sphinx-doc__sphinx-7889": {
+      "instance_id": "sphinx-doc__sphinx-7889",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 56
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2811002622,
+      "disk_free_bytes_after": 120293408768,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:19:53.534153+00:00"
+    },
+    "sphinx-doc__sphinx-7910": {
+      "instance_id": "sphinx-doc__sphinx-7910",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2811052376,
+      "disk_free_bytes_after": 120293175296,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:20:11.511783+00:00"
+    },
+    "sphinx-doc__sphinx-8269": {
+      "instance_id": "sphinx-doc__sphinx-8269",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2811636618,
+      "disk_free_bytes_after": 120292638720,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:20:15.265345+00:00"
+    },
+    "sphinx-doc__sphinx-8459": {
+      "instance_id": "sphinx-doc__sphinx-8459",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2812090720,
+      "disk_free_bytes_after": 120291909632,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:36.796262+00:00"
+    },
+    "sphinx-doc__sphinx-8475": {
+      "instance_id": "sphinx-doc__sphinx-8475",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2808804936,
+      "disk_free_bytes_after": 120295411712,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:05.290206+00:00"
+    },
+    "sphinx-doc__sphinx-8595": {
+      "instance_id": "sphinx-doc__sphinx-8595",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2810244132,
+      "disk_free_bytes_after": 120290828288,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:22:24.914331+00:00"
+    },
+    "sphinx-doc__sphinx-8621": {
+      "instance_id": "sphinx-doc__sphinx-8621",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 20
+      },
+      "image_size_bytes": 2805499533,
+      "disk_free_bytes_after": 120298557440,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:07.942267+00:00"
+    },
+    "sphinx-doc__sphinx-8721": {
+      "instance_id": "sphinx-doc__sphinx-8721",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 67
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2810459336,
+      "disk_free_bytes_after": 120290455552,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:22:30.554308+00:00"
+    },
+    "sphinx-doc__sphinx-9230": {
+      "instance_id": "sphinx-doc__sphinx-9230",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2810874965,
+      "disk_free_bytes_after": 120293126144,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:20.198046+00:00"
+    },
+    "sphinx-doc__sphinx-9258": {
+      "instance_id": "sphinx-doc__sphinx-9258",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 58
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2810979416,
+      "disk_free_bytes_after": 120293097472,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:47.293649+00:00"
+    },
+    "sphinx-doc__sphinx-9281": {
+      "instance_id": "sphinx-doc__sphinx-9281",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2811051418,
+      "disk_free_bytes_after": 120292966400,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:30.668079+00:00"
+    },
+    "sphinx-doc__sphinx-9320": {
+      "instance_id": "sphinx-doc__sphinx-9320",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2811411476,
+      "disk_free_bytes_after": 120292655104,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:21:55.188761+00:00"
+    },
+    "sphinx-doc__sphinx-9367": {
+      "instance_id": "sphinx-doc__sphinx-9367",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 65
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2811574090,
+      "disk_free_bytes_after": 120292360192,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:23:02.412051+00:00"
+    },
+    "sphinx-doc__sphinx-9591": {
+      "instance_id": "sphinx-doc__sphinx-9591",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 60
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2813243712,
+      "disk_free_bytes_after": 120290549760,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:22:53.753052+00:00"
+    },
+    "sphinx-doc__sphinx-9698": {
+      "instance_id": "sphinx-doc__sphinx-9698",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 24
+      },
+      "image_size_bytes": 2814330579,
+      "disk_free_bytes_after": 120289349632,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:23:04.801929+00:00"
+    },
+    "sphinx-doc__sphinx-9711": {
+      "instance_id": "sphinx-doc__sphinx-9711",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 20
+      },
+      "image_size_bytes": 2814318086,
+      "disk_free_bytes_after": 120289443840,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:22:41.619513+00:00"
+    },
+    "sympy__sympy-12096": {
+      "instance_id": "sympy__sympy-12096",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 63
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2732371071,
+      "disk_free_bytes_after": 120390553600,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:19.620377+00:00"
+    },
+    "sympy__sympy-12481": {
+      "instance_id": "sympy__sympy-12481",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2734391639,
+      "disk_free_bytes_after": 120386732032,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:23:38.485909+00:00"
+    },
+    "sympy__sympy-13372": {
+      "instance_id": "sympy__sympy-13372",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 80
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 35
+      },
+      "image_size_bytes": 2745245359,
+      "disk_free_bytes_after": 120375578624,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:54.806724+00:00"
+    },
+    "sympy__sympy-13480": {
+      "instance_id": "sympy__sympy-13480",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 71
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2747038230,
+      "disk_free_bytes_after": 120373915648,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:01.965408+00:00"
+    },
+    "sympy__sympy-14711": {
+      "instance_id": "sympy__sympy-14711",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 56
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2748838027,
+      "disk_free_bytes_after": 120373825536,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:08.099943+00:00"
+    },
+    "sympy__sympy-15017": {
+      "instance_id": "sympy__sympy-15017",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 53
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2753764139,
+      "disk_free_bytes_after": 120368566272,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:40.792985+00:00"
+    },
+    "sympy__sympy-15345": {
+      "instance_id": "sympy__sympy-15345",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 55
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2756413500,
+      "disk_free_bytes_after": 120364408832,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:43.633940+00:00"
+    },
+    "sympy__sympy-15809": {
+      "instance_id": "sympy__sympy-15809",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 68
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 30
+      },
+      "image_size_bytes": 2756150855,
+      "disk_free_bytes_after": 120366247936,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:24:43.503900+00:00"
+    },
+    "sympy__sympy-15875": {
+      "instance_id": "sympy__sympy-15875",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 30
+      },
+      "image_size_bytes": 2756306290,
+      "disk_free_bytes_after": 120366034944,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:25:31.836435+00:00"
+    },
+    "sympy__sympy-16450": {
+      "instance_id": "sympy__sympy-16450",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 106
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 69
+      },
+      "image_size_bytes": 2758278896,
+      "disk_free_bytes_after": 120363913216,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:27:01.572074+00:00"
+    },
+    "sympy__sympy-16766": {
+      "instance_id": "sympy__sympy-16766",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 58
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2759088978,
+      "disk_free_bytes_after": 120363347968,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:25:13.574818+00:00"
+    },
+    "sympy__sympy-16886": {
+      "instance_id": "sympy__sympy-16886",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2759380029,
+      "disk_free_bytes_after": 120363044864,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:26:36.491872+00:00"
+    },
+    "sympy__sympy-17139": {
+      "instance_id": "sympy__sympy-17139",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 171
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 139
+      },
+      "image_size_bytes": 2761879853,
+      "disk_free_bytes_after": 120358383616,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:28:56.131263+00:00"
+    },
+    "sympy__sympy-17655": {
+      "instance_id": "sympy__sympy-17655",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 66
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 28
+      },
+      "image_size_bytes": 2764947603,
+      "disk_free_bytes_after": 120355459072,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:25:44.437417+00:00"
+    },
+    "sympy__sympy-18189": {
+      "instance_id": "sympy__sympy-18189",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 84
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 41
+      },
+      "image_size_bytes": 2767217515,
+      "disk_free_bytes_after": 120352829440,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:28:50.683683+00:00"
+    },
+    "sympy__sympy-18763": {
+      "instance_id": "sympy__sympy-18763",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 26
+      },
+      "image_size_bytes": 2764923681,
+      "disk_free_bytes_after": 120357249024,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:26:50.397317+00:00"
+    },
+    "sympy__sympy-19495": {
+      "instance_id": "sympy__sympy-19495",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2769379803,
+      "disk_free_bytes_after": 120352796672,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:26:14.184951+00:00"
+    },
+    "sympy__sympy-19637": {
+      "instance_id": "sympy__sympy-19637",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2769774719,
+      "disk_free_bytes_after": 120352227328,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:26:57.591657+00:00"
+    },
+    "sympy__sympy-19954": {
+      "instance_id": "sympy__sympy-19954",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 57
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2771166497,
+      "disk_free_bytes_after": 120350908416,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:26:52.669015+00:00"
+    },
+    "sympy__sympy-20916": {
+      "instance_id": "sympy__sympy-20916",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 55
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 21
+      },
+      "image_size_bytes": 2773827259,
+      "disk_free_bytes_after": 120347987968,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:27:31.620264+00:00"
+    },
+    "sympy__sympy-21847": {
+      "instance_id": "sympy__sympy-21847",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 53
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 23
+      },
+      "image_size_bytes": 2778889164,
+      "disk_free_bytes_after": 120340647936,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:27:06.341222+00:00"
+    },
+    "sympy__sympy-22714": {
+      "instance_id": "sympy__sympy-22714",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 61
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2782336107,
+      "disk_free_bytes_after": 120336896000,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:27:14.351119+00:00"
+    },
+    "sympy__sympy-23534": {
+      "instance_id": "sympy__sympy-23534",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 56
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2783226784,
+      "disk_free_bytes_after": 120338276352,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:28:05.379629+00:00"
+    },
+    "sympy__sympy-24539": {
+      "instance_id": "sympy__sympy-24539",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 59
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 22
+      },
+      "image_size_bytes": 2786019191,
+      "disk_free_bytes_after": 120335568896,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:28:34.104401+00:00"
+    },
+    "sympy__sympy-24562": {
+      "instance_id": "sympy__sympy-24562",
+      "gold": {
+        "outcome": "resolved",
+        "reason": null,
+        "duration_s": 62
+      },
+      "noop": {
+        "outcome": "unresolved",
+        "reason": "tests_failed",
+        "duration_s": 27
+      },
+      "image_size_bytes": 2786094640,
+      "disk_free_bytes_after": 120335507456,
+      "harness_version": "5.0.2",
+      "run_url": "https://github.com/defdevio/areyoutbetterthan.ai-submissions/actions/runs/39056563915",
+      "validated_at": "2026-10-17T18:28:44.815567+00:00"
+    }
+  }
+}

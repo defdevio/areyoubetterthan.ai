@@ -1,0 +1,18 @@
+{
+ "v": 1,
+ "instance_id": "acme__widgets-3",
+ "repo": "acme/widgets",
+ "base_commit": "0000000000000000000000000000000000000001",
+ "files": {
+  "README.md": "# widgets\n\nTiny fixture project used by the areyoubetterthan.ai end-to-end tests.\n",
+  "widgets/__init__.py": "from .math import add, clamp\nfrom .text import slugify\n\n__all__ = [\"add\", \"clamp\", \"slugify\"]\n",
+  "widgets/math.py": "def add(a, b):\n    \"\"\"Return the sum of a and b.\"\"\"\n    if a < 0 or b < 0:\n        return abs(a) + abs(b)\n    return a + b\n\n\ndef clamp(value, low, high):\n    \"\"\"Clamp value into [low, high].\"\"\"\n    if value < low:\n        return low\n    if value > high:\n        return low\n    return value\n",
+  "widgets/text.py": "import re\n\n\ndef slugify(text):\n    \"\"\"Lowercase, strip, and join words with dashes.\"\"\"\n    text = text.strip().lower()\n    return re.sub(r\"\\s+\", \"_\", text)\n",
+  "tests/test_math.py": "from widgets import add, clamp\n\n\ndef test_add_positive():\n    assert add(2, 3) == 5\n\n\ndef test_clamp_inside():\n    assert clamp(5, 0, 10) == 5\n",
+  "tests/test_text.py": "from widgets import slugify\n\n\ndef test_slugify_basic():\n    assert slugify(\"hello\") == \"hello\"\n",
+  "setup.cfg": "[metadata]\nname = widgets\nversion = 0.1.0\n"
+ },
+ "omitted": {
+  "docs/logo.png": "binary"
+ }
+}

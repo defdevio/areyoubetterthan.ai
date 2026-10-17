@@ -27,7 +27,7 @@ task-for-task against published model results.
 Browser (Next.js/Monaco) ──► Vercel API routes ──► Neon Postgres
    │ file contents (CORS)        │ GitHub App (bot)
    ▼                             ▼
- task source bundles      public repo: defdevio/areyoubetterthanai-submissions
+ task source bundles      public repo: defdevio/areyoubetterthan.ai-submissions
  (GitHub Pages / R2)        bot branch feat/<user>-<instance>-<id>
                             PR adds submissions/<instance>/<id>.diff only
                             ▼
@@ -38,7 +38,7 @@ Browser (Next.js/Monaco) ──► Vercel API routes ──► Neon Postgres
 
 ### Repos
 1. **`areyoubetterthan.ai`** (this dir): Next.js app, data scripts, DB migrations.
-2. **`defdevio/areyoubetterthanai-submissions`** (public): scoring workflow + one PR per submission (audit trail). PRs are
+2. **`defdevio/areyoubetterthan.ai-submissions`** (public): scoring workflow + one PR per submission (audit trail). PRs are
    auto-closed (never merged) after scoring; branches deleted. Kept separate so PR volume and the
    untrusted-code workflow are isolated from the app.
 
@@ -113,7 +113,7 @@ retries, report_json)` · `shares(id, user_id, created_at, public)`.
 See SQL `todos` table (ids below).
 1. `scaffold-app` – Next.js + TS + Tailwind, Drizzle/Neon, lint/test setup in this dir.
 2. `task-ingest` – script: fetch Verified `<15 min fix` tasks → candidate list.
-3. `submissions-repo` – create public `defdevio/areyoubetterthanai-submissions` repo + `score.yml` (guarded, no secrets) + validation workflow.
+3. `submissions-repo` – create public `defdevio/areyoubetterthan.ai-submissions` repo + `score.yml` (guarded, no secrets) + validation workflow.
 4. `task-validate` – run gold/empty patches on public runners; pick final 100 → `data/tasks.json`.
 5. `source-bundles` – build/host per-task source bundles (Pages/R2).
 6. `model-ingest` – ingest experiments repo → `data/models.json` + weekly refresh Action.
@@ -127,3 +127,26 @@ See SQL `todos` table (ids below).
 14. `share` – public share page + OG image.
 15. `e2e-tests` – unit tests (diff gen, classification, stats) + Playwright happy path with mocked GitHub.
 16. `deploy` – Vercel + Neon + domain + App webhook config, smoke test with a gold patch end to end.
+
+## Implementation notes (first iteration)
+Deviations from the plan above, and why:
+- **Dataset**: the pinned harness (`swebench==5.0.2`) needs `image`/`eval_script` fields that only
+  `SWE-bench/SWE-bench_Verified` has, so tasks and scoring use that dataset (same 500 instances and
+  `difficulty` labels as `princeton-nlp/SWE-bench_Verified`).
+- **Submissions repo** is `defdevio/areyoutbetterthan.ai-submissions` (configurable via `SUBMISSIONS_REPO`).
+- **Validation** used a no-op patch (adds an untracked file) instead of an empty patch, because the
+  harness skips empty predictions. 193/194 candidates finished: 192 passed; `django__django-10097`
+  was rejected (passes without a fix); `psf__requests-2317` was excluded by hand (network-dependent
+  tests hang on runners). Median harness time for gold patches was 64 s; images ≤ 7.1 GB.
+- **Source bundles** are published from *this* repo's GitHub Pages (`bundles.yml`), keeping the
+  untrusted-PR repo free of any workflow with write permissions. ~3 MB gzipped per task.
+- **Model comparison**: `results/results.json` is preferred over `per_instance_details.json`; entries
+  whose per-instance data disagrees with their published score by >2 pts are dropped (2 today);
+  model names are normalized ("Claude Opus 4.5" = "Claude 4.5 Opus"); multi-model agent systems
+  appear only under "All submissions".
+- **Additions**: server-side draft autosave (an abandoned tab still gets its last draft scored),
+  an in-app scoring queue with global/per-user caps, a mock GitHub backend for local dev/e2e,
+  reference fix + hints revealed after each attempt, and a daily reconcile cron.
+
+Status: todos 1–15 are implemented and tested. `deploy` needs the GitHub App, Neon, Vercel, and
+the domain (see docs/SETUP.md).

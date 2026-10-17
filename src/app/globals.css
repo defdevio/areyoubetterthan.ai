@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-bg: #09090b;
+  --color-panel: #111114;
+  --color-panel-2: #17171c;
+  --color-line: #26262e;
+  --color-line-strong: #34343e;
+  --color-fg: #ececf1;
+  --color-muted: #9a9aa8;
+  --color-faint: #6b6b78;
+
+  /* Team colors: humans are warm, models are cool. */
+  --color-human: #fbbf24;
+  --color-human-dim: #f59e0b33;
+  --color-ai: #818cf8;
+  --color-ai-dim: #818cf833;
+  --color-pass: #34d399;
+  --color-fail: #fb7185;
+  --color-warn: #fbbf24;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: #fbbf2455;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, #ffffff08 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff08 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
+}
+
+.caret::after {
+  content: "▍";
+  margin-left: 2px;
+  color: var(--color-human);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-rise {
+  animation: rise 0.35s ease-out both;
+}
+
+/* Rendered issue text (GitHub-flavoured markdown). */
+.prose-issue {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-fg);
+  overflow-wrap: anywhere;
+}
+.prose-issue h1,
+.prose-issue h2,
+.prose-issue h3,
+.prose-issue h4 {
+  font-weight: 600;
+  margin: 1.1em 0 0.4em;
+}
+.prose-issue h1 {
+  font-size: 1.15rem;
+}
+.prose-issue h2 {
+  font-size: 1.05rem;
+}
+.prose-issue p,
+.prose-issue ul,
+.prose-issue ol,
+.prose-issue pre,
+.prose-issue blockquote,
+.prose-issue table {
+  margin: 0.6em 0;
+}
+.prose-issue ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.prose-issue ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.prose-issue a {
+  color: var(--color-ai);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-issue code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.8em;
+  background: #ffffff10;
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+.prose-issue pre {
+  background: #0b0b0e;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: 0.75em 0.9em;
+  overflow-x: auto;
+}
+.prose-issue pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.78rem;
+}
+.prose-issue blockquote {
+  border-left: 3px solid var(--color-line-strong);
+  padding-left: 0.9em;
+  color: var(--color-muted);
+}
+.prose-issue table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+.prose-issue th,
+.prose-issue td {
+  border: 1px solid var(--color-line);
+  padding: 0.3em 0.6em;
+}
+
+/* Unified diff rendering */
+.diff-view {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  white-space: pre;
+}
+.diff-add {
+  background: #34d39914;
+  color: #a7f3d0;
+}
+.diff-del {
+  background: #fb718514;
+  color: #fecdd3;
+}
+.diff-hunk {
+  color: var(--color-ai);
+}
+.diff-file {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+/* Scrollbars that don't shout */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #34343e transparent;
+}
+
+/* Monaco search hit highlight */
+.search-hit {
+  background: #fbbf2455;
+  border-radius: 2px;
+}
+.search-hit-line {
+  background: #fbbf240d;
+}

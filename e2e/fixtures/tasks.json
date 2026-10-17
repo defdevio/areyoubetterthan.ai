@@ -1,0 +1,73 @@
+{
+  "source": {
+    "dataset": "fixtures",
+    "revision": "fixture",
+    "fetched_at": "2026-01-01T00:00:00Z"
+  },
+  "harness_version": "fixture",
+  "selected_at": "2026-01-01T00:00:00Z",
+  "selection": {
+    "method": "fixture",
+    "pool_size": 3,
+    "validated_pool_size": 3,
+    "per_repo": {
+      "acme/widgets": 3
+    }
+  },
+  "tasks": [
+    {
+      "instance_id": "acme__widgets-1",
+      "repo": "acme/widgets",
+      "base_commit": "0000000000000000000000000000000000000001",
+      "version": "0.1",
+      "created_at": "2026-01-01T00:00:00Z",
+      "title": "add() returns the wrong result for negative numbers",
+      "problem_statement": "add() returns the wrong result for negative numbers\n\n```python\n>>> from widgets import add\n>>> add(-2, 3)\n5\n```\n\nExpected `1`. It looks like negative inputs are being turned positive somewhere.\n",
+      "hints_text": "Look at the function named in the title.",
+      "patch": "diff --git a/widgets/math.py b/widgets/math.py\n--- a/widgets/math.py\n+++ b/widgets/math.py\n@@ -1,5 +1,3 @@\n def add(a, b):\n     \"\"\"Return the sum of a and b.\"\"\"\n-    if a < 0 or b < 0:\n-        return abs(a) + abs(b)\n     return a + b\n",
+      "fail_to_pass": [
+        "tests/test_math.py::test_add_negative"
+      ],
+      "pass_to_pass_count": 2,
+      "image": "fixture",
+      "index": 0,
+      "validated": true
+    },
+    {
+      "instance_id": "acme__widgets-2",
+      "repo": "acme/widgets",
+      "base_commit": "0000000000000000000000000000000000000001",
+      "version": "0.1",
+      "created_at": "2026-01-01T00:00:00Z",
+      "title": "clamp() returns the lower bound when value is above the upper bound",
+      "problem_statement": "clamp() returns the lower bound when value is above the upper bound\n\n`clamp(15, 0, 10)` returns `0`, but it should return `10`.\n",
+      "hints_text": "Look at the function named in the title.",
+      "patch": "diff --git a/widgets/math.py b/widgets/math.py\n--- a/widgets/math.py\n+++ b/widgets/math.py\n@@ -10,5 +10,5 @@ def clamp(value, low, high):\n     if value < low:\n         return low\n     if value > high:\n-        return low\n+        return high\n     return value\n",
+      "fail_to_pass": [
+        "tests/test_math.py::test_clamp_above"
+      ],
+      "pass_to_pass_count": 2,
+      "image": "fixture",
+      "index": 1,
+      "validated": true
+    },
+    {
+      "instance_id": "acme__widgets-3",
+      "repo": "acme/widgets",
+      "base_commit": "0000000000000000000000000000000000000001",
+      "version": "0.1",
+      "created_at": "2026-01-01T00:00:00Z",
+      "title": "slugify() should use dashes, not underscores",
+      "problem_statement": "slugify() should use dashes, not underscores\n\nThe docstring says words are joined with dashes, but `slugify(\"Hello World\")` gives `hello_world`. Expected `hello-world`.\n",
+      "hints_text": "Look at the function named in the title.",
+      "patch": "diff --git a/widgets/text.py b/widgets/text.py\n--- a/widgets/text.py\n+++ b/widgets/text.py\n@@ -4,4 +4,4 @@ import re\n def slugify(text):\n     \"\"\"Lowercase, strip, and join words with dashes.\"\"\"\n     text = text.strip().lower()\n-    return re.sub(r\"\\s+\", \"_\", text)\n+    return re.sub(r\"\\s+\", \"-\", text)\n",
+      "fail_to_pass": [
+        "tests/test_text.py::test_slugify_dashes"
+      ],
+      "pass_to_pass_count": 2,
+      "image": "fixture",
+      "index": 2,
+      "validated": true
+    }
+  ]
+}
