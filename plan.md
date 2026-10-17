@@ -72,7 +72,7 @@ Browser (Next.js/Monaco) ──► Vercel API routes ──► Neon Postgres
    - `permissions: contents: read`, **no secrets**, concurrency group per PR, timeout.
    - Guard step: fail fast unless PR changes exactly one `submissions/**` dir and author is the bot.
    - Build `predictions.jsonl` from the diff → `run_evaluation --dataset_name princeton-nlp/SWE-bench_Verified
-     --instance_ids <id> --namespace swebench` (pinned harness version), free disk space step first.
+     --instance_ids <id> --namespace swebench` (pinned harness version).
    - Upload `report.json` artifact; write job summary. Runs whether the patch passes or fails.
 4. GitHub App webhook `workflow_run.completed` → `POST /api/webhooks/github` (signature verified) → download
    artifact → classify: **resolved / unresolved / infra_error** (empty-apply failure = unresolved; harness/Docker
