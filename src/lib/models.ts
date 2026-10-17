@@ -27,6 +27,13 @@ export interface ModelRow {
   bashOnly: boolean;
   date: string;
   verifiedPct: number | null;
+  /**
+   * The model's published accuracy, used to order ties on small task subsets.
+   * vals: "<15 min fix" band (the pool our tasks come from); leaderboard: all 500 tasks.
+   */
+  publishedPct: number | null;
+  publishedStderr: number | null;
+  publishedScope: "band" | "verified";
   source: "swe-bench" | "vals";
   /** vals.ai only: average wall-clock seconds per task on the "<15 min fix" band. */
   latencyS: number | null;
@@ -38,6 +45,9 @@ const file = modelsJson as unknown as ModelsFile;
 const vals = valsJson as unknown as ValsFile;
 
 interface Comparable extends ModelEntry {
+  published_pct: number | null;
+  published_stderr: number | null;
+  published_scope: "band" | "verified";
   source: "swe-bench" | "vals";
   latency_s: number | null;
   cost_usd: number | null;
@@ -56,12 +66,18 @@ const valsEntries: Comparable[] = vals.entries.map((e) => ({
   source: "vals",
   latency_s: e.band.latency_s,
   cost_usd: e.band.cost_usd,
+  published_pct: e.band.accuracy_pct,
+  published_stderr: e.band.stderr_pct,
+  published_scope: "band",
 }));
 
 const leaderboardEntries: Comparable[] = file.entries.map((e) => ({
   ...e,
   source: "swe-bench",
   latency_s: null,
+  published_pct: e.verified_resolved_pct,
+  published_stderr: null,
+  published_scope: "verified",
   cost_usd: null,
 }));
 
@@ -105,6 +121,9 @@ function toRow(e: Comparable): ModelRow {
     bashOnly: e.bash_only,
     date: e.date,
     verifiedPct: e.verified_resolved_pct,
+    publishedPct: e.published_pct,
+    publishedStderr: e.published_stderr,
+    publishedScope: e.published_scope,
   };
 }
 
@@ -163,7 +182,8 @@ export function modelRatesOn(instanceIds: string[], mode: ComparisonMode): Model
     .sort(
       (a, b) =>
         (b.rate.p ?? 0) - (a.rate.p ?? 0) ||
-        (b.row.verifiedPct ?? 0) - (a.row.verifiedPct ?? 0) ||
+        // Small subsets produce many ties; break them by the published score.
+        (b.row.publishedPct ?? 0) - (a.row.publishedPct ?? 0) ||
         a.row.name.localeCompare(b.row.name),
     );
 }

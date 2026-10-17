@@ -105,7 +105,10 @@ async function HumanSection() {
       </div>
       <Card className="p-5">
         <div className="mb-3 text-sm font-medium">Speed vs. the machines</div>
-        <SpeedTable human={{ label: "Humans (pooled)", rate: s.pooled, meanTimeMs: s.metrics.mean_time_ms }} rows={s.speed} />
+        <SpeedTable
+          human={{ label: "Humans (pooled)", rate: s.pooled, meanTimeMs: s.metrics.mean_time_ms, subsetLabel: "On these tasks" }}
+          rows={s.speed}
+        />
       </Card>
       <p className="text-xs text-faint">Flagged attempts (honor-system checks) are excluded. Updated every few minutes.</p>
     </div>

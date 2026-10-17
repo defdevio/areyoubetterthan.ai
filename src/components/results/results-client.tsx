@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
 import { api } from "@/lib/client/api";
-import { MetricTiles, OutcomeBar, SolveCurve, SpeedTable, type SpeedRow } from "@/components/metrics";
+import { fraction, MetricTiles, OutcomeBar, SolveCurve, SpeedTable, type SpeedRow } from "@/components/metrics";
 import { formatDuration, isPending, shortId } from "@/lib/format";
 import { CATEGORY_LABEL } from "@/lib/metrics";
 import type { UserSummary } from "@/lib/results";
@@ -54,7 +54,7 @@ export function ComparisonChart({
           <div
             key={r.id}
             className={cx(
-              "grid grid-cols-[2rem_minmax(0,14rem)_1fr_3.5rem] items-center gap-3 rounded-lg px-2 py-1.5",
+              "grid grid-cols-[2.25rem_minmax(0,13rem)_1fr_3rem_3.75rem] items-center gap-3 rounded-lg px-2 py-1.5",
               isYou && "bg-human/10 ring-1 ring-human/30",
             )}
           >
@@ -66,7 +66,21 @@ export function ComparisonChart({
               )}
             </span>
             <RateBar p={r.rate.p} ci={r.rate.ci} tone={isYou ? "human" : "ai"} />
-            <span className={cx("text-right font-mono text-xs", isYou ? "text-human" : "text-muted")}>{pct(r.rate.p)}</span>
+            <span className={cx("text-right font-mono text-xs", isYou ? "text-human" : "text-muted")}>
+              {r.rate.n < 20 ? fraction(r.rate) : pct(r.rate.p)}
+            </span>
+            <span
+              className="text-right font-mono text-[11px] text-faint"
+              title={
+                r.kind === "model"
+                  ? r.publishedScope === "band"
+                    ? "Published accuracy on all 194 “<15 min fix” tasks"
+                    : "Published score on all 500 Verified tasks"
+                  : undefined
+              }
+            >
+              {r.kind === "model" && r.publishedPct !== null ? `${r.publishedPct.toFixed(1)}%` : ""}
+            </span>
           </div>
         );
       })}
@@ -284,7 +298,7 @@ export function ResultsClient() {
               </div>
               {s.flagged > 0 && (
                 <div className="mt-4 rounded-lg border border-warn/30 bg-warn/5 p-3 text-xs text-warn">
-                  {s.flagged} of your attempts were flagged by the honor-system checks (e.g. large pastes from outside the
+                  {s.flagged} of your attempts {s.flagged === 1 ? "was" : "were"} flagged by the honor-system checks (e.g. large pastes from outside the
                   editor). They count here but are left out of the global human stats.
                 </div>
               )}
@@ -292,8 +306,16 @@ export function ResultsClient() {
             <Card className="p-6">
               <div className="mb-3 flex items-baseline justify-between">
                 <div className="text-sm font-medium">Resolve rate on your tasks</div>
-                <div className="text-[11px] text-faint">white line: 95% interval</div>
+                <div className="text-[11px] text-faint">
+                  white line: 95% interval · right column: published score ({mode === "vals" ? "<15 min band" : "all 500"})
+                </div>
               </div>
+              {s.human.n < 20 && (
+                <p className="mb-3 text-xs text-muted">
+                  Only {s.human.n} {s.human.n === 1 ? "task" : "tasks"} so far, so many models solve all of them and tie. Ties are
+                  ordered by each model&apos;s published score (right column).
+                </p>
+              )}
               <ComparisonChart summary={s} />
             </Card>
           </div>

@@ -143,11 +143,18 @@ export interface SpeedRow {
   model: string;
   org: string | null;
   rate: Rate;
+  published_pct: number | null;
+  published_stderr: number | null;
   latency_s: number | null;
   cost_usd: number | null;
 }
 
-type SortKey = "rate" | "time" | "cost";
+type SortKey = "rate" | "published" | "time" | "cost";
+
+/** "3/3" for small samples, where a bare percentage overstates precision. */
+export function fraction(rate: Rate) {
+  return `${rate.k}/${rate.n}`;
+}
 
 function SortHeader({
   k,
@@ -176,21 +183,43 @@ export function SpeedTable({
   rows,
   limit = 12,
 }: {
-  human: { label: string; rate: Rate; meanTimeMs: number | null };
+  human: { label: string; rate: Rate; meanTimeMs: number | null; subsetLabel?: string };
   rows: SpeedRow[];
   limit?: number;
 }) {
   const [sort, setSort] = useState<SortKey>("rate");
   const [all, setAll] = useState(false);
   const humanRow = useMemo(
-    () => ({ id: "__human", model: human.label, org: null, rate: human.rate, latency_s: human.meanTimeMs === null ? null : human.meanTimeMs / 1000, cost_usd: null, isHuman: true }),
+    () => ({
+      id: "__human",
+      model: human.label,
+      org: null,
+      rate: human.rate,
+      published_pct: null,
+      published_stderr: null,
+      latency_s: human.meanTimeMs === null ? null : human.meanTimeMs / 1000,
+      cost_usd: null,
+      isHuman: true,
+    }),
     [human],
   );
   const sorted = useMemo(() => {
     const list = [...rows.map((r) => ({ ...r, isHuman: false })), humanRow];
     const key = (r: (typeof list)[number]) =>
-      sort === "rate" ? -(r.rate.p ?? 0) : sort === "time" ? (r.latency_s ?? Infinity) : (r.cost_usd ?? (r.isHuman ? -1 : Infinity));
-    return list.sort((a, b) => key(a) - key(b) || (a.isHuman ? -1 : b.isHuman ? 1 : 0));
+      sort === "rate"
+        ? -(r.rate.p ?? 0)
+        : sort === "published"
+          ? -(r.published_pct ?? (r.isHuman ? 100 * (r.rate.p ?? 0) : -1))
+          : sort === "time"
+            ? (r.latency_s ?? Infinity)
+            : (r.cost_usd ?? (r.isHuman ? -1 : Infinity));
+    // Ties (common on a handful of tasks) fall back to the published score, humans first.
+    return list.sort(
+      (a, b) =>
+        key(a) - key(b) ||
+        (a.isHuman ? -1 : b.isHuman ? 1 : 0) ||
+        (b.published_pct ?? 0) - (a.published_pct ?? 0),
+    );
   }, [rows, humanRow, sort]);
   const humanIdx = sorted.findIndex((r) => r.isHuman);
   const visible = all ? sorted : sorted.filter((_, i) => i < limit || i === humanIdx);
@@ -215,7 +244,10 @@ export function SpeedTable({
             <tr className="border-b border-line">
               <th className="px-3 py-2 text-left font-normal">Solver</th>
               <SortHeader k="rate" sort={sort} onSort={setSort}>
-                Resolved here
+                {human.subsetLabel ?? "On your tasks"}
+              </SortHeader>
+              <SortHeader k="published" sort={sort} onSort={setSort}>
+                vals.ai accuracy
               </SortHeader>
               <SortHeader k="time" sort={sort} onSort={setSort}>
                 Avg time / task
@@ -233,7 +265,20 @@ export function SpeedTable({
                   {r.org && <span className="ml-2 text-[11px] text-faint">{r.org}</span>}
                 </td>
                 <td className={cx("px-3 py-1.5 text-right font-mono text-xs", r.isHuman ? "text-human" : "text-muted")}>
-                  {pct(r.rate.p)}
+                  {fraction(r.rate)}
+                  {r.rate.n >= 10 && <span className="ml-1.5 text-faint">{pct(r.rate.p)}</span>}
+                </td>
+                <td className="px-3 py-1.5 text-right font-mono text-xs text-muted">
+                  {r.published_pct === null ? (
+                    "–"
+                  ) : (
+                    <>
+                      {r.published_pct.toFixed(1)}%
+                      {r.published_stderr !== null && (
+                        <span className="text-faint"> ±{r.published_stderr.toFixed(1)}</span>
+                      )}
+                    </>
+                  )}
                 </td>
                 <td className={cx("px-3 py-1.5 text-right font-mono text-xs", r.isHuman ? "text-human" : "text-muted")}>
                   {r.latency_s === null ? "–" : formatDuration(r.latency_s * 1000)}
@@ -252,13 +297,14 @@ export function SpeedTable({
         </button>
       )}
       <p className="mt-3 px-3 text-[11px] leading-relaxed text-faint">
-        Model times and costs are{" "}
+        The first column is solved / attempted on exactly these tasks; with only a few tasks most strong models solve all of
+        them, so ties are ordered by{" "}
         <a href="https://www.vals.ai/benchmarks/swebench" className="underline-offset-2 hover:underline" target="_blank" rel="noreferrer">
           vals.ai
         </a>
-        &apos;s averages over all “&lt;15 min fix” tasks, run with the same bash-only harness, timed from the model&apos;s first
-        step. “Resolved here” is on exactly these tasks. Human time is capped at 15 minutes and includes reading the issue;
-        model time includes API latency.
+        &apos;s published accuracy (± standard error) on all 194 “&lt;15 min fix” tasks. Times and costs are vals.ai&apos;s
+        averages over that same band, run with one bash-only harness and timed from the model&apos;s first step. Human time is
+        capped at 15 minutes and includes reading the issue; model time includes API latency.
       </p>
     </div>
   );

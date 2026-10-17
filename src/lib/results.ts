@@ -135,6 +135,8 @@ function speedTable(ids: string[]) {
     model: m.row.model,
     org: m.row.org,
     rate: m.rate,
+    published_pct: m.row.publishedPct,
+    published_stderr: m.row.publishedStderr,
     latency_s: m.row.latencyS,
     cost_usd: m.row.costUsd,
   }));
