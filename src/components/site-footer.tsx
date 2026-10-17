@@ -9,6 +9,9 @@ export function SiteFooter() {
           <a className="hover:text-fg" href="https://github.com/SWE-bench/experiments">SWE-bench/experiments</a> and{" "}
           <a className="hover:text-fg" href="https://www.vals.ai/benchmarks/swebench">vals.ai</a>. Not affiliated with the
           SWE-bench team or vals.ai.
+          <div className="mt-1">
+            <a className="hover:text-fg" href="https://thenounproject.com/icon/turing-test-6570497/">“Turing Test”</a> icon by Adrien Coquet from <a className="hover:text-fg" href="https://thenounproject.com/icon/turing-test-6570497/">Noun Project</a>.
+          </div>
         </div>
         <div className="flex gap-4">
           <Link className="hover:text-fg" href="/methodology">Methodology</Link>
