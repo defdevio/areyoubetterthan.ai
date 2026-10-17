@@ -69,11 +69,18 @@ test("a human fixes an issue, gets scored, and shares the result", async ({ page
   await expect(page.getByTestId("human-rate")).toHaveText("100%");
   await expect(page.getByTestId("comparison-chart")).toContainText("You");
   await expect(page.getByTestId("task-table")).toContainText(instanceId);
+  // Beyond pass/fail: time, partial credit, localization, outcome breakdown, speed vs models.
+  await expect(page.getByTestId("metric-tiles")).toContainText("Found the right file");
+  await expect(page.getByTestId("metric-tiles")).toContainText("100%");
+  await expect(page.getByTestId("outcome-bar")).toContainText("Resolved");
+  await expect(page.getByTestId("speed-table")).toContainText("You");
+  await expect(page.getByTestId("speed-table")).toContainText("Avg time / task");
 
   // Review page reveals the reference fix after the attempt.
   await page.goto(`/review/${instanceId}`);
   await expect(page.getByText("Reference fix (what was merged upstream)")).toBeVisible();
   await expect(page.getByText("1 / 1 passing")).toBeVisible();
+  await expect(page.getByTestId("attempt-breakdown")).toContainText("Files the upstream fix changed");
 
   // Opt-in share page + OG image.
   await page.goto("/results");

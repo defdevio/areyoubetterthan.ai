@@ -61,7 +61,9 @@ Browser (Monaco) ─► Next.js API ─► Postgres
    the PR, and deletes the branch. Infra errors are retried twice, then an issue is opened. They
    never count against the human. Polling reconciliation and a daily cron cover missed webhooks.
 5. **Compare** (`/results`, `/stats`): each model is scored on exactly the subset of tasks you
-   attempted, with Wilson 95% intervals. There's a per-task breakdown, the reference fix and hints
+   attempted, with Wilson 95% intervals. Beyond pass/fail, each attempt records time, partial
+   credit (share of the bug's tests passing), whether it touched the right files, patch size vs.
+   the upstream fix, and how it ended. Time and cost are compared against vals.ai's model runs. There's a per-task breakdown, the reference fix and hints
    after the attempt, an opt-in share page `/r/<id>` with an OG image, and a methodology page
    that discloses every difference between the human and model conditions.
 
@@ -74,6 +76,7 @@ Browser (Monaco) ─► Next.js API ─► Postgres
 | `pnpm data:select` | Pick the final task set → `data/tasks.json` (validated only; hand exclusions live in `scripts/select-tasks.ts`) |
 | `pnpm data:bundles` | Build per-task source bundles (`--out dir`, `--ids a,b`) |
 | `pnpm data:models` | Ingest per-instance results from SWE-bench/experiments → `data/models.json` (also runs weekly in CI and opens a PR) |
+| `pnpm data:vals` | Ingest vals.ai's uniform bash-only runs (resolved tasks, plus average time and cost per task on the "<15 min fix" band) → `data/vals.json` (weekly too) |
 
 `data/tasks.json` contains reference patches and hints. It is only imported by server code
 and those fields are only returned after an attempt is over.

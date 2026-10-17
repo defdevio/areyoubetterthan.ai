@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import type { AttemptMetrics } from "@/lib/metrics";
 import {
   bigint,
   boolean,
@@ -60,6 +61,8 @@ export const attempts = pgTable(
     autoSubmitted: boolean("auto_submitted").notNull().default(false),
     outcome: text("outcome").$type<AttemptOutcome>(),
     outcomeReason: text("outcome_reason"),
+    /** Computed when the outcome is decided: time, test-level results, localization, patch size. */
+    metrics: jsonb("metrics").$type<AttemptMetrics>(),
   },
   (t) => [
     uniqueIndex("attempts_user_instance").on(t.userId, t.instanceId),

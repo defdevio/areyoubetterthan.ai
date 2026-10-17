@@ -148,5 +148,11 @@ Deviations from the plan above, and why:
   an in-app scoring queue with global/per-user caps, a mock GitHub backend for local dev/e2e,
   reference fix + hints revealed after each attempt, and a daily reconcile cron.
 
+- **Richer metrics** (added after the first pass): per-attempt time, partial credit (FAIL_TO_PASS
+  share), file-level localization vs. the upstream fix, patch size, and an outcome category are
+  stored on `attempts.metrics`. A second model source, vals.ai (86 models run with one bash-only
+  harness), adds per-task resolved lists plus average wall-clock time and cost per task on the
+  "<15 min fix" band; it's parsed from page data (no API), validated, and refreshed weekly.
+
 Status: todos 1–15 are implemented and tested. `deploy` needs the GitHub App, Neon, Vercel, and
 the domain (see docs/SETUP.md).

@@ -8,6 +8,7 @@ import { validateDiff } from "@/lib/diff-validate";
 import { computeFlags, sanitizePasteEvents } from "@/lib/flags";
 import { newId } from "@/lib/ids";
 import { nextTask } from "@/lib/order";
+import { metricsFor } from "@/lib/attempt-metrics";
 import { HttpError } from "@/lib/errors";
 import { briefing, getTask, taskIds, teaser } from "@/lib/tasks";
 
@@ -78,6 +79,7 @@ async function createSubmission(
 
 async function closeWithoutPatch(attempt: Attempt, status: "submitted" | "expired", endedAt: Date, elapsedMs: number, pasteEvents?: PasteEvent[]) {
   const db = await getDb();
+  const outcomeReason = status === "expired" ? "timed_out_no_patch" : "no_patch";
   await db
     .update(attempts)
     .set({
@@ -85,7 +87,8 @@ async function closeWithoutPatch(attempt: Attempt, status: "submitted" | "expire
       endedAt,
       elapsedMs,
       outcome: "unresolved",
-      outcomeReason: status === "expired" ? "timed_out_no_patch" : "no_patch",
+      outcomeReason,
+      metrics: metricsFor({ ...attempt, elapsedMs, outcome: "unresolved", outcomeReason }, null),
       draftDiff: null,
       ...(pasteEvents ? { pasteEvents } : {}),
     })

@@ -105,3 +105,32 @@ export interface ModelsFile {
   pool: string[];
   entries: ModelEntry[];
 }
+
+export interface ValsStats {
+  accuracy_pct: number;
+  stderr_pct: number | null;
+  /** Average wall-clock seconds per task, measured by vals.ai from the model's first step. */
+  latency_s: number | null;
+  /** Average API cost per task in USD. */
+  cost_usd: number | null;
+}
+
+export interface ValsEntry {
+  /** "vals:<provider>/<model>" */
+  id: string;
+  vals_id: string;
+  name: string;
+  provider: string | null;
+  /** All 500 Verified tasks. */
+  overall: ValsStats;
+  /** The "<15 min fix" difficulty band, the pool our tasks are drawn from. */
+  band: ValsStats;
+  /** Indices into ValsFile.pool of tasks this model resolved. */
+  resolved: number[];
+}
+
+export interface ValsFile {
+  source: { url: string; fetched_at: string; date_modified: string | null; band: string };
+  pool: string[];
+  entries: ValsEntry[];
+}

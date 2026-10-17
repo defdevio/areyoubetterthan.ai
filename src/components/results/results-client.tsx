@@ -5,11 +5,23 @@ import { useEffect, useMemo, useState } from "react";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
 import { api } from "@/lib/client/api";
+import { MetricTiles, OutcomeBar, SolveCurve, SpeedTable, type SpeedRow } from "@/components/metrics";
 import { formatDuration, isPending, shortId } from "@/lib/format";
+import { CATEGORY_LABEL } from "@/lib/metrics";
 import type { UserSummary } from "@/lib/results";
 import { pct } from "@/lib/stats";
 
-type Mode = "default" | "all";
+type Mode = "default" | "all" | "vals";
+
+/** Reference lines for the solve curve: fastest and median model average time per task. */
+export function speedMarkers(rows: SpeedRow[]) {
+  const times = rows.map((r) => r.latency_s).filter((t): t is number => t !== null).sort((a, b) => a - b);
+  if (!times.length) return [];
+  return [
+    { label: "fastest model avg", minutes: times[0] / 60 },
+    { label: "median model avg", minutes: times[Math.floor(times.length / 2)] / 60 },
+  ];
+}
 
 export function ComparisonChart({
   summary,
@@ -183,6 +195,7 @@ export function ResultsClient() {
             [
               ["default", "Latest per model"],
               ["all", "All submissions"],
+              ["vals", "vals.ai runs"],
             ] as const
           ).map(([m, label]) => (
             <button
@@ -192,8 +205,10 @@ export function ResultsClient() {
               role="tab"
               title={
                 m === "default"
-                  ? "One row per model: its most recent result, preferring the bash-only mini-SWE-agent scaffold"
-                  : "Every agent + model submission on the SWE-bench leaderboard"
+                  ? "SWE-bench leaderboard, one row per model: its most recent result, preferring the bash-only mini-SWE-agent scaffold"
+                  : m === "all"
+                    ? "Every agent + model submission on the SWE-bench leaderboard"
+                    : "vals.ai's independent runs: every model with the same bash-only harness, with time and cost per task"
               }
               className={cx("rounded-md px-3 py-1.5", mode === m ? "bg-white/10 text-fg" : "text-muted hover:text-fg")}
             >
@@ -283,6 +298,34 @@ export function ResultsClient() {
             </Card>
           </div>
 
+          <section className="mt-10 space-y-4">
+            <h2 className="text-lg font-semibold tracking-tight">How you worked</h2>
+            <MetricTiles m={s.metrics} />
+            <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
+              <Card className="p-5">
+                <div className="text-sm font-medium">How each attempt ended</div>
+                <p className="mt-1 mb-4 text-xs text-muted">
+                  Unresolved isn&apos;t all the same: a fix that breaks other tests is closer than a patch that doesn&apos;t apply.
+                </p>
+                <OutcomeBar categories={s.metrics.categories} />
+              </Card>
+              <Card className="p-5">
+                <div className="text-sm font-medium">Solved within N minutes</div>
+                <p className="mt-1 mb-2 text-xs text-muted">
+                  Share of your attempts resolved by each minute. Dashed lines mark models&apos; average time per task.
+                </p>
+                <SolveCurve
+                  series={[{ label: "You", values: s.metrics.solved_by_minute, tone: "human" }]}
+                  markers={speedMarkers(s.speed)}
+                />
+              </Card>
+            </div>
+            <Card className="p-5">
+              <div className="mb-3 text-sm font-medium">Speed vs. the machines</div>
+              <SpeedTable human={{ label: "You", rate: s.human, meanTimeMs: s.metrics.mean_time_ms }} rows={s.speed} />
+            </Card>
+          </section>
+
           {(s.human_edge.length > 0 || s.ai_edge.length > 0) && (
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <Card className="p-5">
@@ -306,6 +349,8 @@ export function ResultsClient() {
                   <tr className="border-b border-line">
                     <th className="px-5 py-2 font-normal">Task</th>
                     <th className="px-3 py-2 font-normal">You</th>
+                    <th className="px-3 py-2 font-normal">Bug tests</th>
+                    <th className="px-3 py-2 font-normal">Right file</th>
                     <th className="px-3 py-2 font-normal">Time</th>
                     <th className="px-5 py-2 font-normal">Models that solved it</th>
                   </tr>
@@ -321,6 +366,21 @@ export function ResultsClient() {
                       </td>
                       <td className="px-3 py-3">
                         <PhaseBadge phase={t.you} />
+                        {t.category && t.category !== "resolved" && (
+                          <div className="mt-1 text-[11px] text-faint">{CATEGORY_LABEL[t.category]}</div>
+                        )}
+                      </td>
+                      <td className="px-3 py-3 font-mono text-xs text-muted">
+                        {t.f2p_total ? `${t.f2p_passed}/${t.f2p_total}` : "–"}
+                      </td>
+                      <td className="px-3 py-3 text-xs">
+                        {t.right_file === null ? (
+                          <span className="text-faint">–</span>
+                        ) : t.right_file ? (
+                          <span className="text-pass">✓</span>
+                        ) : (
+                          <span className="text-fail">✗</span>
+                        )}
                       </td>
                       <td className="px-3 py-3 font-mono text-xs text-muted">{formatDuration(t.elapsed_ms)}</td>
                       <td className="px-5 py-3">

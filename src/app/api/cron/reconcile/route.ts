@@ -1,6 +1,7 @@
 import { lt } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { webhookDeliveries } from "@/lib/db/schema";
+import { backfillMetrics } from "@/lib/attempt-metrics";
 import { finalizeExpiredAttempts } from "@/lib/game";
 import { reconcile } from "@/lib/scoring/service";
 
@@ -17,5 +18,6 @@ export async function GET(req: Request) {
   // Delivery ids only need to outlive GitHub's redelivery window.
   const db = await getDb();
   await db.delete(webhookDeliveries).where(lt(webhookDeliveries.receivedAt, new Date(Date.now() - 14 * 86_400_000)));
-  return Response.json({ ok: true, expired });
+  const backfilled = await backfillMetrics();
+  return Response.json({ ok: true, expired, backfilled });
 }

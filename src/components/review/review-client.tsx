@@ -4,15 +4,18 @@ import { useEffect, useState } from "react";
 import { DiffView } from "@/components/diff-view";
 import { Markdown } from "@/components/markdown";
 import { useResults, useSession } from "@/components/providers";
-import { Card, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
+import { Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
 import { api, ApiError } from "@/lib/client/api";
 import type { ScoreResult } from "@/lib/db/schema";
 import { FLAG_LABELS } from "@/lib/flags";
 import { formatDuration, isPending, PHASE_HINT, REASON_LABEL } from "@/lib/format";
+import { CATEGORY_LABEL, type AttemptMetrics } from "@/lib/metrics";
 import type { ResultItem } from "@/lib/results";
+import { CATEGORY_COLOR } from "@/components/metrics";
 
 interface Review {
   item: ResultItem;
+  metrics: AttemptMetrics | null;
   task: {
     instance_id: string;
     repo: string;
@@ -101,7 +104,7 @@ export function ReviewClient({ instanceId }: { instanceId: string }) {
     );
   }
 
-  const { item, task, diff, result, models } = review;
+  const { item, task, diff, result, models, metrics } = review;
   const tests = result?.tests;
   return (
     <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-12" data-testid="review-page">
@@ -200,6 +203,8 @@ export function ReviewClient({ instanceId }: { instanceId: string }) {
         </Card>
       </div>
 
+      {metrics && <AttemptBreakdown m={metrics} />}
+
       <div className="mt-4 space-y-4">
         {diff && (
           <Collapsible title="Your patch" defaultOpen>
@@ -237,5 +242,50 @@ export function ReviewClient({ instanceId }: { instanceId: string }) {
         </LinkButton>
       </div>
     </div>
+  );
+}
+
+function AttemptBreakdown({ m }: { m: AttemptMetrics }) {
+  const loc = m.localization;
+  return (
+    <Card className="mt-4 p-5" data-testid="attempt-breakdown">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className={cx("size-2.5 rounded-full", CATEGORY_COLOR[m.category])} />
+        <span className="text-sm font-medium">{CATEGORY_LABEL[m.category]}</span>
+        <span className="text-xs text-faint">
+          · {m.f2p_passed}/{m.f2p_total} bug tests passing
+          {m.p2p_failed ? ` · ${m.p2p_failed} regression${m.p2p_failed === 1 ? "" : "s"}` : ""}
+          {m.patch_lines !== null && m.gold_lines > 0
+            ? ` · ${m.patch_lines} changed lines vs ${m.gold_lines} in the reference fix`
+            : ""}
+        </span>
+      </div>
+      {loc && (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <div className="text-xs text-faint">Files the upstream fix changed</div>
+            <ul className="mt-1.5 space-y-1 font-mono text-[11.5px]">
+              {loc.gold.map((f) => (
+                <li key={f} className="flex gap-2 break-all">
+                  <span className={loc.hit.includes(f) ? "text-pass" : "text-fail"}>{loc.hit.includes(f) ? "✓" : "✗"}</span>
+                  <span className="text-muted">{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <div className="text-xs text-faint">Files you changed</div>
+            <ul className="mt-1.5 space-y-1 font-mono text-[11.5px]">
+              {loc.touched.map((f) => (
+                <li key={f} className="flex gap-2 break-all">
+                  <span className={loc.hit.includes(f) ? "text-pass" : "text-faint"}>{loc.hit.includes(f) ? "✓" : "·"}</span>
+                  <span className="text-muted">{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </Card>
   );
 }

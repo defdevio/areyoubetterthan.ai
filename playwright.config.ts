@@ -32,6 +32,7 @@ export default defineConfig({
       MOCK_SCORE_MS: "3000",
       APP_URL: `http://localhost:${PORT}`,
       NEXT_TELEMETRY_DISABLED: "1",
+      ...(PROD ? { NEXT_DIST_DIR: ".next-e2e" } : {}),
     },
   },
 });

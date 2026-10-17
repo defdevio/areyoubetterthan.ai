@@ -1,10 +1,22 @@
 import "server-only";
 import modelsJson from "../../data/models.json";
-import type { ModelEntry, ModelsFile } from "@/lib/data-types";
+import valsJson from "../../data/vals.json";
+import type { ModelEntry, ModelsFile, ValsFile } from "@/lib/data-types";
 import { FIXTURES, taskIds } from "@/lib/tasks";
 import { rate, type Rate } from "@/lib/stats";
 
-export type ComparisonMode = "default" | "all";
+/**
+ * default: SWE-bench leaderboard, one row per model (latest, bash-only preferred)
+ * all:     every SWE-bench leaderboard submission
+ * vals:    vals.ai's uniform bash-only runs, which also report time and cost per task
+ */
+export type ComparisonMode = "default" | "all" | "vals";
+
+export const COMPARISON_MODES: ComparisonMode[] = ["default", "all", "vals"];
+
+export function parseMode(v: string | null | undefined): ComparisonMode {
+  return COMPARISON_MODES.includes(v as ComparisonMode) ? (v as ComparisonMode) : "default";
+}
 
 export interface ModelRow {
   id: string;
@@ -15,9 +27,43 @@ export interface ModelRow {
   bashOnly: boolean;
   date: string;
   verifiedPct: number | null;
+  source: "swe-bench" | "vals";
+  /** vals.ai only: average wall-clock seconds per task on the "<15 min fix" band. */
+  latencyS: number | null;
+  /** vals.ai only: average API cost per task (USD) on the "<15 min fix" band. */
+  costUsd: number | null;
 }
 
 const file = modelsJson as unknown as ModelsFile;
+const vals = valsJson as unknown as ValsFile;
+
+interface Comparable extends ModelEntry {
+  source: "swe-bench" | "vals";
+  latency_s: number | null;
+  cost_usd: number | null;
+}
+
+const valsEntries: Comparable[] = vals.entries.map((e) => ({
+  id: e.id,
+  name: e.name,
+  model: e.name,
+  model_org: e.provider,
+  agent: "mini-SWE-agent",
+  bash_only: true,
+  date: vals.source.date_modified ?? "",
+  verified_resolved_pct: e.overall.accuracy_pct,
+  resolved: e.resolved.map((i) => vals.pool[i]).map((iid) => file.pool.indexOf(iid)).filter((i) => i >= 0),
+  source: "vals",
+  latency_s: e.band.latency_s,
+  cost_usd: e.band.cost_usd,
+}));
+
+const leaderboardEntries: Comparable[] = file.entries.map((e) => ({
+  ...e,
+  source: "swe-bench",
+  latency_s: null,
+  cost_usd: null,
+}));
 
 /** instance id -> set of entry ids that resolved it */
 let solvedBy: Map<string, Set<string>> | null = null;
@@ -33,7 +79,7 @@ function index() {
   if (solvedBy) return solvedBy;
   solvedBy = new Map();
   for (const id of taskIds) solvedBy.set(id, new Set());
-  for (const e of file.entries) {
+  for (const e of [...leaderboardEntries, ...valsEntries]) {
     if (FIXTURES) {
       for (const id of taskIds) if (fixtureSolved(e, id)) solvedBy.get(id)!.add(e.id);
       continue;
@@ -46,8 +92,11 @@ function index() {
   return solvedBy;
 }
 
-function toRow(e: ModelEntry): ModelRow {
+function toRow(e: Comparable): ModelRow {
   return {
+    source: e.source,
+    latencyS: e.latency_s,
+    costUsd: e.cost_usd,
     id: e.id,
     name: e.name,
     model: e.model,
@@ -70,18 +119,19 @@ export function modelKey(name: string) {
     .join(" ");
 }
 
-let defaultEntries: ModelEntry[] | null = null;
+let defaultEntries: Comparable[] | null = null;
 
 /**
  * Default comparison set: one row per model, its most recent result, preferring the
  * bash-only mini-SWE-agent scaffold (closest to apples-to-apples across models).
  * Multi-model agent systems have no single model, so they only appear in "all".
  */
-export function comparisonEntries(mode: ComparisonMode): ModelEntry[] {
-  if (mode === "all") return file.entries;
+export function comparisonEntries(mode: ComparisonMode): Comparable[] {
+  if (mode === "vals") return valsEntries;
+  if (mode === "all") return leaderboardEntries;
   if (defaultEntries) return defaultEntries;
-  const best = new Map<string, ModelEntry>();
-  for (const e of file.entries) {
+  const best = new Map<string, Comparable>();
+  for (const e of leaderboardEntries) {
     if (e.multi_model) continue;
     const key = modelKey(e.model);
     const cur = best.get(key);
@@ -128,6 +178,10 @@ export function solversOf(instanceId: string, mode: ComparisonMode) {
 
 export function modelsSource() {
   return { ...file.source, entries: file.entries.length, default_entries: comparisonEntries("default").length };
+}
+
+export function valsSource() {
+  return { ...vals.source, entries: vals.entries.length };
 }
 
 export function bestModelOnTaskSet(mode: ComparisonMode = "default") {

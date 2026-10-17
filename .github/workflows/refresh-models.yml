@@ -1,7 +1,7 @@
 name: refresh-models
 
-# Re-ingests per-instance model results from SWE-bench/experiments every week and opens
-# a PR when anything changed. Requires "Allow GitHub Actions to create pull requests"
+# Re-ingests per-instance model results from SWE-bench/experiments and vals.ai every week
+# and opens a PR when anything changed. Requires "Allow GitHub Actions to create pull requests"
 # in Settings → Actions → General.
 
 on:
@@ -26,12 +26,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm data:models | tee ingest.log
+      - run: pnpm data:vals | tee -a ingest.log
       - name: Open PR if data changed
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           # The fetched_at timestamp always changes; only open a PR for real data changes.
-          if git diff --quiet -I '^  "source": ' -- data/models.json; then
+          if git diff --quiet -I '^  "source": ' -- data/models.json data/vals.json; then
             echo "No model changes."
             exit 0
           fi
@@ -39,10 +40,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
-          git add data/models.json
-          git commit -m "Refresh model results from SWE-bench/experiments"
+          git add data/models.json data/vals.json
+          git commit -m "Refresh model results from SWE-bench/experiments and vals.ai"
           git push --force origin "$branch"
           gh pr create --base main --head "$branch" \
             --title "Refresh model results ($(date -u +%Y-%m-%d))" \
-            --body "$(printf 'Automated weekly refresh of `data/models.json`.\n\n```\n%s\n```' "$(cat ingest.log)")" \
+            --body "$(printf 'Automated weekly refresh of `data/models.json` and `data/vals.json`.\n\n```\n%s\n```' "$(cat ingest.log)")" \
             || echo "PR already exists"

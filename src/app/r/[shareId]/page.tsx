@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { MetricTiles } from "@/components/metrics";
 import { ComparisonChart } from "@/components/results/results-client";
 import { SiteFooter } from "@/components/site-footer";
 import { Card, LinkButton, PhaseBadge } from "@/components/ui";
@@ -54,6 +55,9 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
         <Card className="p-6">
           <ComparisonChart summary={s} you={share.displayName} limit={12} />
         </Card>
+      </div>
+      <div className="mt-4">
+        <MetricTiles m={s.metrics} />
       </div>
       <Card className="mt-4 divide-y divide-line">
         {s.tasks.map((t) => (

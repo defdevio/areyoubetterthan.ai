@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ComparisonChart } from "@/components/results/results-client";
+import { MetricTiles, OutcomeBar, SolveCurve, SpeedTable } from "@/components/metrics";
+import { ComparisonChart, speedMarkers } from "@/components/results/results-client";
 import { SiteFooter } from "@/components/site-footer";
 import { Card, LinkButton, RateBar } from "@/components/ui";
 import { modelRatesOn, modelsSource } from "@/lib/models";
@@ -87,6 +88,25 @@ async function HumanSection() {
           </div>
         </Card>
       </div>
+      <h2 className="pt-6 text-lg font-semibold">How humans work</h2>
+      <MetricTiles m={s.metrics} who="humans" />
+      <div className="grid gap-4 lg:grid-cols-[1fr_1.2fr]">
+        <Card className="p-5">
+          <div className="mb-4 text-sm font-medium">How attempts ended</div>
+          <OutcomeBar categories={s.metrics.categories} />
+        </Card>
+        <Card className="p-5">
+          <div className="text-sm font-medium">Solved within N minutes</div>
+          <SolveCurve
+            series={[{ label: "Humans", values: s.metrics.solved_by_minute, tone: "human" }]}
+            markers={speedMarkers(s.speed)}
+          />
+        </Card>
+      </div>
+      <Card className="p-5">
+        <div className="mb-3 text-sm font-medium">Speed vs. the machines</div>
+        <SpeedTable human={{ label: "Humans (pooled)", rate: s.pooled, meanTimeMs: s.metrics.mean_time_ms }} rows={s.speed} />
+      </Card>
       <p className="text-xs text-faint">Flagged attempts (honor-system checks) are excluded. Updated every few minutes.</p>
     </div>
   );

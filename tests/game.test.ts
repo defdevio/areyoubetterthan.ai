@@ -68,8 +68,19 @@ describe("attempt lifecycle", () => {
     expect(items[0]).toMatchObject({ instance_id: next!.instance_id, phase: "resolved" });
     expect(items[0].tests?.f2p_passed).toBe(items[0].tests?.f2p_total);
 
+    const db = await getDb();
+    const [stored] = await db.select().from(attempts).where(eq(attempts.id, active.id));
+    expect(stored.metrics).toMatchObject({ category: "resolved", f2p_passed: 1, f2p_total: 1 });
+    expect(stored.metrics?.localization?.hit.length).toBe(1);
+
     const summary = await userSummary(user.id, "default");
     expect(summary.human).toMatchObject({ k: 1, n: 1, p: 1 });
+    expect(summary.metrics).toMatchObject({ attempts: 1, right_file_rate: 1, bug_tests_passed: 1 });
+    expect(summary.speed.length).toBeGreaterThan(20);
+    expect(summary.speed[0].latency_s).toBeGreaterThan(0);
+    expect(summary.tasks[0]).toMatchObject({ category: "resolved", right_file: true });
+    const vals = await userSummary(user.id, "vals");
+    expect(vals.models[0].source).toBe("vals");
     expect(summary.models.length).toBeGreaterThan(0);
     expect(summary.tasks[0].you).toBe("resolved");
 
@@ -87,6 +98,9 @@ describe("attempt lifecycle", () => {
     expect(res.submission_id).toBeNull();
     const items = await userResults(user.id);
     expect(items[0]).toMatchObject({ phase: "unresolved", reason: "no_patch" });
+    const db = await getDb();
+    const [a] = await db.select().from(attempts).where(eq(attempts.id, active.id));
+    expect(a.metrics).toMatchObject({ category: "no_patch", patch_lines: null });
   });
 
   it("rejects malformed diffs", async () => {
@@ -188,6 +202,7 @@ describe("scoring pipeline", () => {
     await reconcile();
     const items = await userResults(user.id);
     expect(items[0]).toMatchObject({ phase: "unresolved", reason: "patch_apply_failed" });
+    expect((await userSummary(user.id, "default")).metrics.categories.did_not_apply).toBe(1);
   });
 
   it("enforces the per-user concurrency cap", async () => {

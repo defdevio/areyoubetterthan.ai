@@ -10,6 +10,7 @@ import {
   type Submission,
   type SubmissionStatus,
 } from "@/lib/db/schema";
+import { metricsFor } from "@/lib/attempt-metrics";
 import { getBackend, type RunInfo } from "@/lib/github";
 
 export const ACTIVE_STATUSES: SubmissionStatus[] = ["dispatching", "dispatched", "running", "retrying"];
@@ -114,9 +115,14 @@ async function finalize(sub: Submission, result: ScoreResult, run: RunInfo) {
     .where(and(eq(submissions.id, sub.id), notInArray(submissions.status, FINAL_STATUSES)))
     .returning();
   if (!done) return; // another worker (webhook vs. poll) already finalized it
+  const [attempt] = await db.select().from(attempts).where(eq(attempts.id, sub.attemptId));
+  const outcomeReason = result.reason ?? result.outcome;
+  const metrics = attempt
+    ? metricsFor({ ...attempt, outcome: status, outcomeReason }, { diff: done.diff, result })
+    : null;
   await db
     .update(attempts)
-    .set({ outcome: status, outcomeReason: result.reason ?? result.outcome })
+    .set({ outcome: status, outcomeReason, metrics })
     .where(eq(attempts.id, sub.attemptId));
   log(`${sub.id} (${sub.instanceId}) -> ${result.outcome}`);
   try {

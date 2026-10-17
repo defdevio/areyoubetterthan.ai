@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { Card } from "@/components/ui";
 import { FLAG_RULES } from "@/lib/flags";
-import { modelsSource } from "@/lib/models";
+import { modelsSource, valsSource } from "@/lib/models";
 import { getTasksFile } from "@/lib/tasks";
 
 export const metadata: Metadata = {
@@ -26,6 +26,7 @@ function H({ id, children }: { id: string; children: ReactNode }) {
 export default function MethodologyPage() {
   const tasks = getTasksFile();
   const models = modelsSource();
+  const vals = valsSource();
   const sel = tasks.selection;
   const fmt = (iso: string) => new Date(iso).toISOString().slice(0, 10);
   return (
@@ -44,6 +45,7 @@ export default function MethodologyPage() {
             ["environment", "Environment"],
             ["scoring", "Scoring"],
             ["models", "Model comparison"],
+            ["metrics", "Metrics"],
             ["stats", "Statistics"],
             ["honor", "Honor system"],
             ["limits", "Limitations"],
@@ -155,6 +157,49 @@ export default function MethodologyPage() {
             scored on those 12, not on all 500. A model that didn&apos;t produce a patch for a task counts as unresolved, as on
             the leaderboard. Entries whose per-instance data disagrees with their published score by more than 2 points are
             excluded.
+          </p>
+
+          <p>
+            A second, independent source is{" "}
+            <a className="text-ai hover:underline" href={vals.url}>
+              vals.ai
+            </a>
+            , which runs {vals.entries} models itself with the same bash-only harness and also reports{" "}
+            <strong>wall-clock time and API cost per task</strong> (snapshot from {vals.date_modified ?? fmt(vals.fetched_at)}).
+            Pick “vals.ai runs” on your results page to compare against it. Their time and cost figures are averages over all
+            “{vals.band}” tasks rather than per task, so they describe the same difficulty band, not exactly your tasks.
+          </p>
+
+          <H id="metrics">Metrics</H>
+          <p>
+            The headline is the resolve rate, since that&apos;s what the leaderboard ranks on. We also record:
+          </p>
+          <ul className="list-disc space-y-1 pl-5">
+            <li>
+              <strong>Time</strong>: from pressing Start to submitting, measured on the server. Auto-submits and abandoned
+              attempts count as the full 15 minutes. We show the median per task and the median for correct fixes only, and
+              a “solved within N minutes” curve.
+            </li>
+            <li>
+              <strong>Bug tests passing</strong> (partial credit): the share of each task&apos;s FAIL_TO_PASS tests your patch
+              makes pass, averaged over attempts. No patch or a patch that doesn&apos;t apply counts as 0.
+            </li>
+            <li>
+              <strong>Found the right file</strong>: whether your patch changed at least one file the upstream fix changed,
+              plus file-level F1 against it. It&apos;s a measure of locating the bug, independent of fixing it.
+            </li>
+            <li>
+              <strong>Patch size</strong>: lines you changed relative to the upstream fix.
+            </li>
+            <li>
+              <strong>How it ended</strong>: resolved; fixed the bug but broke other tests; partly fixed; didn&apos;t fix it;
+              patch didn&apos;t apply; no patch; or tests timed out.
+            </li>
+          </ul>
+          <p>
+            For models, only resolve rate (both sources) and vals.ai&apos;s average time and cost are available. Human and
+            model times aren&apos;t perfectly comparable: humans are capped at 15 minutes and time includes reading the issue;
+            model time is uncapped and includes API latency.
           </p>
 
           <H id="stats">Statistics</H>

@@ -19,7 +19,8 @@
     "data:validate": "tsx scripts/validate-tasks.ts",
     "data:select": "tsx scripts/select-tasks.ts",
     "data:bundles": "tsx scripts/build-bundles.ts",
-    "data:models": "tsx scripts/ingest-models.ts"
+    "data:models": "tsx scripts/ingest-models.ts",
+    "data:vals": "tsx scripts/ingest-vals.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.10",
