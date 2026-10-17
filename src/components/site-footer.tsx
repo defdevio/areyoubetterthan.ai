@@ -19,6 +19,13 @@ export function SiteFooter() {
           <a className="hover:text-fg" href="https://github.com/defdevio/areyoutbetterthan.ai-submissions">Scoring audit trail</a>
         </div>
       </div>
+      <div className="mx-auto mt-6 flex max-w-6xl items-center gap-2 px-4">
+        <a className="opacity-60 hover:opacity-100" href="https://defdev.io">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/defdev-logo.svg" alt="DefDev" className="h-5 w-auto" />
+        </a>
+        <span>© 2026 DefDev LLC</span>
+      </div>
     </footer>
   );
 }
