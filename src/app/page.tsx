@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { Card, LinkButton, RateBar } from "@/components/ui";
-import { modelRatesOn, modelsSource } from "@/lib/models";
+import { modelRatesOn, valsSource } from "@/lib/models";
+import { formatDuration } from "@/lib/format";
 import { getHumanStats } from "@/lib/public-stats";
 import { pct } from "@/lib/stats";
 import { getTasksFile, taskIds } from "@/lib/tasks";
@@ -20,10 +21,20 @@ const DIFFERENT = [
 
 async function HumansSoFar() {
   const stats = await getHumanStats();
-  if (stats.attempts === 0) {
+  if (!stats.unlocked) {
     return (
-      <div className="text-sm text-muted">
-        No humans have finished a task yet. <span className="text-human">You could be the first data point.</span>
+      <div className="space-y-2">
+        <div className="flex items-baseline justify-between text-sm">
+          <span className="font-medium text-human">Humans</span>
+          <span className="font-mono text-human">?</span>
+        </div>
+        <div className="h-2.5 overflow-hidden rounded-full bg-white/[0.06]">
+          <div className="h-full bg-human/60" style={{ width: `${Math.min(100, (stats.attempts / stats.min_attempts) * 100)}%` }} />
+        </div>
+        <div className="text-[11px] text-faint">
+          Ranked after {stats.min_attempts} scored attempts · {stats.attempts} so far.{" "}
+          <span className="text-human">You could be one of them.</span>
+        </div>
       </div>
     );
   }
@@ -42,8 +53,8 @@ async function HumansSoFar() {
 }
 
 export default function Home() {
-  const top = modelRatesOn([...taskIds], "default").slice(0, 6);
-  const src = modelsSource();
+  const top = modelRatesOn([...taskIds], "vals").slice(0, 6);
+  const src = valsSource();
   const tasks = getTasksFile();
   return (
     <>
@@ -76,14 +87,16 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-faint">
               <span>{tasks.tasks.length} validated tasks</span>
               <span>15 min each</span>
-              <span>{src.default_entries} models compared</span>
+              <span>{src.entries}+ models compared</span>
               <span>scored by swebench {tasks.harness_version}</span>
             </div>
           </div>
 
           <Card className="self-start p-6">
             <div className="flex items-baseline justify-between">
-              <div className="text-sm font-medium">On these {taskIds.length} tasks</div>
+              <div className="text-sm font-medium">
+                On these {taskIds.length} tasks <span className="text-[11px] font-normal text-faint">· vals.ai runs</span>
+              </div>
               <Link href="/stats" className="text-xs text-faint hover:text-fg">
                 Full table →
               </Link>
@@ -94,7 +107,9 @@ export default function Home() {
                   <div className="flex items-baseline justify-between gap-3 text-sm">
                     <span className="truncate">
                       {m.row.model}
-                      <span className="ml-2 text-[11px] text-faint">{m.row.bashOnly ? "mini-SWE-agent" : m.row.agent}</span>
+                      {m.row.latencyS !== null && (
+                        <span className="ml-2 text-[11px] text-faint">{formatDuration(m.row.latencyS * 1000)} / task</span>
+                      )}
                     </span>
                     <span className="font-mono text-ai">{pct(m.rate.p)}</span>
                   </div>

@@ -8,7 +8,7 @@ import { metricsOf } from "@/lib/attempt-metrics";
 import { summarize, type AttemptMetrics, type Category } from "@/lib/metrics";
 import { modelRatesOn, solversOf, type ComparisonMode } from "@/lib/models";
 import { queuePositions, reconcile, runUrl } from "@/lib/scoring/service";
-import { rate } from "@/lib/stats";
+import { rate, type Rate } from "@/lib/stats";
 import { debrief, getTask, repoShort, taskIds } from "@/lib/tasks";
 
 export type Phase =
@@ -226,7 +226,50 @@ export async function attemptReview(userId: string, instanceId: string) {
   };
 }
 
-/** Pooled "all humans" numbers. Flagged attempts are excluded. */
+/** Scored, non-flagged attempts needed before the human baseline is published. */
+export const HUMAN_MIN_ATTEMPTS = Number(process.env.ABT_HUMAN_MIN_ATTEMPTS ?? 10);
+
+export interface BoardRow {
+  id: string;
+  model: string;
+  org: string | null;
+  agent: string;
+  bashOnly: boolean;
+  source: "swe-bench" | "vals";
+  published_pct: number | null;
+  published_stderr: number | null;
+  published_scope: "band" | "verified";
+  latency_s: number | null;
+  cost_usd: number | null;
+  /** On all tasks in the set. */
+  all: Rate;
+  /**
+   * Head-to-head: scored on exactly the human attempts (a task attempted by five people
+   * counts five times), so it is directly comparable to the pooled human rate.
+   */
+  h2h: Rate | null;
+}
+
+function board(mode: ComparisonMode, attemptTasks: string[]): BoardRow[] {
+  const h2h = attemptTasks.length ? new Map(modelRatesOn(attemptTasks, mode).map((m) => [m.row.id, m.rate])) : null;
+  return modelRatesOn([...taskIds], mode).map((m) => ({
+    id: m.row.id,
+    model: m.row.model,
+    org: m.row.org,
+    agent: m.row.agent,
+    bashOnly: m.row.bashOnly,
+    source: m.row.source,
+    published_pct: m.row.publishedPct,
+    published_stderr: m.row.publishedStderr,
+    published_scope: m.row.publishedScope,
+    latency_s: m.row.latencyS,
+    cost_usd: m.row.costUsd,
+    all: m.rate,
+    h2h: h2h?.get(m.row.id) ?? null,
+  }));
+}
+
+/** Pooled "all humans" numbers against every model. Flagged attempts are excluded. */
 export async function humanStats() {
   const db = await getDb();
   const rows = await db
@@ -252,34 +295,41 @@ export async function humanStats() {
     attempted.length > 0
       ? attempted.reduce((acc, id) => acc + perTask.get(id)!.k / perTask.get(id)!.n, 0) / attempted.length
       : null;
-  const models = modelRatesOn(attempted, "default");
+  const attemptTasks = valid.map((r) => r.instanceId);
+  const metrics = summarize(valid.map((r) => r.metrics).filter((m): m is AttemptMetrics => Boolean(m)));
   return {
+    unlocked: valid.length >= HUMAN_MIN_ATTEMPTS,
+    min_attempts: HUMAN_MIN_ATTEMPTS,
     humans: new Set(valid.map((r) => r.userId)).size,
     attempts: valid.length,
     tasks_covered: attempted.length,
     total_tasks: taskIds.length,
     pooled: rate(valid.filter((r) => r.outcome === "resolved").length, valid.length),
     mean_per_task: meanPerTask,
-    models_on_same_tasks: models.slice(0, 12).map((m) => ({ ...m.row, rate: m.rate })),
-    metrics: summarize(valid.map((r) => r.metrics).filter((m): m is AttemptMetrics => Boolean(m))),
-    speed: speedTable(attempted),
+    metrics,
+    boards: { vals: board("vals", attemptTasks), swe: board("default", attemptTasks) },
     per_task: attempted
       .map((id) => {
         const t = getTask(id)!;
-        const s = solversOf(id, "default");
+        const swe = solversOf(id, "default");
+        const vals = solversOf(id, "vals");
         const h = perTask.get(id)!;
         return {
           instance_id: id,
           repo: repoShort(t.repo),
           title: t.title,
           humans: rate(h.k, h.n),
-          models_solved: s.solved,
-          models_total: s.total,
+          models_solved: swe.solved,
+          models_total: swe.total,
+          vals_solved: vals.solved,
+          vals_total: vals.total,
         };
       })
       .sort((a, b) => b.humans.n - a.humans.n || a.instance_id.localeCompare(b.instance_id)),
   };
 }
+
+export type HumanStats = Awaited<ReturnType<typeof humanStats>>;
 
 export async function publicShare(shareId: string) {
   const db = await getDb();

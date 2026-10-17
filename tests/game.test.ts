@@ -266,5 +266,27 @@ describe("aggregate stats", () => {
     expect(stats.humans).toBe(1);
     expect(stats.attempts).toBe(1);
     expect(stats.pooled.k).toBe(1);
+    expect(stats.unlocked).toBe(false);
+    expect(stats.boards.vals.length).toBeGreaterThan(20);
+    expect(stats.boards.vals[0].latency_s).toBeGreaterThan(0);
+    expect(stats.boards.swe.length).toBeGreaterThan(20);
+  });
+});
+
+describe("head-to-head weighting", () => {
+  it("scores models on exactly the human attempts, counting repeats", async () => {
+    // Three users, all of whom get a task; models are scored on the same three attempts.
+    for (const login of ["h1", "h2", "h3"]) {
+      const user = await newUser(login);
+      const { next } = await getPlayState(user);
+      const { active } = await startAttempt(user, next!.instance_id);
+      await submitAttempt(user, active.id, "", []);
+    }
+    const stats = await humanStats();
+    expect(stats.attempts).toBe(3);
+    for (const row of stats.boards.vals) {
+      expect(row.h2h?.n).toBe(3);
+      expect(row.all.n).toBe(taskIds.length);
+    }
   });
 });

@@ -32,6 +32,9 @@ export default defineConfig({
       MOCK_SCORE_MS: "3000",
       APP_URL: `http://localhost:${PORT}`,
       NEXT_TELEMETRY_DISABLED: "1",
+      // Unlock the human leaderboard after one scored attempt so e2e covers both states.
+      ABT_HUMAN_MIN_ATTEMPTS: "1",
+      ABT_STATS_TTL_MS: "0",
       ...(PROD ? { NEXT_DIST_DIR: ".next-e2e" } : {}),
     },
   },

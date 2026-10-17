@@ -5,23 +5,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
 import { api } from "@/lib/client/api";
-import { fraction, MetricTiles, OutcomeBar, SolveCurve, SpeedTable, type SpeedRow } from "@/components/metrics";
+import { fraction, MetricTiles, OutcomeBar, SolveCurve, SpeedTable } from "@/components/metrics";
 import { formatDuration, isPending, shortId } from "@/lib/format";
-import { CATEGORY_LABEL } from "@/lib/metrics";
+import { CATEGORY_LABEL, speedMarkers } from "@/lib/metrics";
 import type { UserSummary } from "@/lib/results";
 import { pct } from "@/lib/stats";
 
 type Mode = "default" | "all" | "vals";
 
-/** Reference lines for the solve curve: fastest and median model average time per task. */
-export function speedMarkers(rows: SpeedRow[]) {
-  const times = rows.map((r) => r.latency_s).filter((t): t is number => t !== null).sort((a, b) => a - b);
-  if (!times.length) return [];
-  return [
-    { label: "fastest model avg", minutes: times[0] / 60 },
-    { label: "median model avg", minutes: times[Math.floor(times.length / 2)] / 60 },
-  ];
-}
 
 export function ComparisonChart({
   summary,

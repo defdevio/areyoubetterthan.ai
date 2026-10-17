@@ -27,6 +27,28 @@ const FIXES: Record<string, { file: string; line: string; from: string; to: stri
   "acme__widgets-3": { file: "widgets/text.py", line: 're.sub(r"\\s+"', from: '"_"', to: '"-"' },
 };
 
+test("public pages render without signing in", async ({ page }) => {
+  for (const path of ["/", "/stats", "/methodology"]) {
+    const res = await page.goto(path);
+    expect(res?.status()).toBe(200);
+  }
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: /Are you better/ })).toBeVisible();
+  await page.goto("/play");
+  await expect(page.getByText("Sign in to take the test")).toBeVisible();
+
+  // The global table is useful before any humans have played: every model, with time and cost.
+  await page.goto("/stats");
+  // Scope to <main>: streamed Suspense content can briefly exist twice while React swaps it in.
+  const main = page.getByRole("main");
+  const board = main.getByTestId("global-leaderboard");
+  await expect(board).toContainText("Avg time / task");
+  await expect(board).toContainText("Cost / task");
+  await expect(main.getByTestId("humans-locked-row")).toContainText(/ranked once \d+ attempts? (is|are) scored/);
+  await board.getByRole("tab", { name: "SWE-bench leaderboard" }).click();
+  await expect(board).toContainText("Published (all 500)");
+});
+
 test("a human fixes an issue, gets scored, and shares the result", async ({ page }) => {
   const login = `e2e-${Date.now()}`;
   await signIn(page, login);
@@ -96,6 +118,14 @@ test("a human fixes an issue, gets scored, and shares the result", async ({ page
   const og = await page.request.get(`${href}/opengraph-image`);
   expect(og.status()).toBe(200);
   expect(og.headers()["content-type"]).toContain("image/png");
+
+  // With a scored attempt the human row joins the global leaderboard.
+  await page.goto("/stats");
+  const stats = page.getByRole("main");
+  await expect(stats.getByTestId("verdict")).toContainText("humans resolve 100%");
+  await expect(stats.locator("[data-human]")).toContainText("Humans (pooled)");
+  await expect(stats.getByTestId("metric-tiles")).toBeVisible();
+  await expect(stats.getByTestId("per-task")).toContainText(instanceId);
 });
 
 test("giving up records an unresolved attempt and moves on", async ({ page }) => {
@@ -109,13 +139,3 @@ test("giving up records an unresolved attempt and moves on", async ({ page }) =>
   await expect(page.getByText("Task 2 of 3")).toBeVisible();
 });
 
-test("public pages render without signing in", async ({ page }) => {
-  for (const path of ["/", "/stats", "/methodology"]) {
-    const res = await page.goto(path);
-    expect(res?.status()).toBe(200);
-  }
-  await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Are you better/ })).toBeVisible();
-  await page.goto("/play");
-  await expect(page.getByText("Sign in to take the test")).toBeVisible();
-});

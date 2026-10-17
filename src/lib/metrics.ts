@@ -185,3 +185,13 @@ export function summarize(list: AttemptMetrics[]): MetricsSummary {
     solved_by_minute: solvedByMinute,
   };
 }
+
+/** Reference lines for the solve curve: fastest and median model average time per task. */
+export function speedMarkers(rows: { latency_s: number | null }[]) {
+  const times = rows.map((r) => r.latency_s).filter((t): t is number => t !== null).sort((a, b) => a - b);
+  if (!times.length) return [];
+  return [
+    { label: "fastest model avg", minutes: times[0] / 60 },
+    { label: "median model avg", minutes: times[Math.floor(times.length / 2)] / 60 },
+  ];
+}
