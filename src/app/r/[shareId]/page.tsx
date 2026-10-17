@@ -30,9 +30,9 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
   return (
     <>
       <div className="text-sm text-muted">areyoubetterthan.ai results for</div>
-      <h1 className="mt-1 text-4xl font-semibold tracking-tight">{share.displayName}</h1>
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight break-words sm:text-4xl">{share.displayName}</h1>
       <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1.4fr]">
-        <Card className="p-6">
+        <Card className="p-4 sm:p-6">
           <div className="text-sm text-muted">Resolved</div>
           <div className="mt-2 flex items-baseline gap-3">
             <span className="text-5xl font-semibold text-human">{pct(s.human.p)}</span>
@@ -52,7 +52,7 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
             on the same {s.human.n} SWE-bench Verified tasks, with 15 minutes each and no code execution.
           </p>
         </Card>
-        <Card className="p-6">
+        <Card className="p-4 sm:p-6">
           <ComparisonChart summary={s} you={share.displayName} limit={12} />
         </Card>
       </div>

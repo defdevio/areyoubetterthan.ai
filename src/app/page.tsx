@@ -84,6 +84,10 @@ export default function Home() {
                 How it works
               </LinkButton>
             </div>
+            {/* Matches the /play gate (900px wide); the test itself needs a desktop-sized screen. */}
+            <p className="mt-3 text-xs text-faint min-[900px]:hidden">
+              The test runs on a desktop or laptop. On your phone you can still explore every result.
+            </p>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-faint">
               <span>{tasks.tasks.length} validated tasks</span>
               <span>15 min each</span>

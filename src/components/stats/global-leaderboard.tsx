@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { cx } from "@/components/ui";
+import { cx, SortSelect } from "@/components/ui";
 import { formatDuration } from "@/lib/format";
 import type { BoardRow } from "@/lib/results";
 import { pct, type Rate } from "@/lib/stats";
@@ -34,7 +34,7 @@ function Header({
   title?: string;
 }) {
   return (
-    <th className="px-3 py-2 text-right font-normal whitespace-nowrap" title={title}>
+    <th className="hidden px-3 py-2 text-right font-normal whitespace-nowrap lg:table-cell" title={title}>
       <button onClick={() => onSort(k)} className={cx("hover:text-fg", sort === k && "text-fg")}>
         {children}
         {sort === k ? (k === "time" || k === "cost" ? " ↑" : " ↓") : ""}
@@ -42,6 +42,24 @@ function Header({
     </th>
   );
 }
+
+/** Plain-text value of one metric, for the compact phone layout. */
+function metricText(k: SortKey, r: Row): string {
+  switch (k) {
+    case "h2h":
+      return r.h2h && r.h2h.n ? `${pct(r.h2h.p, 1)} ${r.h2h.k}/${r.h2h.n}` : "–";
+    case "all":
+      return r.isHuman ? "–" : r.all.n ? pct(r.all.p, 1) : "–";
+    case "published":
+      return r.published_pct === null ? "–" : `${r.published_pct.toFixed(1)}%`;
+    case "time":
+      return r.latency_s === null ? "–" : formatDuration(r.latency_s * 1000);
+    case "cost":
+      return r.isHuman ? "free" : r.cost_usd === null ? "–" : money(r.cost_usd);
+  }
+}
+
+const SHORT: Record<SortKey, string> = { h2h: "h2h", all: "all", published: "pub", time: "", cost: "" };
 
 function RateCell({ r, showCount }: { r: Rate | null; showCount: boolean }) {
   if (!r || r.n === 0) return <span className="text-faint">–</span>;
@@ -131,17 +149,27 @@ export function GlobalLeaderboard({
   const humanIdx = ranked.findIndex((x) => x.row.isHuman);
   const limit = 15;
   const visible = showAll ? ranked : ranked.filter((_, i) => i < limit || i === humanIdx);
+  const keys = (["h2h", "all", "published", "time", "cost"] as const).filter(
+    (k) => (k !== "h2h" || humans.unlocked) && (vals || (k !== "time" && k !== "cost")),
+  );
+  const label: Record<SortKey, string> = {
+    h2h: "Head-to-head",
+    all: `All ${totalTasks} tasks`,
+    published: "Published accuracy",
+    time: "Avg time / task",
+    cost: "Cost / task",
+  };
 
   return (
     <div data-testid="global-leaderboard">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3 sm:px-5">
         <div className="flex rounded-lg border border-line p-0.5 text-xs" role="tablist">
           {(
             [
-              ["vals", "vals.ai runs · time & cost"],
-              ["swe", "SWE-bench leaderboard"],
+              ["vals", "vals.ai runs", " · time & cost"],
+              ["swe", "SWE-bench", " leaderboard"],
             ] as const
-          ).map(([k, label]) => (
+          ).map(([k, label, more]) => (
             <button
               key={k}
               role="tab"
@@ -153,10 +181,12 @@ export function GlobalLeaderboard({
               className={cx("rounded-md px-3 py-1.5", source === k ? "bg-white/10 text-fg" : "text-muted hover:text-fg")}
             >
               {label}
+              <span className="hidden sm:inline">{more}</span>
             </button>
           ))}
         </div>
-        <div className="text-[11px] text-faint">
+        <SortSelect value={sort} onChange={setSort} options={keys.map((k) => [k, label[k]] as const)} className="lg:hidden" />
+        <div className="w-full text-[11px] text-faint lg:w-auto">
           {vals
             ? `${rows.length} models, one bash-only harness, run independently by vals.ai`
             : `${rows.length} models, latest leaderboard result each (bash-only scaffold preferred)`}
@@ -168,6 +198,7 @@ export function GlobalLeaderboard({
             <tr className="border-b border-line">
               <th className="w-10 px-3 py-2 text-right font-normal">#</th>
               <th className="px-3 py-2 text-left font-normal">Solver</th>
+              <th className="px-3 py-2 text-right font-normal lg:hidden">{label[sort]}</th>
               {humans.unlocked && (
                 <Header k="h2h" sort={sort} onSort={setSort} title="Scored on exactly the attempts humans made">
                   Head-to-head
@@ -204,7 +235,7 @@ export function GlobalLeaderboard({
             {!humans.unlocked && (
               <tr className="bg-human/[0.06]" data-testid="humans-locked-row">
                 <td className="px-3 py-2.5 text-right font-mono text-[11px] text-human">?</td>
-                <td className="px-3 py-2.5" colSpan={vals ? 5 : 3}>
+                <td className="px-3 py-2.5" colSpan={vals ? 6 : 4}>
                   <span className="font-semibold text-human">Humans</span>
                   <span className="ml-3 text-xs text-muted">
                     ranked once {humans.minAttempts} {humans.minAttempts === 1 ? "attempt is" : "attempts are"} scored ·{" "}
@@ -227,20 +258,47 @@ export function GlobalLeaderboard({
                 <td className={cx("px-3 py-2 text-right font-mono text-[11px]", r.isHuman ? "text-human" : "text-faint")}>
                   {tied ? `=${rank}` : rank}
                 </td>
-                <td className="max-w-72 truncate px-3 py-2">
-                  <span className={cx(r.isHuman && "font-semibold text-human")}>{r.model}</span>
-                  {!r.isHuman && (
-                    <span className="ml-2 text-[11px] text-faint">
-                      {vals ? (r.org ?? "") : r.bashOnly ? "mini-SWE-agent" : r.agent}
-                    </span>
+                <td className="max-w-[52vw] px-3 py-2 lg:max-w-72">
+                  <div className="truncate">
+                    <span className={cx(r.isHuman && "font-semibold text-human")}>{r.model}</span>
+                    {!r.isHuman && (
+                      <span className="ml-2 text-[11px] text-faint">
+                        {vals ? (r.org ?? "") : r.bashOnly ? "mini-SWE-agent" : r.agent}
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-0.5 font-mono text-[10px] leading-snug text-faint lg:hidden">
+                    {keys
+                      .filter((k) => k !== sort)
+                      .map((k) => [k, metricText(k, r)] as const)
+                      .filter(([, v]) => v !== "–")
+                      .map(([k, v]) => `${SHORT[k]} ${v}`.trim())
+                      .join(" · ")}
+                  </div>
+                </td>
+                <td
+                  className={cx(
+                    "px-3 py-2 text-right font-mono text-xs whitespace-nowrap lg:hidden",
+                    r.isHuman ? "text-human" : "text-fg",
+                  )}
+                >
+                  {sort === "h2h" && r.h2h && r.h2h.n ? (
+                    <>
+                      <div>{pct(r.h2h.p, 1)}</div>
+                      <div className="text-[10px] text-faint">
+                        {r.h2h.k}/{r.h2h.n}
+                      </div>
+                    </>
+                  ) : (
+                    metricText(sort, r)
                   )}
                 </td>
                 {humans.unlocked && (
-                  <td className={cx("px-3 py-2 text-right font-mono text-xs", r.isHuman ? "text-human" : "text-muted")}>
+                  <td className={cx("hidden px-3 py-2 text-right font-mono text-xs lg:table-cell", r.isHuman ? "text-human" : "text-muted")}>
                     <RateCell r={r.h2h} showCount />
                   </td>
                 )}
-                <td className="px-3 py-2 text-right font-mono text-xs text-muted">
+                <td className="hidden px-3 py-2 text-right font-mono text-xs text-muted lg:table-cell">
                   {r.isHuman ? (
                     <span className="text-faint" title="Humans haven't attempted every task yet">
                       –
@@ -249,7 +307,7 @@ export function GlobalLeaderboard({
                     <RateCell r={r.all} showCount={false} />
                   )}
                 </td>
-                <td className="px-3 py-2 text-right font-mono text-xs text-muted">
+                <td className="hidden px-3 py-2 text-right font-mono text-xs text-muted lg:table-cell">
                   {r.published_pct === null ? (
                     <span className="text-faint">–</span>
                   ) : (
@@ -261,10 +319,10 @@ export function GlobalLeaderboard({
                 </td>
                 {vals && (
                   <>
-                    <td className={cx("px-3 py-2 text-right font-mono text-xs", r.isHuman ? "text-human" : "text-muted")}>
+                    <td className={cx("hidden px-3 py-2 text-right font-mono text-xs lg:table-cell", r.isHuman ? "text-human" : "text-muted")}>
                       {r.latency_s === null ? <span className="text-faint">–</span> : formatDuration(r.latency_s * 1000)}
                     </td>
-                    <td className="px-3 py-2 text-right font-mono text-xs text-muted">
+                    <td className="hidden px-3 py-2 text-right font-mono text-xs text-muted lg:table-cell">
                       {r.isHuman ? "free" : r.cost_usd === null ? "–" : money(r.cost_usd)}
                     </td>
                   </>
