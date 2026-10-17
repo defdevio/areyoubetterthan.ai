@@ -79,6 +79,15 @@ const PHASE_STYLE: Record<Phase, string> = {
   unresolved: "bg-fail/15 text-fail border-fail/30",
 };
 
+function OutcomeIcon({ path }: { path: string }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden className="size-3 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="8" cy="8" r="6.5" />
+      <path d={path} />
+    </svg>
+  );
+}
+
 export function PhaseBadge({ phase, queuePosition }: { phase: Phase; queuePosition?: number | null }) {
   const spinning = phase === "waiting" || phase === "running" || phase === "delayed";
   return (
@@ -90,8 +99,8 @@ export function PhaseBadge({ phase, queuePosition }: { phase: Phase; queuePositi
       )}
     >
       {spinning && <Spinner className="size-2.5 border-[1.5px]" />}
-      {phase === "resolved" && "✓"}
-      {phase === "unresolved" && "✗"}
+      {phase === "resolved" && <OutcomeIcon path="M5.25 8.25l1.75 1.75 3.75-3.75" />}
+      {phase === "unresolved" && <OutcomeIcon path="M5.75 5.75l4.5 4.5m0-4.5l-4.5 4.5" />}
       {PHASE_LABEL[phase]}
       {phase === "queued" && queuePosition ? ` · #${queuePosition}` : ""}
     </span>
