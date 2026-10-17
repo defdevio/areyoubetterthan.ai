@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Card, cx } from "@/components/ui";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Card, cx, SortSelect } from "@/components/ui";
 import { formatDuration } from "@/lib/format";
 import { CATEGORIES, CATEGORY_LABEL, type Category, type MetricsSummary } from "@/lib/metrics";
 import { pct, type Rate } from "@/lib/stats";
@@ -29,7 +29,7 @@ function Tile({ label, value, hint }: { label: string; value: string; hint: stri
 export function MetricTiles({ m, who = "you" }: { m: MetricsSummary; who?: "you" | "humans" }) {
   const you = who === "you";
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" data-testid="metric-tiles">
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4" data-testid="metric-tiles">
       <Tile
         label="Median time per task"
         value={formatDuration(m.median_time_ms)}
@@ -93,13 +93,23 @@ export function SolveCurve({
   /** Vertical reference lines in minutes, e.g. model average times. */
   markers?: { label: string; minutes: number }[];
 }) {
-  const W = 560;
+  // Drawn at the container's real pixel width so labels stay legible on phones instead of being scaled down.
+  const ref = useRef<HTMLDivElement>(null);
+  const [W, setW] = useState(560);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setW(Math.max(240, Math.round(e.contentRect.width))));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const H = 180;
   const P = { l: 34, r: 10, t: 10, b: 24 };
   const x = (min: number) => P.l + ((min - 0) / 15) * (W - P.l - P.r);
   const y = (v: number) => H - P.b - v * (H - P.t - P.b);
   const stroke = { human: "#fbbf24", ai: "#818cf8", muted: "#6b6b78" };
   return (
+    <div ref={ref}>
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Solve rate by minute" data-testid="solve-curve">
       {[0, 0.25, 0.5, 0.75, 1].map((v) => (
         <g key={v}>
@@ -116,10 +126,11 @@ export function SolveCurve({
       ))}
       {markers
         .filter((mk) => mk.minutes > 0 && mk.minutes <= 15)
-        .map((mk) => (
+        .map((mk, i) => (
           <g key={mk.label}>
             <line x1={x(mk.minutes)} x2={x(mk.minutes)} y1={P.t} y2={H - P.b} stroke="#818cf855" strokeDasharray="3 3" />
-            <text x={x(mk.minutes) + 3} y={P.t + 9} fontSize="9" fill="#818cf8">
+            {/* Alternate rows so neighbouring labels don't overlap on narrow charts. */}
+            <text x={x(mk.minutes) + 3} y={P.t + 9 + (i % 2) * 12} fontSize="9" fill="#818cf8">
               {mk.label}
             </text>
           </g>
@@ -135,6 +146,7 @@ export function SolveCurve({
         />
       ))}
     </svg>
+    </div>
   );
 }
 
@@ -168,7 +180,7 @@ function SortHeader({
   children: React.ReactNode;
 }) {
   return (
-    <th className="px-3 py-2 text-right font-normal">
+    <th className="hidden px-3 py-2 text-right font-normal lg:table-cell">
       <button onClick={() => onSort(k)} className={cx("hover:text-fg", sort === k && "text-fg")}>
         {children}
         {sort === k ? " ↓" : ""}
@@ -176,6 +188,23 @@ function SortHeader({
     </th>
   );
 }
+
+type SpeedTableRow = SpeedRow & { isHuman: boolean };
+
+function speedText(k: SortKey, r: SpeedTableRow): string {
+  switch (k) {
+    case "rate":
+      return r.rate.n >= 10 ? `${fraction(r.rate)} ${pct(r.rate.p)}` : fraction(r.rate);
+    case "published":
+      return r.published_pct === null ? "–" : `${r.published_pct.toFixed(1)}%`;
+    case "time":
+      return r.latency_s === null ? "–" : formatDuration(r.latency_s * 1000);
+    case "cost":
+      return r.isHuman ? "free" : r.cost_usd === null ? "–" : `$${r.cost_usd < 0.1 ? r.cost_usd.toFixed(3) : r.cost_usd.toFixed(2)}`;
+  }
+}
+
+const SPEED_SHORT: Record<SortKey, string> = { rate: "", published: "vals.ai", time: "", cost: "" };
 
 /** You (or all humans) next to vals.ai models: resolve rate on the same tasks, time and cost per task. */
 export function SpeedTable({
@@ -238,11 +267,25 @@ export function SpeedTable({
           models&apos; average.
         </p>
       )}
+      <SortSelect
+        value={sort}
+        onChange={setSort}
+        options={[
+          ["rate", human.subsetLabel ?? "On your tasks"],
+          ["published", "vals.ai accuracy"],
+          ["time", "Avg time / task"],
+          ["cost", "Cost / task"],
+        ]}
+        className="mb-2 lg:hidden"
+      />
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="text-[11px] text-faint">
             <tr className="border-b border-line">
               <th className="px-3 py-2 text-left font-normal">Solver</th>
+              <th className="px-3 py-2 text-right font-normal lg:hidden">
+                {sort === "rate" ? (human.subsetLabel ?? "On your tasks") : sort === "published" ? "vals.ai accuracy" : sort === "time" ? "Avg time" : "Cost"}
+              </th>
               <SortHeader k="rate" sort={sort} onSort={setSort}>
                 {human.subsetLabel ?? "On your tasks"}
               </SortHeader>
@@ -260,15 +303,33 @@ export function SpeedTable({
           <tbody className="divide-y divide-line">
             {visible.map((r) => (
               <tr key={r.id} className={cx(r.isHuman && "bg-human/10")}>
-                <td className={cx("max-w-56 truncate px-3 py-1.5", r.isHuman ? "font-semibold text-human" : "")}>
-                  {r.model}
-                  {r.org && <span className="ml-2 text-[11px] text-faint">{r.org}</span>}
+                <td className="max-w-[60vw] px-3 py-1.5 lg:max-w-56">
+                  <div className={cx("truncate", r.isHuman && "font-semibold text-human")}>
+                    {r.model}
+                    {r.org && <span className="ml-2 text-[11px] font-normal text-faint">{r.org}</span>}
+                  </div>
+                  <div className="font-mono text-[10px] leading-snug text-faint lg:hidden">
+                    {(["rate", "published", "time", "cost"] as const)
+                      .filter((k) => k !== sort)
+                      .map((k) => [k, speedText(k, r)] as const)
+                      .filter(([, v]) => v !== "–")
+                      .map(([k, v]) => `${SPEED_SHORT[k]} ${v}`.trim())
+                      .join(" · ")}
+                  </div>
                 </td>
-                <td className={cx("px-3 py-1.5 text-right font-mono text-xs", r.isHuman ? "text-human" : "text-muted")}>
+                <td
+                  className={cx(
+                    "px-3 py-1.5 text-right font-mono text-xs whitespace-nowrap lg:hidden",
+                    r.isHuman ? "text-human" : "text-fg",
+                  )}
+                >
+                  {speedText(sort, r)}
+                </td>
+                <td className={cx("hidden px-3 py-1.5 text-right font-mono text-xs lg:table-cell", r.isHuman ? "text-human" : "text-muted")}>
                   {fraction(r.rate)}
                   {r.rate.n >= 10 && <span className="ml-1.5 text-faint">{pct(r.rate.p)}</span>}
                 </td>
-                <td className="px-3 py-1.5 text-right font-mono text-xs text-muted">
+                <td className="hidden px-3 py-1.5 text-right font-mono text-xs text-muted lg:table-cell">
                   {r.published_pct === null ? (
                     "–"
                   ) : (
@@ -280,11 +341,11 @@ export function SpeedTable({
                     </>
                   )}
                 </td>
-                <td className={cx("px-3 py-1.5 text-right font-mono text-xs", r.isHuman ? "text-human" : "text-muted")}>
+                <td className={cx("hidden px-3 py-1.5 text-right font-mono text-xs lg:table-cell", r.isHuman ? "text-human" : "text-muted")}>
                   {r.latency_s === null ? "–" : formatDuration(r.latency_s * 1000)}
                 </td>
-                <td className="px-3 py-1.5 text-right font-mono text-xs text-muted">
-                  {r.isHuman ? "free" : r.cost_usd === null ? "–" : `$${r.cost_usd < 0.1 ? r.cost_usd.toFixed(3) : r.cost_usd.toFixed(2)}`}
+                <td className="hidden px-3 py-1.5 text-right font-mono text-xs text-muted lg:table-cell">
+                  {speedText("cost", r)}
                 </td>
               </tr>
             ))}

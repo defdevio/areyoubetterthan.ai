@@ -139,6 +139,36 @@ export function Kbd({ children }: { children: ReactNode }) {
   );
 }
 
+/** Stand-in for sortable column headers on small screens, where those columns are hidden. */
+export function SortSelect<K extends string>({
+  value,
+  options,
+  onChange,
+  className,
+}: {
+  value: K;
+  options: readonly (readonly [K, string])[];
+  onChange: (k: K) => void;
+  className?: string;
+}) {
+  return (
+    <label className={cx("flex items-center gap-2 text-xs text-faint", className)}>
+      Sort by
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value as K)}
+        className="rounded-md border border-line-strong bg-panel-2 px-2 py-1.5 text-xs text-fg"
+      >
+        {options.map(([k, label]) => (
+          <option key={k} value={k}>
+            {label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 export function Section({ title, children, aside, className }: { title: ReactNode; children: ReactNode; aside?: ReactNode; className?: string }) {
   return (
     <section className={cx("space-y-4", className)}>

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useResults, useSession } from "@/components/providers";
 import { cx, PhaseBadge, Spinner } from "@/components/ui";
+import { useHydrated } from "@/lib/client/use-media";
 import { formatClock, isPending, PHASE_HINT, shortId, timeAgo } from "@/lib/format";
 
 const NAV = [
@@ -77,15 +78,23 @@ function ResultsTray() {
         aria-label="Scoring results"
         data-testid="tray-button"
         className={cx(
-          "inline-flex h-8 items-center gap-2 rounded-full border px-3 text-xs font-medium transition-colors",
+          "inline-flex h-8 items-center gap-2 rounded-full border px-2.5 text-xs font-medium transition-colors sm:px-3",
           pending > 0 ? "border-ai/40 bg-ai/10 text-ai" : "border-line-strong text-muted hover:text-fg",
         )}
       >
         {pending > 0 ? <Spinner className="size-3" /> : <span aria-hidden>◎</span>}
-        {pending > 0 ? `Scoring ${pending}` : "Results"}
+        {pending > 0 ? (
+          <span>
+            <span className="hidden sm:inline">Scoring </span>
+            {pending}
+          </span>
+        ) : (
+          <span className="hidden sm:inline">Results</span>
+        )}
       </button>
       {open && (
-        <div className="animate-rise absolute right-0 z-50 mt-2 w-[min(92vw,26rem)] overflow-hidden rounded-xl border border-line-strong bg-panel shadow-2xl shadow-black/60">
+        // Phones: pinned under the header across the screen; larger screens: anchored to the button.
+        <div className="animate-rise fixed inset-x-3 top-16 z-50 overflow-hidden rounded-xl border border-line-strong bg-panel shadow-2xl shadow-black/60 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-[26rem]">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <div className="text-sm font-medium">Scoring tray</div>
             <div className="text-xs text-faint">{pending > 0 ? "live · updates every few seconds" : "all caught up"}</div>
@@ -132,12 +141,14 @@ function ResultsTray() {
 function UserMenu() {
   const { me, loading } = useSession();
   const pathname = usePathname();
-  if (loading) return <div className="h-8 w-20 animate-pulse rounded-full bg-white/5" />;
+  // The session can resolve before this boundary hydrates; render the server's placeholder until then.
+  const hydrated = useHydrated();
+  if (loading || !hydrated) return <div className="h-8 w-20 animate-pulse rounded-full bg-white/5" />;
   if (!me?.user) {
     return (
       <a
         href={`/api/auth/login?next=${encodeURIComponent(pathname === "/" ? "/play" : pathname)}`}
-        className="inline-flex h-8 items-center gap-2 rounded-full bg-fg px-3 text-xs font-medium text-black hover:bg-white"
+        className="inline-flex h-8 shrink-0 items-center gap-2 rounded-full bg-fg px-3 text-xs font-medium whitespace-nowrap text-black hover:bg-white"
       >
         <GitHubMark /> Sign in
       </a>
@@ -182,12 +193,12 @@ export function GitHubMark({ className = "size-3.5" }: { className?: string }) {
 
 export function Logo() {
   return (
-    <Link href="/" className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight">
-      <span className="grid size-8 place-items-center rounded-md bg-human">
+    <Link href="/" className="group flex min-w-0 items-center gap-2 font-mono text-[13px] font-semibold tracking-tight sm:text-sm">
+      <span className="grid size-8 shrink-0 place-items-center rounded-md bg-human">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/human_vs_ai.svg" alt="" className="size-7" />
       </span>
-      <span>
+      <span className="truncate">
         areyoubetterthan<span className="text-ai">.ai</span>
       </span>
     </Link>
@@ -215,7 +226,7 @@ export function SiteHeader() {
         compact ? "h-12" : "h-14",
       )}
     >
-      <div className={cx("mx-auto flex h-full items-center gap-6 px-4", compact ? "max-w-none" : "max-w-6xl")}>
+      <div className={cx("mx-auto flex h-full items-center gap-3 px-4 md:gap-6", compact ? "max-w-none" : "max-w-6xl")}>
         <Logo />
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((n) => (
@@ -224,21 +235,86 @@ export function SiteHeader() {
               href={n.href}
               className={cx(
                 "rounded-md px-2.5 py-1.5 text-sm transition-colors",
-                pathname === n.href || (n.href !== "/" && pathname.startsWith(n.href))
-                  ? "text-fg"
-                  : "text-muted hover:text-fg",
+                isActive(pathname, n.href) ? "text-fg" : "text-muted hover:text-fg",
               )}
             >
               {n.label}
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
           <ActiveAttemptChip />
           <UserMenu />
+          <MobileNav />
         </div>
       </div>
     </header>
+  );
+}
+
+function isActive(pathname: string, href: string) {
+  return pathname === href || (href !== "/" && pathname.startsWith(href));
+}
+
+/** Below md the nav links move into a menu under the header. */
+function MobileNav() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="md:hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-controls="mobile-nav"
+        aria-label={open ? "Close menu" : "Open menu"}
+        data-testid="mobile-nav-button"
+        className="grid size-8 place-items-center rounded-full border border-line-strong text-muted hover:text-fg"
+      >
+        <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+          {open ? <path d="M4 4l8 8M12 4l-8 8" strokeLinecap="round" /> : <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" strokeLinecap="round" />}
+        </svg>
+      </button>
+      {open && (
+        // Anchored to the sticky header (the nearest positioned ancestor), full width.
+        <nav
+          id="mobile-nav"
+          data-testid="mobile-nav"
+          className="animate-rise absolute inset-x-0 top-full border-b border-line bg-bg px-4 py-2 shadow-2xl shadow-black/60"
+        >
+          {NAV.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              onClick={() => setOpen(false)}
+              aria-current={isActive(pathname, n.href) ? "page" : undefined}
+              className={cx(
+                "flex items-center justify-between rounded-lg px-3 py-3 text-base",
+                isActive(pathname, n.href) ? "bg-white/5 text-fg" : "text-muted hover:text-fg",
+              )}
+            >
+              {n.label}
+              {n.href === "/play" && <span className="text-[11px] text-faint">on a computer</span>}
+            </Link>
+          ))}
+        </nav>
+      )}
+    </div>
   );
 }
 
@@ -250,7 +326,7 @@ export function ResultToasts() {
     return () => clearTimeout(id);
   }, [justFinished, dismiss]);
   return (
-    <div className="pointer-events-none fixed top-16 right-4 z-50 flex w-80 flex-col gap-2" aria-live="polite">
+    <div className="pointer-events-none fixed top-16 right-4 z-50 flex w-[min(20rem,calc(100vw-2rem))] flex-col gap-2" aria-live="polite">
       {justFinished.map((i) => (
         <div
           key={i.attempt_id}

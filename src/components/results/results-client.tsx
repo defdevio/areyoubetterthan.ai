@@ -45,23 +45,26 @@ export function ComparisonChart({
           <div
             key={r.id}
             className={cx(
-              "grid grid-cols-[2.25rem_minmax(0,13rem)_1fr_3rem_3.75rem] items-center gap-3 rounded-lg px-2 py-1.5",
+              // Phones: name gets the full row (wrapping if needed); bar + published score drop to a second row.
+              "grid grid-cols-[2rem_minmax(0,1fr)_3rem] items-center gap-x-3 gap-y-1 rounded-lg px-2 py-1.5 sm:grid-cols-[2.25rem_minmax(0,13rem)_1fr_3rem_3.75rem]",
               isYou && "bg-human/10 ring-1 ring-human/30",
             )}
           >
             <span className="text-right font-mono text-[11px] text-faint">{tied ? `=${rank}` : rank}</span>
-            <span className="truncate text-sm">
+            <span className="text-sm sm:truncate">
               <span className={cx(isYou && "font-semibold text-human")}>{r.model}</span>
               {r.kind === "model" && (
-                <span className="ml-2 text-[11px] text-faint">{r.bashOnly ? "mini-SWE-agent" : r.agent}</span>
+                <span className="block text-[11px] text-faint sm:ml-2 sm:inline">{r.bashOnly ? "mini-SWE-agent" : r.agent}</span>
               )}
             </span>
-            <RateBar p={r.rate.p} ci={r.rate.ci} tone={isYou ? "human" : "ai"} />
+            <div className="col-start-2 row-start-2 sm:col-start-3 sm:row-start-1">
+              <RateBar p={r.rate.p} ci={r.rate.ci} tone={isYou ? "human" : "ai"} />
+            </div>
             <span className={cx("text-right font-mono text-xs", isYou ? "text-human" : "text-muted")}>
               {r.rate.n < 20 ? fraction(r.rate) : pct(r.rate.p)}
             </span>
             <span
-              className="text-right font-mono text-[11px] text-faint"
+              className="col-start-3 row-start-2 text-right font-mono text-[11px] text-faint sm:col-start-5 sm:row-start-1"
               title={
                 r.kind === "model"
                   ? r.publishedScope === "band"
@@ -258,7 +261,7 @@ export function ResultsClient() {
       ) : (
         <>
           <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1.4fr]">
-            <Card className="p-6">
+            <Card className="p-4 sm:p-6">
               <div className="text-sm text-muted">You resolved</div>
               <div className="mt-2 flex items-baseline gap-3">
                 <span className="text-5xl font-semibold tracking-tight text-human" data-testid="human-rate">
@@ -294,8 +297,8 @@ export function ResultsClient() {
                 </div>
               )}
             </Card>
-            <Card className="p-6">
-              <div className="mb-3 flex items-baseline justify-between">
+            <Card className="p-4 sm:p-6">
+              <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <div className="text-sm font-medium">Resolve rate on your tasks</div>
                 <div className="text-[11px] text-faint">
                   white line: 95% interval · right column: published score ({mode === "vals" ? "<15 min band" : "all 500"})
@@ -355,38 +358,62 @@ export function ResultsClient() {
           )}
 
           <Card className="mt-4 overflow-hidden">
-            <div className="border-b border-line px-5 py-3 text-sm font-medium">Every task you attempted</div>
+            <div className="border-b border-line px-4 py-3 text-sm font-medium sm:px-5">Every task you attempted</div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm" data-testid="task-table">
                 <thead className="text-left text-[11px] text-faint">
                   <tr className="border-b border-line">
-                    <th className="px-5 py-2 font-normal">Task</th>
-                    <th className="px-3 py-2 font-normal">You</th>
-                    <th className="px-3 py-2 font-normal">Bug tests</th>
-                    <th className="px-3 py-2 font-normal">Right file</th>
-                    <th className="px-3 py-2 font-normal">Time</th>
-                    <th className="px-5 py-2 font-normal">Models that solved it</th>
+                    <th className="px-4 py-2 font-normal sm:px-5">Task</th>
+                    <th className="hidden px-3 py-2 font-normal lg:table-cell">You</th>
+                    <th className="hidden px-3 py-2 font-normal lg:table-cell">Bug tests</th>
+                    <th className="hidden px-3 py-2 font-normal lg:table-cell">Right file</th>
+                    <th className="hidden px-3 py-2 font-normal lg:table-cell">Time</th>
+                    <th className="hidden px-5 py-2 font-normal lg:table-cell">Models that solved it</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
                   {s.tasks.map((t) => (
                     <tr key={t.instance_id} className="hover:bg-white/[0.02]">
-                      <td className="max-w-md px-5 py-3">
-                        <Link href={`/review/${t.instance_id}`} className="block truncate hover:text-human">
+                      <td className="px-4 py-3 sm:px-5 lg:max-w-md">
+                        <Link href={`/review/${t.instance_id}`} className="line-clamp-2 hover:text-human lg:block lg:truncate">
                           {t.title}
                         </Link>
-                        <div className="font-mono text-[11px] text-faint">{t.instance_id}</div>
+                        <div className="font-mono text-[11px] break-all text-faint">{t.instance_id}</div>
+                        {/* Phones: the other columns, stacked under the title. */}
+                        <div className="mt-2 space-y-2 lg:hidden">
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted">
+                            <PhaseBadge phase={t.you} />
+                            {t.category && t.category !== "resolved" && <span>{CATEGORY_LABEL[t.category]}</span>}
+                            {t.f2p_total ? (
+                              <span className="font-mono">
+                                bug tests {t.f2p_passed}/{t.f2p_total}
+                              </span>
+                            ) : null}
+                            {t.right_file !== null && (
+                              <span className={t.right_file ? "text-pass" : "text-fail"}>
+                                {t.right_file ? "✓ right file" : "✗ wrong file"}
+                              </span>
+                            )}
+                            <span className="font-mono">{formatDuration(t.elapsed_ms)}</span>
+                          </div>
+                          <div className="flex items-center gap-3 text-[11px]">
+                            <RateBar p={t.models_total ? t.models_solved / t.models_total : 0} ci={null} tone="ai" className="flex-1" />
+                            <span className="font-mono text-muted">
+                              {t.models_solved}/{t.models_total} models
+                            </span>
+                          </div>
+                        </div>
                       </td>
-                      <td className="px-3 py-3">
+                      <td className="hidden px-3 py-3 lg:table-cell">
                         <PhaseBadge phase={t.you} />
                         {t.category && t.category !== "resolved" && (
                           <div className="mt-1 text-[11px] text-faint">{CATEGORY_LABEL[t.category]}</div>
                         )}
                       </td>
-                      <td className="px-3 py-3 font-mono text-xs text-muted">
+                      <td className="hidden px-3 py-3 font-mono text-xs text-muted lg:table-cell">
                         {t.f2p_total ? `${t.f2p_passed}/${t.f2p_total}` : "–"}
                       </td>
-                      <td className="px-3 py-3 text-xs">
+                      <td className="hidden px-3 py-3 text-xs lg:table-cell">
                         {t.right_file === null ? (
                           <span className="text-faint">–</span>
                         ) : t.right_file ? (
@@ -395,8 +422,8 @@ export function ResultsClient() {
                           <span className="text-fail">✗</span>
                         )}
                       </td>
-                      <td className="px-3 py-3 font-mono text-xs text-muted">{formatDuration(t.elapsed_ms)}</td>
-                      <td className="px-5 py-3">
+                      <td className="hidden px-3 py-3 font-mono text-xs text-muted lg:table-cell">{formatDuration(t.elapsed_ms)}</td>
+                      <td className="hidden px-5 py-3 lg:table-cell">
                         <div className="flex items-center gap-3">
                           <RateBar p={t.models_total ? t.models_solved / t.models_total : 0} ci={null} tone="ai" className="w-32" />
                           <span className="font-mono text-xs text-muted">

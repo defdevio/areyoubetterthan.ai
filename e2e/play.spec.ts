@@ -139,3 +139,42 @@ test("giving up records an unresolved attempt and moves on", async ({ page }) =>
   await expect(page.getByText("Task 2 of 3")).toBeVisible();
 });
 
+
+test.describe("on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test("the test is desktop-only, everything else works", async ({ page }) => {
+    // Every public page fits the screen without sideways scrolling.
+    for (const path of ["/", "/stats", "/methodology", "/play"]) {
+      await page.goto(path);
+      await expect(page.locator("main, [data-testid=desktop-only]").first()).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+    }
+
+    // Navigation lives behind the menu button.
+    await page.goto("/stats");
+    await page.getByTestId("mobile-nav-button").click();
+    await page.getByTestId("mobile-nav").getByRole("link", { name: "Methodology" }).click();
+    await expect(page).toHaveURL(/\/methodology$/);
+    await expect(page.getByTestId("mobile-nav")).toHaveCount(0);
+
+    // Signed in, /play shows the notice and never asks the server for a task, so no clock can start.
+    const requests: string[] = [];
+    page.on("request", (r) => requests.push(new URL(r.url()).pathname));
+    await page.goto("/signin?next=/results");
+    await page.getByTestId("dev-login").fill(`phone-${Date.now()}`);
+    await page.getByTestId("dev-login-submit").click();
+    await expect(page).toHaveURL(/\/results$/);
+    await page.goto("/play");
+    await expect(page.getByTestId("desktop-only")).toContainText("The test needs a bigger screen");
+    await expect(page.getByTestId("start-task")).toHaveCount(0);
+    expect(requests).not.toContain("/api/play");
+    expect(requests).not.toContain("/api/attempts");
+
+    // The leaderboard swaps column headers for a sort menu.
+    await page.goto("/stats");
+    const board = page.getByRole("main").getByTestId("global-leaderboard");
+    await board.getByRole("combobox").selectOption("time");
+    await expect(board.locator("thead")).toContainText("Avg time / task");
+  });
+});
