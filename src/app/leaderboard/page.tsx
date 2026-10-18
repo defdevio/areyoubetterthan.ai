@@ -255,7 +255,7 @@ async function Board() {
 export default function LeaderboardPage() {
   return (
     <>
-      <main className="mx-auto w-full max-w-5xl flex-1 space-y-8 px-4 py-12">
+      <main className="mx-auto w-full max-w-6xl flex-1 space-y-8 px-4 py-12">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Leaderboard</h1>
           <p className="mt-2 max-w-2xl text-muted">

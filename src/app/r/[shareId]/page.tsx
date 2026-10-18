@@ -96,7 +96,7 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
 export default function SharePage({ params }: PageProps<"/r/[shareId]">) {
   return (
     <>
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12">
         <Suspense fallback={<div className="h-96 animate-pulse rounded-xl bg-white/[0.03]" />}>
           <ShareBody params={params} />
         </Suspense>
