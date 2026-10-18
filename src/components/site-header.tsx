@@ -234,7 +234,7 @@ export function Logo() {
 /** Static header used in the prerendered shell until the pathname-aware one streams in. */
 export function SiteHeaderShell() {
   return (
-    <header className="sticky top-0 z-40 h-14 border-b border-line bg-bg/85 backdrop-blur">
+    <header className="sticky top-0 z-40 h-14 border-b border-line bg-bg">
       <div className="mx-auto flex h-full max-w-6xl items-center gap-6 px-4">
         <Logo />
       </div>
@@ -249,7 +249,7 @@ export function SiteHeader() {
   return (
     <header
       className={cx(
-        "sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur",
+        "sticky top-0 z-40 border-b border-line bg-bg",
         compact ? "h-12" : "h-14",
       )}
     >

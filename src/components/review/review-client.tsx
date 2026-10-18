@@ -197,7 +197,16 @@ export function ReviewClient({ instanceId }: { instanceId: string }) {
           {models.names.length > 0 && (
             <details className="mt-3 text-xs text-faint">
               <summary className="cursor-pointer hover:text-fg">Which ones</summary>
-              <div className="mt-2 leading-relaxed">{models.names.join(" · ")}</div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {models.names.map((n) => (
+                  <span
+                    key={n}
+                    className="inline-flex items-center rounded-full border border-line-strong bg-white/[0.03] px-2.5 py-1 text-[11.5px] leading-none text-fg/90"
+                  >
+                    {n}
+                  </span>
+                ))}
+              </div>
             </details>
           )}
         </Card>
