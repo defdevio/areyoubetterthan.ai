@@ -10,8 +10,9 @@ import { formatClock, isPending, PHASE_HINT, shortId, timeAgo } from "@/lib/form
 
 const NAV = [
   { href: "/play", label: "Play" },
-  { href: "/results", label: "My results" },
+  { href: "/leaderboard", label: "Leaderboard" },
   { href: "/stats", label: "Humans vs AI" },
+  { href: "/results", label: "My results" },
   { href: "/methodology", label: "Methodology" },
 ];
 
@@ -141,6 +142,23 @@ function ResultsTray() {
 function UserMenu() {
   const { me, loading } = useSession();
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
   // The session can resolve before this boundary hydrates; render the server's placeholder until then.
   const hydrated = useHydrated();
   if (loading || !hydrated) return <div className="h-8 w-20 animate-pulse rounded-full bg-white/5" />;
@@ -157,8 +175,13 @@ function UserMenu() {
   return (
     <div className="flex items-center gap-2">
       <ResultsTray />
-      <details className="group relative">
-        <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full p-0.5 hover:bg-white/5">
+      <div className="relative" ref={ref}>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-label="Account menu"
+          className="flex cursor-pointer items-center gap-2 rounded-full p-0.5 hover:bg-white/5"
+        >
           {me.user.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={me.user.avatar_url} alt="" className="size-7 rounded-full" />
@@ -167,18 +190,20 @@ function UserMenu() {
               {me.user.login[0]?.toUpperCase()}
             </span>
           )}
-        </summary>
-        <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-line-strong bg-panel p-1 shadow-2xl shadow-black/60">
-          <div className="px-3 py-2 text-xs text-faint">
-            Signed in as <span className="text-fg">@{me.user.login}</span>
+        </button>
+        {open && (
+          <div className="animate-rise absolute right-0 z-50 mt-2 w-48 rounded-xl border border-line-strong bg-panel p-1 shadow-2xl shadow-black/60">
+            <div className="px-3 py-2 text-xs text-faint">
+              Signed in as <span className="text-fg">@{me.user.login}</span>
+            </div>
+            <form action="/api/auth/logout" method="post">
+              <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-muted hover:bg-white/5 hover:text-fg">
+                Sign out
+              </button>
+            </form>
           </div>
-          <form action="/api/auth/logout" method="post">
-            <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-muted hover:bg-white/5 hover:text-fg">
-              Sign out
-            </button>
-          </form>
-        </div>
-      </details>
+        )}
+      </div>
     </div>
   );
 }

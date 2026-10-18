@@ -107,7 +107,7 @@ export function ReviewClient({ instanceId }: { instanceId: string }) {
   const { item, task, diff, result, models, metrics } = review;
   const tests = result?.tests;
   return (
-    <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-12" data-testid="review-page">
+    <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-12" data-testid="review-page">
       <div className="font-mono text-xs text-faint">
         {item.repo} · {item.instance_id}
       </div>

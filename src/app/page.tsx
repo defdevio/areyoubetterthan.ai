@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/site-footer";
+import { HumanAvatar } from "@/components/human-avatar";
 import { Card, LinkButton, RateBar } from "@/components/ui";
+import { getLeaderboard } from "@/lib/leaderboard";
 import { modelRatesOn, valsSource } from "@/lib/models";
 import { formatDuration } from "@/lib/format";
 import { getHumanStats } from "@/lib/public-stats";
@@ -49,6 +51,39 @@ async function HumansSoFar() {
         {stats.attempts} {stats.attempts === 1 ? "attempt" : "attempts"} by {stats.humans} {stats.humans === 1 ? "human" : "humans"} across {stats.tasks_covered} {stats.tasks_covered === 1 ? "task" : "tasks"}
       </div>
     </div>
+  );
+}
+
+async function TopHumans() {
+  const board = await getLeaderboard();
+  const top = board.ranked.slice(0, 5);
+  return (
+    <Card className="p-6" data-testid="top-humans">
+      <div className="flex items-baseline justify-between gap-3">
+        <div className="text-sm font-medium">Top humans</div>
+        <Link href="/leaderboard" className="text-xs text-faint hover:text-fg">
+          Leaderboard →
+        </Link>
+      </div>
+      {top.length === 0 ? (
+        <p className="mt-3 text-sm text-muted">
+          Nobody&apos;s ranked yet. Score {board.min_tasks} tasks and the top spot is yours.
+          {board.provisional.length > 0 &&
+            ` ${board.provisional.length} ${board.provisional.length === 1 ? "person is" : "people are"} already on the way.`}
+        </p>
+      ) : (
+        <ol className="mt-4 space-y-3">
+          {top.map((e) => (
+            <li key={e.rank} className="flex items-center gap-3 text-sm">
+              <span className="w-5 shrink-0 text-right font-mono text-xs text-faint">{e.rank}</span>
+              <HumanAvatar name={e.name} url={e.avatar_url} size="size-6" />
+              <span className="min-w-0 flex-1 truncate">{e.name}</span>
+              <span className="shrink-0 font-mono text-human">{pct(e.skill, 1)}</span>
+            </li>
+          ))}
+        </ol>
+      )}
+    </Card>
   );
 }
 
@@ -143,6 +178,22 @@ export default function Home() {
               </Card>
             ))}
           </div>
+        </section>
+
+        <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-[1fr_1.1fr]">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">And humans vs humans</h2>
+            <p className="mt-2 max-w-md text-muted">
+              Every task you score counts toward your rank. Fixing an issue most models miss counts for more than one they all
+              solve, so the leaderboard rewards skill, not just stamina.
+            </p>
+            <LinkButton href="/leaderboard" variant="secondary" className="mt-6">
+              See the leaderboard →
+            </LinkButton>
+          </div>
+          <Suspense fallback={<div className="h-56 animate-pulse rounded-xl bg-white/[0.03]" />}>
+            <TopHumans />
+          </Suspense>
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-16">

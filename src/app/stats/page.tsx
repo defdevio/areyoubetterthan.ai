@@ -271,7 +271,12 @@ export default function StatsPage() {
         <div>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Humans vs AI</h1>
           <p className="mt-2 max-w-2xl text-muted">
-            Every human attempt, pooled, against every model, on the same real GitHub issues graded by the same tests.
+            Every human attempt, pooled, against every model, on the same real GitHub issues graded by the same tests. For who
+            the best individual humans are, see the{" "}
+            <Link href="/leaderboard" className="text-human hover:underline">
+              leaderboard
+            </Link>
+            .
           </p>
         </div>
         <Suspense fallback={<div className="h-[640px] animate-pulse rounded-xl bg-white/[0.03]" />}>

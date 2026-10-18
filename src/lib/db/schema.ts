@@ -22,6 +22,10 @@ export const users = pgTable("users", {
   avatarUrl: text("avatar_url"),
   /** Seeds this user's task order so coverage spreads evenly across the task set. */
   seed: integer("seed").notNull(),
+  /** Shown on the public leaderboard instead of the GitHub login (and avatar) when set. */
+  leaderboardName: text("leaderboard_name"),
+  /** Leaves the user off the public leaderboard; their attempts still count in pooled stats. */
+  leaderboardHidden: boolean("leaderboard_hidden").notNull().default(false),
   createdAt: createdAt(),
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
 });

@@ -4,6 +4,7 @@ import { getDb } from "@/lib/db";
 import { attempts, shares, submissions, users, type Attempt, type Submission } from "@/lib/db/schema";
 import { finalizeExpiredAttempts, recentAttempts } from "@/lib/game";
 import { getBackend } from "@/lib/github";
+import { getLeaderboard, leaderboard, standingOf, type Leaderboard } from "@/lib/leaderboard";
 import { metricsOf } from "@/lib/attempt-metrics";
 import { summarize, type AttemptMetrics, type Category } from "@/lib/metrics";
 import { modelRatesOn, solversOf, type ComparisonMode } from "@/lib/models";
@@ -142,7 +143,7 @@ function speedTable(ids: string[]) {
   }));
 }
 
-export async function userSummary(userId: string, mode: ComparisonMode) {
+export async function userSummary(userId: string, mode: ComparisonMode, opts: { board?: Leaderboard } = {}) {
   const db = await getDb();
   const joined = await db
     .select({ attempt: attempts, submission: { diff: submissions.diff, result: submissions.result } })
@@ -197,6 +198,8 @@ export async function userSummary(userId: string, mode: ComparisonMode) {
     progress: { attempted: finished.length, total: taskIds.length },
     metrics: summarize(finished.map((a) => metricsById.get(a.id)).filter((m): m is AttemptMetrics => Boolean(m))),
     speed: speedTable(ids),
+    // Your own page computes it fresh so a new result shows up immediately.
+    standing: standingOf(opts.board ?? (await leaderboard()), userId),
   };
 }
 
@@ -340,6 +343,6 @@ export async function publicShare(shareId: string) {
     .where(and(eq(shares.id, shareId), eq(shares.public, true)))
     .limit(1);
   if (!row) return null;
-  const summary = await userSummary(row.user.id, "default");
+  const summary = await userSummary(row.user.id, "default", { board: await getLeaderboard() });
   return { displayName: row.share.displayName, summary };
 }

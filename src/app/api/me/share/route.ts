@@ -3,15 +3,9 @@ import { handle, requireUser } from "@/lib/auth/session";
 import { config } from "@/lib/config";
 import { getDb } from "@/lib/db";
 import { shares } from "@/lib/db/schema";
-import { assertSameOrigin, HttpError, readJson } from "@/lib/errors";
+import { cleanDisplayName as cleanName } from "@/lib/display-name";
+import { assertSameOrigin, readJson } from "@/lib/errors";
 import { newId } from "@/lib/ids";
-
-function cleanName(v: unknown): string {
-  if (typeof v !== "string") throw new HttpError(400, "Display name is required.");
-  const name = v.replace(/[\p{C}]/gu, "").replace(/\s+/g, " ").trim().slice(0, 40);
-  if (name.length < 1) throw new HttpError(400, "Display name is required.");
-  return name;
-}
 
 export async function PUT(req: Request) {
   return handle(async () => {

@@ -8,6 +8,7 @@ import type { ResultItem } from "@/lib/results";
 export interface Me {
   user: { id: string; login: string; name: string | null; avatar_url: string | null } | null;
   share?: { id: string; display_name: string; public: boolean } | null;
+  leaderboard?: { visibility: "github" | "name" | "hidden"; name: string | null };
   dev_login: boolean;
 }
 

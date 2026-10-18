@@ -3,6 +3,7 @@ import { getCurrentUser, handle } from "@/lib/auth/session";
 import { config } from "@/lib/config";
 import { getDb } from "@/lib/db";
 import { shares } from "@/lib/db/schema";
+import { leaderboardSettings } from "@/lib/leaderboard";
 
 export async function GET() {
   return handle(async () => {
@@ -13,6 +14,7 @@ export async function GET() {
     return {
       user: { id: user.id, login: user.login, name: user.name, avatar_url: user.avatarUrl },
       share: share ? { id: share.id, display_name: share.displayName, public: share.public } : null,
+      leaderboard: leaderboardSettings(user),
       dev_login: config.devLogin,
     };
   });

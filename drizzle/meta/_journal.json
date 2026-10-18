@@ -15,6 +15,13 @@
       "when": 1792266385343,
       "tag": "0001_attempt_metrics",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792280506243,
+      "tag": "0002_leaderboard_visibility",
+      "breakpoints": true
     }
   ]
 }

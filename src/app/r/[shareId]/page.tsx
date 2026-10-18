@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -51,6 +52,22 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
           <p className="mt-1 text-sm text-muted">
             on the same {s.human.n} SWE-bench Verified tasks, with 15 minutes each and no code execution.
           </p>
+          {s.standing && !s.standing.hidden && (
+            <div className="mt-5 border-t border-line pt-5 text-sm text-muted" data-testid="share-standing">
+              {s.standing.rank !== null ? (
+                <>
+                  <span className="text-2xl font-semibold text-human">#{s.standing.rank}</span> of {s.standing.of} humans on
+                  the{" "}
+                </>
+              ) : (
+                <>Provisional on the </>
+              )}
+              <Link href="/leaderboard" className="text-fg hover:underline">
+                leaderboard
+              </Link>{" "}
+              · skill {pct(s.standing.skill, 1)}
+            </div>
+          )}
         </Card>
         <Card className="p-4 sm:p-6">
           <ComparisonChart summary={s} you={share.displayName} limit={12} />
@@ -79,7 +96,7 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
 export default function SharePage({ params }: PageProps<"/r/[shareId]">) {
   return (
     <>
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-12">
         <Suspense fallback={<div className="h-96 animate-pulse rounded-xl bg-white/[0.03]" />}>
           <ShareBody params={params} />
         </Suspense>
