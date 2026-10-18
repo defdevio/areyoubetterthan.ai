@@ -98,7 +98,9 @@ async function TopHumans() {
   return (
     <Card className="p-6" data-testid="top-humans">
       <div className="flex items-baseline justify-between gap-3">
-        <div className="text-sm font-medium">Top humans</div>
+        <div className="text-sm font-medium">
+          <span aria-hidden className="mr-1.5">🏆</span>Top humans
+        </div>
         <Link href="/leaderboard" className="text-xs text-faint hover:text-fg">
           Leaderboard →
         </Link>
