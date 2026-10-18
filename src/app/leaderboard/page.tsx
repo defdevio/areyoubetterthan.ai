@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/site-footer";
+import { CountryFlag } from "@/components/country-flag";
+import { CountryBoard } from "@/components/leaderboard/country-board";
 import { HumanAvatar } from "@/components/human-avatar";
+import { Medal } from "@/components/medal";
 import { Card, cx, LinkButton } from "@/components/ui";
 import { getCurrentUser } from "@/lib/auth/session";
 import { formatDuration } from "@/lib/format";
@@ -24,7 +27,12 @@ function Avatar({ e, size = "size-7" }: { e: LeaderboardEntry; size?: string }) 
 /** Links to the person's GitHub profile when listed by login; a display name links to their share page, if any. */
 function Name({ e, className }: { e: LeaderboardEntry; className?: string }) {
   const href = e.login ? `https://github.com/${e.login}` : e.share_id ? `/r/${e.share_id}` : null;
-  const label = <span className={cx("truncate", className)}>{e.name}</span>;
+  const label = (
+    <span className={cx("truncate", className)}>
+      <CountryFlag code={e.country} className="mr-2 align-middle text-[0.85em]" />
+      {e.name}
+    </span>
+  );
   if (!href) return label;
   return href.startsWith("/") ? (
     <Link href={href} className="min-w-0 truncate hover:underline">
@@ -60,7 +68,9 @@ function Podium({ top, models, youId }: { top: LeaderboardEntry[]; models: numbe
             e.user_id === youId && "ring-1 ring-human/50",
           )}
         >
-          <div className={cx("font-mono text-sm font-semibold", MEDAL[i])}>#{e.rank}</div>
+          <div className={cx("flex items-center gap-2 font-mono text-sm font-semibold", MEDAL[i])}>
+            <Medal place={(i + 1) as 1 | 2 | 3} />#{e.rank}
+          </div>
           <div className="mt-3 flex min-w-0 items-center gap-3">
             <Avatar e={e} size="size-10" />
             <div className="min-w-0">
@@ -166,6 +176,7 @@ function YourStanding({ board, userId }: { board: Leaderboard; userId: string })
     <Card className="flex flex-wrap items-center justify-between gap-4 border-human/30 bg-human/[0.04] p-5" data-testid="your-standing">
       <div>
         <div className="font-medium">
+          {s.country && !s.hidden && <CountryFlag code={s.country} className="mr-2 align-middle text-base" />}
           {s.rank === null
             ? `Provisional: ${s.needed} more ${s.needed === 1 ? "task" : "tasks"} to get ranked`
             : s.hidden
@@ -220,6 +231,7 @@ async function Board() {
               Showing the top {SHOWN} of {board.ranked.length} ranked humans.
             </p>
           )}
+          <CountryBoard ranked={board.ranked} />
         </>
       )}
 
@@ -239,6 +251,7 @@ async function Board() {
                 )}
               >
                 <Avatar e={e} size="size-5" />
+                <CountryFlag code={e.country} className="text-xs" />
                 <span className="truncate">{e.name}</span>
                 <span className="font-mono text-faint">
                   {e.attempted}/{board.min_tasks}

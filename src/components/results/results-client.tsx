@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { CountryFlag } from "@/components/country-flag";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
+import { COUNTRIES } from "@/lib/countries";
 import { api } from "@/lib/client/api";
 import { fraction, MetricTiles, OutcomeBar, SolveCurve, SpeedTable } from "@/components/metrics";
 import { formatDuration, isPending, shortId } from "@/lib/format";
@@ -89,23 +91,28 @@ export function ComparisonChart({
 
 function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
   const { me, reload } = useSession();
-  const settings = me?.leaderboard ?? { visibility: "github" as const, name: null };
+  const settings = me?.leaderboard ?? { visibility: "github" as const, name: null, country: null };
   const [visibility, setVisibility] = useState(settings.visibility);
   const [name, setName] = useState(settings.name ?? me?.share?.display_name ?? "");
+  const [country, setCountry] = useState(settings.country ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const dirty = visibility !== settings.visibility || (visibility === "name" && name.trim() !== (settings.name ?? ""));
+  const dirty =
+    visibility !== settings.visibility ||
+    (visibility === "name" && name.trim() !== (settings.name ?? "")) ||
+    country !== (settings.country ?? "");
 
   const save = async () => {
     setSaving(true);
     setError(null);
     try {
-      const saved = await api<{ visibility: typeof visibility; name: string | null }>("/api/me/leaderboard", {
-        method: "PUT",
-        json: { visibility, name },
-      });
+      const saved = await api<{ visibility: typeof visibility; name: string | null; country: string | null }>(
+        "/api/me/leaderboard",
+        { method: "PUT", json: { visibility, name, country: country || null } },
+      );
       // Show the name exactly as stored (the server trims and collapses whitespace).
       if (saved.name) setName(saved.name);
+      setCountry(saved.country ?? "");
       await reload();
     } catch (e) {
       setError((e as Error).message);
@@ -129,7 +136,8 @@ function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
             <p className="mt-2 text-sm text-muted">None of your attempts count yet (flagged attempts are left out).</p>
           ) : (
             <>
-              <div className="mt-2 text-3xl font-semibold tracking-tight" data-testid="your-rank">
+              <div className="mt-2 text-2xl font-semibold tracking-tight" data-testid="your-rank">
+                {s.country && !s.hidden && <CountryFlag code={s.country} className="mr-3 align-middle text-xl" />}
                 {s.rank === null ? (
                   <span className="inline-flex items-center rounded-full border border-human/30 bg-human/10 px-3 py-1 text-sm font-medium text-human">
                     Provisional
@@ -195,6 +203,23 @@ function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
                 ? "Just this name, no avatar or GitHub link."
                 : "You won't be listed. Your attempts still count in the Humans vs AI totals."}
           </p>
+          <label className="mt-4 block text-sm text-muted" htmlFor="lb-country">
+            Country <span className="text-faint">(optional)</span>
+          </label>
+          <select
+            id="lb-country"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            data-testid="lb-country"
+            className="mt-2 h-9 w-full rounded-lg border border-line bg-bg px-3 text-sm focus:border-human/50 focus:outline-none"
+          >
+            <option value="">No country</option>
+            {COUNTRIES.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.name}
+              </option>
+            ))}
+          </select>
           {error && <p className="mt-2 text-xs text-fail">{error}</p>}
           {dirty && (
             <Button

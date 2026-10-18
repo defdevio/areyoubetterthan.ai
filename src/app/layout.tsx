@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { ResultToasts, SiteHeader, SiteHeaderShell } from "@/components/site-header";
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </Suspense>
           <ResultToasts />
           <div className="flex flex-1 flex-col">{children}</div>
+          <Analytics />
         </Providers>
       </body>
     </html>

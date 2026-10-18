@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { CountryFlag } from "@/components/country-flag";
 import { MetricTiles } from "@/components/metrics";
 import { ComparisonChart } from "@/components/results/results-client";
 import { SiteFooter } from "@/components/site-footer";
@@ -31,7 +32,12 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
   return (
     <>
       <div className="text-sm text-muted">areyoubetterthan.ai results for</div>
-      <h1 className="mt-1 text-3xl font-semibold tracking-tight break-words sm:text-4xl">{share.displayName}</h1>
+      <h1 className="mt-1 text-3xl font-semibold tracking-tight break-words sm:text-4xl">
+        {s.standing && !s.standing.hidden && (
+          <CountryFlag code={s.standing.country} className="mr-3 align-middle text-[0.6em]" />
+        )}
+        {share.displayName}
+      </h1>
       <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1.4fr]">
         <Card className="p-4 sm:p-6">
           <div className="text-sm text-muted">Resolved</div>

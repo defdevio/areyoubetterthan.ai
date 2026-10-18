@@ -373,6 +373,7 @@ describe("human leaderboard", () => {
       last_at: null,
       rank: null,
       hidden: false,
+      country: null,
     };
     const slow = { ...base, name: "slow", skill: 0.6012, median_solve_ms: 400_000 };
     const fast = { ...base, name: "fast", skill: 0.6009, median_solve_ms: 200_000 };

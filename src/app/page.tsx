@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { CountryFlag } from "@/components/country-flag";
 import { SiteFooter } from "@/components/site-footer";
 import { HumanAvatar } from "@/components/human-avatar";
-import { Card, LinkButton, RateBar } from "@/components/ui";
+import { Medal } from "@/components/medal";
+import { Card, LinkButton, RateBar, cx } from "@/components/ui";
 import { getLeaderboard } from "@/lib/leaderboard";
 import { modelRatesOn, valsSource } from "@/lib/models";
 import { formatDuration } from "@/lib/format";
@@ -92,12 +94,18 @@ async function HumansSoFar() {
   );
 }
 
+// Below md each block is its own card. From md up they sit inside one card.
+const BLOCK = "rounded-xl border border-line bg-panel p-4 md:rounded-none md:border-0 md:bg-transparent md:p-0";
+
 async function TopHumans() {
   const board = await getLeaderboard();
   const top = board.ranked.slice(0, 5);
   return (
-    <Card className="p-6" data-testid="top-humans">
-      <div className="flex items-baseline justify-between gap-3">
+    <div
+      data-testid="top-humans"
+      className="space-y-3 md:space-y-0 md:rounded-xl md:border md:border-line md:bg-panel md:p-6"
+    >
+      <div className={cx(BLOCK, "flex items-baseline justify-between gap-3")}>
         <div className="text-sm font-medium">
           <span aria-hidden className="mr-1.5">🏆</span>Top humans
         </div>
@@ -106,24 +114,54 @@ async function TopHumans() {
         </Link>
       </div>
       {top.length === 0 ? (
-        <p className="mt-3 text-sm text-muted">
+        <p className={cx(BLOCK, "text-sm text-muted md:mt-3")}>
           Nobody&apos;s ranked yet. Score {board.min_tasks} tasks and the top spot is yours.
           {board.provisional.length > 0 &&
             ` ${board.provisional.length} ${board.provisional.length === 1 ? "person is" : "people are"} already on the way.`}
         </p>
       ) : (
-        <ol className="mt-4 space-y-3">
-          {top.map((e) => (
-            <li key={e.rank} className="flex items-center gap-3 text-sm">
-              <span className="w-5 shrink-0 text-right font-mono text-xs text-faint">{e.rank}</span>
-              <HumanAvatar name={e.name} url={e.avatar_url} size="size-6" />
-              <span className="min-w-0 flex-1 truncate">{e.name}</span>
-              <span className="shrink-0 font-mono text-human">{pct(e.skill, 1)}</span>
-            </li>
-          ))}
-        </ol>
+        <>
+          <div className="hidden text-[10px] uppercase tracking-wide text-faint md:mt-4 md:flex md:justify-between">
+            <span>Human</span>
+            <span title="Share of tasks you'd be expected to resolve, on the same scale as the models">Skill</span>
+          </div>
+          <ol className="space-y-3 md:mt-3">
+            {top.map((e, i) => (
+              <li key={e.rank} className={cx(BLOCK, "flex items-center gap-3 text-sm")}>
+                <span className="flex w-10 shrink-0 items-center gap-1 font-mono text-xs text-faint">
+                  {i < 3 ? (
+                    <Medal place={(i + 1) as 1 | 2 | 3} />
+                  ) : (
+                    <span aria-hidden className="inline-block size-5 shrink-0" />
+                  )}
+                  #{e.rank}
+                </span>
+                <HumanAvatar name={e.name} url={e.avatar_url} size="size-6" />
+                <div className="min-w-0 flex-1">
+                  <div className="break-words">
+                    {e.country && <CountryFlag code={e.country} className="mr-2 align-middle" />}
+                    {e.name}
+                  </div>
+                  <div className="font-mono text-[10px] text-faint md:truncate">
+                    {e.solved}/{e.attempted} solved
+                    {e.median_solve_ms !== null && ` · ${formatDuration(e.median_solve_ms)} median fix`}
+                    {` · beats ${e.beats} of ${board.models_total} models`}
+                  </div>
+                </div>
+                <span className="shrink-0 text-right">
+                  <span className="block font-mono text-human">{pct(e.skill, 1)}</span>
+                  <span className="block text-[10px] uppercase tracking-wide text-faint md:hidden">Skill</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className={cx(BLOCK, "text-[11px] leading-relaxed text-faint md:mt-4")}>
+            <span className="text-muted">Skill</span> is the share of tasks you&apos;d be expected to resolve, on the same scale as the
+            models.
+          </p>
+        </>
       )}
-    </Card>
+    </div>
   );
 }
 
@@ -232,7 +270,7 @@ export default function Home() {
               Every task you score counts toward your rank. Fixing an issue most models miss counts for more than one they all
               solve, so the leaderboard rewards skill, not just stamina.
             </p>
-            <LinkButton href="/leaderboard" variant="secondary" className="mt-6">
+            <LinkButton href="/leaderboard" variant="secondary" className="mt-6 max-md:hidden">
               See the leaderboard →
             </LinkButton>
           </div>
