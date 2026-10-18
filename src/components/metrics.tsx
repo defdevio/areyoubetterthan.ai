@@ -145,6 +145,22 @@ export function SolveCurve({
           points={[`${x(0)},${y(0)}`, ...s.values.map((v, i) => `${x(i + 1)},${y(v)}`)].join(" ")}
         />
       ))}
+      {/* With nothing resolved the curve is a flat line on the axis, which reads as broken. */}
+      {series.every((s) => s.values.every((v) => v === 0)) && (
+        <text
+          x={(P.l + W - P.r) / 2}
+          y={(P.t + H - P.b) / 2}
+          textAnchor="middle"
+          fontSize="12"
+          fill="#a1a1aa"
+          data-testid="solve-curve-empty"
+        >
+          No resolved attempts yet.
+          <tspan x={(P.l + W - P.r) / 2} dy="16" fontSize="11" fill="#71717a">
+            The line climbs as your fixes pass.
+          </tspan>
+        </text>
+      )}
     </svg>
     </div>
   );
