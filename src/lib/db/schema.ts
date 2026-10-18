@@ -26,6 +26,8 @@ export const users = pgTable("users", {
   leaderboardName: text("leaderboard_name"),
   /** Leaves the user off the public leaderboard; their attempts still count in pooled stats. */
   leaderboardHidden: boolean("leaderboard_hidden").notNull().default(false),
+  /** Optional ISO 3166-1 alpha-2 code (e.g. "US"), shown as a flag on the public leaderboard. */
+  country: text("country"),
   createdAt: createdAt(),
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
 });

@@ -28,6 +28,11 @@ pnpm data:bundles            # writes public/bundles/*.json.gz
 pnpm dev
 ```
 
+Both commands first fill the database with about 30 made-up people (GitHub handles, display
+names, hidden users, some with countries) so the leaderboard has data to look at. Re-running
+replaces only those people. `pnpm db:seed` runs the same seed on its own; stop the dev server
+first, since PGlite allows one process per directory.
+
 Open http://localhost:3000. Mock scoring resolves a patch if it touches a file the reference
 fix touches. Put `MOCK_UNRESOLVED`, `MOCK_APPLY_FAIL`, `MOCK_INFRA_ONCE` or `MOCK_INFRA` in a
 diff to exercise the other paths.

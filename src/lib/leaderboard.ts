@@ -18,6 +18,8 @@ export interface LeaderboardEntry {
   /** Set only when the person is shown by their GitHub login. */
   login: string | null;
   avatar_url: string | null;
+  /** ISO 3166-1 alpha-2 code the person picked, shown as a flag. */
+  country: string | null;
   /** Public share page, if they made one. */
   share_id: string | null;
   /** Estimated share of the whole task set this person would resolve (0–1). */
@@ -46,6 +48,7 @@ export interface Standing {
   beats: number;
   models_total: number;
   hidden: boolean;
+  country: string | null;
 }
 
 let difficulties: Map<string, number> | null = null;
@@ -92,6 +95,7 @@ export async function leaderboard({ minTasks = RANK_MIN_TASKS }: { minTasks?: nu
       avatarUrl: users.avatarUrl,
       leaderboardName: users.leaderboardName,
       leaderboardHidden: users.leaderboardHidden,
+      country: users.country,
     })
     .from(attempts)
     .innerJoin(users, eq(users.id, attempts.userId))
@@ -133,6 +137,7 @@ export async function leaderboard({ minTasks = RANK_MIN_TASKS }: { minTasks?: nu
       name: named ? u.leaderboardName! : u.login,
       login: named ? null : u.login,
       avatar_url: named ? null : u.avatarUrl,
+      country: u.country,
       share_id: shareOf.get(userId) ?? null,
       skill,
       skill_range: [expectedRate(theta - sd, allB), expectedRate(theta + sd, allB)],
@@ -186,16 +191,18 @@ export function standingOf(board: Leaderboard, userId: string): Standing | null 
     beats: me.beats,
     models_total: board.models_total,
     hidden: me.hidden,
+    country: me.country,
   };
 }
 
 export type LeaderboardVisibility = "github" | "name" | "hidden";
 
 /** How a user appears on the public board, for their own settings UI. */
-export function leaderboardSettings(u: { leaderboardHidden: boolean; leaderboardName: string | null }) {
+export function leaderboardSettings(u: { leaderboardHidden: boolean; leaderboardName: string | null; country: string | null }) {
   return {
     visibility: (u.leaderboardHidden ? "hidden" : u.leaderboardName ? "name" : "github") as LeaderboardVisibility,
     name: u.leaderboardName,
+    country: u.country,
   };
 }
 
