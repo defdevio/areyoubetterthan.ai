@@ -66,6 +66,12 @@ Browser (Monaco) ─► Next.js API ─► Postgres
    the upstream fix, and how it ended. Time and cost are compared against vals.ai's model runs. There's a per-task breakdown, the reference fix and hints
    after the attempt, an opt-in share page `/r/<id>` with an OG image, and a methodology page
    that discloses every difference between the human and model conditions.
+6. **Compete** (`/leaderboard`): people are ranked against each other by a skill score from a
+   Rasch model. Task difficulty comes from how many vals.ai models failed each task, and each
+   person's skill is a MAP estimate shrunk toward the human average. It's reported as the share
+   of all tasks they'd be expected to resolve, on the same scale as the models. Ranked after 5
+   scored tasks (`ABT_RANK_MIN_TASKS`); listed by GitHub login unless they pick a display name
+   or hide themselves on `/results`.
 
 ## Data pipeline
 
@@ -99,6 +105,8 @@ src/lib/game.ts          attempt lifecycle: order, start, autosave, submit, expi
 src/lib/scoring/         queue, dispatch, run handling, retries, reconcile
 src/lib/github/          GitHub App backend + in-process mock
 src/lib/models.ts        model comparison sets and subset rates
+src/lib/skill.ts         Rasch skill model behind the human leaderboard
+src/lib/leaderboard.ts   per-person standings, provisional/hidden handling
 scripts/                 data ingestion, validation, selection, bundles, migrations
 drizzle/                 SQL migrations
 e2e/                     Playwright tests + fixture tasks

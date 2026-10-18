@@ -28,7 +28,7 @@ const FIXES: Record<string, { file: string; line: string; from: string; to: stri
 };
 
 test("public pages render without signing in", async ({ page }) => {
-  for (const path of ["/", "/stats", "/methodology"]) {
+  for (const path of ["/", "/stats", "/methodology", "/leaderboard"]) {
     const res = await page.goto(path);
     expect(res?.status()).toBe(200);
   }
@@ -47,6 +47,10 @@ test("public pages render without signing in", async ({ page }) => {
   await expect(main.getByTestId("humans-locked-row")).toContainText(/ranked once \d+ attempts? (is|are) scored/);
   await board.getByRole("tab", { name: "SWE-bench leaderboard" }).click();
   await expect(board).toContainText("Published (all 500)");
+
+  // Before anyone has played, the human leaderboard invites people to claim the top spot.
+  await page.goto("/leaderboard");
+  await expect(page.getByRole("main").getByTestId("leaderboard-empty")).toContainText("Nobody's ranked yet");
 });
 
 test("a human fixes an issue, gets scored, and shares the result", async ({ page }) => {
@@ -126,6 +130,23 @@ test("a human fixes an issue, gets scored, and shares the result", async ({ page
   await expect(stats.locator("[data-human]")).toContainText("Humans (pooled)");
   await expect(stats.getByTestId("metric-tiles")).toBeVisible();
   await expect(stats.getByTestId("per-task")).toContainText(instanceId);
+
+  // Humans vs humans: listed by GitHub login by default, ranked after one task (e2e setting).
+  await page.goto("/leaderboard");
+  const lb = page.getByRole("main");
+  await expect(lb.getByTestId("your-standing")).toContainText(/You're #\d+ of \d+/);
+  await expect(lb.getByTestId("podium").or(lb.getByTestId("ranked-table"))).toContainText(login);
+
+  // Switch to a display name on /results; the board shows it instead of the login.
+  await page.goto("/results");
+  await expect(page.getByTestId("your-rank")).toContainText(/#\d+/);
+  await page.getByTestId("lb-visibility-name").click();
+  await page.getByTestId("lb-name").fill("Grace H.");
+  await page.getByTestId("lb-save").click();
+  await expect(page.getByTestId("lb-save")).toHaveCount(0);
+  await page.goto("/leaderboard");
+  await expect(lb.getByTestId("podium").or(lb.getByTestId("ranked-table"))).toContainText("Grace H.");
+  await expect(lb).not.toContainText(login);
 });
 
 test("giving up records an unresolved attempt and moves on", async ({ page }) => {
@@ -145,7 +166,7 @@ test.describe("on a phone", () => {
 
   test("the test is desktop-only, everything else works", async ({ page }) => {
     // Every public page fits the screen without sideways scrolling.
-    for (const path of ["/", "/stats", "/methodology", "/play"]) {
+    for (const path of ["/", "/stats", "/methodology", "/leaderboard", "/play"]) {
       await page.goto(path);
       await expect(page.locator("main, [data-testid=desktop-only]").first()).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { Card } from "@/components/ui";
 import { FLAG_RULES } from "@/lib/flags";
+import { RANK_MIN_TASKS } from "@/lib/leaderboard";
 import { modelsSource, valsSource } from "@/lib/models";
 import { getTasksFile } from "@/lib/tasks";
 
@@ -47,6 +48,7 @@ export default function MethodologyPage() {
             ["models", "Model comparison"],
             ["metrics", "Metrics"],
             ["stats", "Statistics"],
+            ["leaderboard", "Leaderboard"],
             ["honor", "Honor system"],
             ["limits", "Limitations"],
             ["data", "Data & privacy"],
@@ -211,6 +213,34 @@ export default function MethodologyPage() {
             enough attempts to be meaningful.
           </p>
 
+          <H id="leaderboard">Leaderboard</H>
+          <p>
+            Everyone gets the tasks in a different random order and plays a different number of them, so a raw resolve rate
+            would reward lucky draws and short records. The leaderboard instead ranks by a <strong>skill score</strong> from a
+            one-parameter item response (Rasch) model: the chance you solve a task is σ(θ − b), where b is the task&apos;s
+            difficulty and θ is your skill.
+          </p>
+          <ul className="list-disc space-y-1 pl-5">
+            <li>
+              <strong>Difficulty</strong> comes from vals.ai&apos;s runs (one harness, every model, every task): the logit of the
+              share of models that failed it. Fixing a task most models miss raises θ a lot; missing one they all fix lowers it.
+            </li>
+            <li>
+              <strong>θ</strong> is a maximum a posteriori estimate under a normal prior (sd 1 logit) centred on the human
+              population&apos;s pooled skill. Short records are pulled toward the average human; after a few dozen tasks your
+              own results dominate.
+            </li>
+            <li>
+              The score shown is the <strong>share of all {tasks.tasks.length} tasks you&apos;d be expected to resolve</strong> at
+              that θ, the same scale as each model&apos;s resolve rate on the full set, so “beats N models” compares like with
+              like. The likely range is ±1 posterior standard deviation.
+            </li>
+            <li>
+              You&apos;re <strong>ranked after {RANK_MIN_TASKS} scored tasks</strong>; before that you&apos;re listed as
+              provisional. Ties to 0.1% go to the faster median time on solved tasks. Flagged attempts don&apos;t count.
+            </li>
+          </ul>
+
           <H id="honor">Honor system</H>
           <p>
             Please don&apos;t use AI assistants or look up the actual fix. The reference patches are public, so we can&apos;t make
@@ -227,7 +257,7 @@ export default function MethodologyPage() {
           </ul>
           <p>
             Copying and pasting within the editor or from the issue doesn&apos;t count. Flagged attempts still appear in your own
-            results but are excluded from the global human statistics.
+            results but are excluded from the global human statistics and the leaderboard.
           </p>
 
           <H id="limits">Limitations</H>
@@ -248,7 +278,12 @@ export default function MethodologyPage() {
           <p>
             We store your GitHub id, login and avatar URL; your attempts (start/end times, your diff, paste sizes and timings,
             but not paste contents); and scoring results. The GitHub sign-in token is used once to read your public profile and
-            is never stored. Your diffs are public in the submissions repository, attributed to your GitHub login. Share pages
+            is never stored. Your diffs are public in the submissions repository, attributed to your GitHub login.
+          </p>
+          <p>
+            The <strong>leaderboard is public</strong>: once you have a scored attempt you&apos;re listed by your GitHub login
+            and avatar, with your skill, tasks solved and times. In My results you can switch to a display name (no avatar or
+            GitHub link) or hide yourself entirely; hidden players still count in the pooled Humans vs AI totals. Share pages
             are opt-in and show only the display name you pick.
           </p>
           <p className="text-sm text-faint">

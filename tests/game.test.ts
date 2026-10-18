@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { eq } from "drizzle-orm";
 import { getDb, setDbForTests } from "@/lib/db";
-import { attempts, submissions } from "@/lib/db/schema";
+import { attempts, submissions, users } from "@/lib/db/schema";
 import { upsertUser } from "@/lib/auth/users";
 import { generateDiff } from "@/lib/diff";
 import { getPlayState, saveDraft, startAttempt, submitAttempt } from "@/lib/game";
@@ -9,6 +9,7 @@ import { setBackendForTests } from "@/lib/github";
 import { MockBackend } from "@/lib/github/mock";
 import type { RunInfo } from "@/lib/github/types";
 import { taskOrder } from "@/lib/order";
+import { compareEntries, leaderboard, standingOf } from "@/lib/leaderboard";
 import { humanStats, userResults, userSummary } from "@/lib/results";
 import { handleWorkflowRunEvent, pumpQueue, reconcile } from "@/lib/scoring/service";
 import { getTask, taskIds } from "@/lib/tasks";
@@ -288,5 +289,94 @@ describe("head-to-head weighting", () => {
       expect(row.h2h?.n).toBe(3);
       expect(row.all.n).toBe(taskIds.length);
     }
+  });
+});
+
+describe("human leaderboard", () => {
+  /** Plays the user's next tasks in order: true = submit the fixing diff, false = give up. */
+  async function play(user: Awaited<ReturnType<typeof newUser>>, outcomes: boolean[], paste = 0) {
+    for (const solve of outcomes) {
+      const { next } = await getPlayState(user);
+      const { active } = await startAttempt(user, next!.instance_id);
+      await submitAttempt(
+        user,
+        active.id,
+        solve ? diffFor(next!.instance_id) : "",
+        paste ? [{ t: 1, chars: paste, lines: 1, external: true }] : [],
+      );
+    }
+    await pumpQueue();
+    await reconcile();
+  }
+
+  it("ranks people by skill, with provisional, hidden and renamed players handled", async () => {
+    const ace = await newUser("ace");
+    const mid = await newUser("mid");
+    const newbie = await newUser("newbie");
+    const shy = await newUser("shy");
+    const alias = await newUser("real-login");
+    const cheat = await newUser("cheat");
+    await play(ace, [true, true, true]);
+    await play(mid, [true, false, false]);
+    await play(newbie, [true]);
+    await play(shy, [true, true, true]);
+    await play(alias, [true, true]);
+    await play(cheat, [true, true, true], 5000);
+    const db = await getDb();
+    await db.update(users).set({ leaderboardHidden: true }).where(eq(users.id, shy.id));
+    await db.update(users).set({ leaderboardName: "Mystery Coder" }).where(eq(users.id, alias.id));
+
+    const board = await leaderboard({ minTasks: 2 });
+    const names = board.ranked.map((e) => e.name);
+    expect(names.indexOf("ace")).toBeLessThan(names.indexOf("mid"));
+    expect(board.ranked.map((e) => e.rank)).toEqual(board.ranked.map((_, i) => i + 1));
+    // Under the minimum: listed, unranked.
+    expect(board.provisional.map((e) => e.name)).toEqual(["newbie"]);
+    // Hidden: not listed anywhere public, but knows where they'd be.
+    expect([...names, ...board.provisional.map((e) => e.name)]).not.toContain("shy");
+    const shyStanding = standingOf(board, shy.id)!;
+    expect(shyStanding.hidden).toBe(true);
+    // 3/3 would put them above mid (1/3); the total counts them in.
+    expect(shyStanding.rank).toBeLessThanOrEqual(names.indexOf("mid") + 1);
+    expect(shyStanding.of).toBe(board.ranked.length + 1);
+    // Display name replaces login and avatar.
+    const renamed = board.ranked.find((e) => e.name === "Mystery Coder")!;
+    expect(renamed.login).toBeNull();
+    expect(renamed.avatar_url).toBeNull();
+    expect(names).not.toContain("real-login");
+    // Flagged attempts don't count, so a player with only flagged attempts isn't on the board.
+    expect(board.entries.find((e) => e.user_id === cheat.id)).toBeUndefined();
+    for (const e of board.ranked) {
+      expect(e.skill).toBeGreaterThan(0);
+      expect(e.skill).toBeLessThan(1);
+      expect(e.skill_range[0]).toBeLessThanOrEqual(e.skill);
+      expect(e.skill_range[1]).toBeGreaterThanOrEqual(e.skill);
+    }
+
+    // Your own summary carries your standing.
+    const summary = await userSummary(newbie.id, "default");
+    expect(summary.standing?.rank).toBeNull();
+    expect(summary.standing?.needed).toBe(4);
+  });
+
+  it("breaks ties by the faster median fix", () => {
+    const base = {
+      user_id: "",
+      name: "",
+      login: null,
+      avatar_url: null,
+      share_id: null,
+      skill_range: [0.5, 0.7] as [number, number],
+      solved: 3,
+      attempted: 4,
+      beats: 10,
+      last_at: null,
+      rank: null,
+      hidden: false,
+    };
+    const slow = { ...base, name: "slow", skill: 0.6012, median_solve_ms: 400_000 };
+    const fast = { ...base, name: "fast", skill: 0.6009, median_solve_ms: 200_000 };
+    const better = { ...base, name: "better", skill: 0.62, median_solve_ms: 800_000 };
+    expect([slow, better, fast].sort(compareEntries).map((e) => e.name)).toEqual(["better", "fast", "slow"]);
   });
 });

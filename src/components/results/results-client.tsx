@@ -87,6 +87,131 @@ export function ComparisonChart({
   );
 }
 
+function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
+  const { me, reload } = useSession();
+  const settings = me?.leaderboard ?? { visibility: "github" as const, name: null };
+  const [visibility, setVisibility] = useState(settings.visibility);
+  const [name, setName] = useState(settings.name ?? me?.share?.display_name ?? "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dirty = visibility !== settings.visibility || (visibility === "name" && name.trim() !== (settings.name ?? ""));
+
+  const save = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      const saved = await api<{ visibility: typeof visibility; name: string | null }>("/api/me/leaderboard", {
+        method: "PUT",
+        json: { visibility, name },
+      });
+      // Show the name exactly as stored (the server trims and collapses whitespace).
+      if (saved.name) setName(saved.name);
+      await reload();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const s = standing;
+  return (
+    <Card className="scroll-mt-20 p-4 sm:p-6" id="leaderboard-settings" data-testid="leaderboard-card">
+      <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
+        <div>
+          <div className="flex items-baseline justify-between gap-3">
+            <div className="text-sm text-muted">Leaderboard</div>
+            <Link href="/leaderboard" className="text-xs text-faint hover:text-fg">
+              View →
+            </Link>
+          </div>
+          {!s ? (
+            <p className="mt-2 text-sm text-muted">None of your attempts count yet (flagged attempts are left out).</p>
+          ) : (
+            <>
+              <div className="mt-2 text-3xl font-semibold tracking-tight" data-testid="your-rank">
+                {s.rank === null ? (
+                  <span className="text-muted">Provisional</span>
+                ) : (
+                  <>
+                    <span className="text-human">#{s.rank}</span>
+                    <span className="text-lg font-normal text-muted"> of {s.of}</span>
+                  </>
+                )}
+              </div>
+              <p className="mt-1 text-sm text-muted">
+                {s.rank === null
+                  ? `${s.needed} more scored ${s.needed === 1 ? "task" : "tasks"} to get ranked.`
+                  : s.hidden
+                    ? "That's where you'd be. You're hidden, so you aren't listed."
+                    : "Among ranked humans."}{" "}
+                Skill <span className="font-mono text-fg">{pct(s.skill, 1)}</span>{" "}
+                <span className="text-faint">
+                  (likely {pct(s.skill_range[0])}–{pct(s.skill_range[1])})
+                </span>
+                , ahead of {s.beats} of {s.models_total} models.
+              </p>
+            </>
+          )}
+        </div>
+        <div>
+          <div className="text-sm text-muted">Show me as</div>
+          <div className="mt-2 flex flex-wrap rounded-lg border border-line p-0.5 text-xs" role="radiogroup">
+            {(
+              [
+                ["github", `@${me?.user?.login ?? "github"}`],
+                ["name", "Display name"],
+                ["hidden", "Hidden"],
+              ] as const
+            ).map(([v, label]) => (
+              <button
+                key={v}
+                role="radio"
+                aria-checked={visibility === v}
+                onClick={() => setVisibility(v)}
+                data-testid={`lb-visibility-${v}`}
+                className={cx("flex-1 truncate rounded-md px-3 py-1.5", visibility === v ? "bg-white/10 text-fg" : "text-muted hover:text-fg")}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {visibility === "name" && (
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={40}
+              placeholder="Display name"
+              data-testid="lb-name"
+              className="mt-2 h-9 w-full rounded-lg border border-line bg-bg px-3 text-sm focus:border-human/50 focus:outline-none"
+            />
+          )}
+          <p className="mt-2 text-[11px] leading-relaxed text-faint">
+            {visibility === "github"
+              ? "Your GitHub login and avatar, linked to your profile."
+              : visibility === "name"
+                ? "Just this name, no avatar or GitHub link."
+                : "You won't be listed. Your attempts still count in the Humans vs AI totals."}
+          </p>
+          {error && <p className="mt-2 text-xs text-fail">{error}</p>}
+          {dirty && (
+            <Button
+              variant="primary"
+              size="sm"
+              className="mt-3"
+              disabled={saving || (visibility === "name" && !name.trim())}
+              onClick={() => void save()}
+              data-testid="lb-save"
+            >
+              Save
+            </Button>
+          )}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
 function SharePanel() {
   const { me, reload } = useSession();
   const [name, setName] = useState(me?.share?.display_name ?? me?.user?.login ?? "");
@@ -118,8 +243,9 @@ function SharePanel() {
     <Card className="p-5">
       <div className="text-sm font-medium">Share your results</div>
       <p className="mt-1 text-xs leading-relaxed text-muted">
-        Opt-in. Creates a public page with your score and comparison under a name you choose. Your GitHub account isn&apos;t
-        shown. Turn it off any time.
+        Opt-in. Creates a public page with your score and comparison under a name you choose. The page doesn&apos;t show your
+        GitHub account, but your rank and stats are also on the public leaderboard under your leaderboard name. Turn it off any
+        time.
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         <input
@@ -312,6 +438,10 @@ export function ResultsClient() {
               )}
               <ComparisonChart summary={s} />
             </Card>
+          </div>
+
+          <div className="mt-4">
+            <LeaderboardCard standing={s.standing} />
           </div>
 
           <section className="mt-10 space-y-4">
