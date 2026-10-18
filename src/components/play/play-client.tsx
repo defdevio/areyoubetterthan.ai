@@ -10,6 +10,7 @@ import type { ActiveAttempt, SubmittedInfo } from "@/components/workspace/worksp
 import type { SourceBundle } from "@/lib/bundle-types";
 import { api, ApiError } from "@/lib/client/api";
 import { formatBytes, loadBundle, type Progress } from "@/lib/client/bundle";
+import { setWorkspaceActive } from "@/lib/client/workspace-mode";
 import { isPending, PHASE_HINT, shortId } from "@/lib/format";
 
 const Workspace = dynamic(() => import("@/components/workspace/workspace").then((m) => m.Workspace), {
@@ -104,6 +105,12 @@ export function PlayClient() {
     const id = setTimeout(() => void load(), 0);
     return () => clearTimeout(id);
   }, [me?.user, load]);
+
+  // The header switches to its full-width layout only while the workspace is showing.
+  useEffect(() => {
+    setWorkspaceActive(view.kind === "working");
+  }, [view.kind]);
+  useEffect(() => () => setWorkspaceActive(false), []);
 
   const start = async (state: PlayState) => {
     if (!state.next || !bundle) return;

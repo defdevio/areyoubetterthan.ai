@@ -131,7 +131,9 @@ function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
             <>
               <div className="mt-2 text-3xl font-semibold tracking-tight" data-testid="your-rank">
                 {s.rank === null ? (
-                  <span className="text-muted">Provisional</span>
+                  <span className="inline-flex items-center rounded-full border border-human/30 bg-human/10 px-3 py-1 text-sm font-medium text-human">
+                    Provisional
+                  </span>
                 ) : (
                   <>
                     <span className="text-human">#{s.rank}</span>

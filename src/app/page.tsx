@@ -21,6 +21,44 @@ const DIFFERENT = [
   ["Hints", "Neither side sees hints or the tests. Same as the leaderboard."],
 ];
 
+const STEP_ICON_PROPS = {
+  viewBox: "0 0 16 16",
+  "aria-hidden": true,
+  className: "size-4",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.5,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
+
+const STEP_ICONS = [
+  function BugIcon() {
+    return (
+      <svg {...STEP_ICON_PROPS}>
+        <rect x="5" y="5" width="6" height="8" rx="3" />
+        <path d="M8 5V13M6 2.5L7 4M10 2.5L9 4M5 8H2.5M11 8h2.5M5 11l-2 1.5M11 11l2 1.5" />
+      </svg>
+    );
+  },
+  function BrowserIcon() {
+    return (
+      <svg {...STEP_ICON_PROPS}>
+        <rect x="2" y="2.5" width="12" height="11" rx="1.5" />
+        <path d="M2 5.5h12M6.5 8.5L5 10l1.5 1.5M9.5 8.5L11 10l-1.5 1.5" />
+      </svg>
+    );
+  },
+  function CheckIcon() {
+    return (
+      <svg {...STEP_ICON_PROPS}>
+        <circle cx="8" cy="8" r="6" />
+        <path d="M5.5 8.25l1.75 1.75 3.25-3.5" />
+      </svg>
+    );
+  },
+];
+
 async function HumansSoFar() {
   const stats = await getHumanStats();
   if (!stats.unlocked) {
@@ -167,16 +205,21 @@ export default function Home() {
         <section className="mx-auto max-w-6xl px-4 py-16">
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              ["1", "Get a real issue", "A bug report from Django, sympy, scikit-learn and friends, picked from the tasks SWE-bench rates as “<15 min fix”."],
-              ["2", "Fix it in your browser", "The whole repository at the original commit: file tree, full-text search, a real editor. Fifteen minutes on the clock."],
-              ["3", "Get graded, compare", "Your diff runs through the official harness on a public GitHub runner. See which models you beat on exactly the tasks you did."],
-            ].map(([n, title, body]) => (
-              <Card key={n} className="p-6">
-                <div className="font-mono text-sm text-human">{n}</div>
-                <div className="mt-3 font-medium">{title}</div>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
-              </Card>
-            ))}
+              ["Get a real issue", "A bug report from Django, sympy, scikit-learn and friends, picked from the tasks SWE-bench rates as “<15 min fix”."],
+              ["Fix it in your browser", "The whole repository at the original commit: file tree, full-text search, a real editor. Fifteen minutes on the clock."],
+              ["Get graded, compare", "Your diff runs through the official harness on a public GitHub runner. See which models you beat on exactly the tasks you did."],
+            ].map(([title, body], i) => {
+              const Icon = STEP_ICONS[i];
+              return (
+                <Card key={title} className="p-6">
+                  <span className="grid size-8 place-items-center rounded-lg border border-human/30 bg-human/10 text-human">
+                    <Icon />
+                  </span>
+                  <div className="mt-3 font-medium">{title}</div>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
+                </Card>
+              );
+            })}
           </div>
         </section>
 

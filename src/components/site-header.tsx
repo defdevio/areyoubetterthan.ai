@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useResults, useSession } from "@/components/providers";
 import { cx, PhaseBadge, Spinner } from "@/components/ui";
 import { useHydrated } from "@/lib/client/use-media";
+import { useWorkspaceActive } from "@/lib/client/workspace-mode";
 import { formatClock, isPending, PHASE_HINT, shortId, timeAgo } from "@/lib/format";
 
 const NAV = [
@@ -243,7 +244,8 @@ export function SiteHeaderShell() {
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const compact = pathname === "/play";
+  const workspace = useWorkspaceActive();
+  const compact = pathname === "/play" && workspace;
   return (
     <header
       className={cx(
