@@ -15,6 +15,7 @@ export function SiteFooter() {
         </div>
         <div className="flex gap-4">
           <Link className="hover:text-fg" href="/methodology">Methodology</Link>
+          <Link className="hover:text-fg" href="/privacy">Privacy</Link>
           <a className="hover:text-fg" href="https://github.com/defdevio/areyoubetterthan.ai">Source</a>
           <a className="hover:text-fg" href="https://github.com/defdevio/areyoutbetterthan.ai-submissions">Scoring audit trail</a>
         </div>
