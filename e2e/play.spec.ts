@@ -11,6 +11,11 @@ async function signIn(page: Page, login: string) {
 async function edit(page: Page, file: string, line: string, from: string, to: string, nth = 0) {
   await page.getByPlaceholder("Go to file…").fill(file);
   await page.getByPlaceholder("Go to file…").press("Enter");
+  await editLine(page, line, from, to, nth);
+}
+
+/** Replaces `from` with `to` on a line of the file that is already open in the editor. */
+async function editLine(page: Page, line: string, from: string, to: string, nth = 0) {
   const view = page.locator(".view-line", { hasText: line }).nth(nth);
   await view.click();
   await page.keyboard.press("End");
@@ -18,6 +23,27 @@ async function edit(page: Page, file: string, line: string, from: string, to: st
   const after = text.slice(text.indexOf(from) + from.length);
   for (let i = 0; i < after.length + from.length; i++) await page.keyboard.press("Backspace");
   await page.keyboard.type(to + after);
+}
+
+/** Walks the first-time practice round: each guided step, then a submit that is never scored. */
+async function completeTour(page: Page) {
+  await page.getByRole("button", { name: "Start practice round" }).click();
+  await expect(page.getByTestId("tour-card")).toBeVisible();
+  await expect(page.getByTestId("timer")).toHaveCount(0);
+  await page.getByTestId("tour-next").click();
+  await page.locator('[data-tour="issue-toggle"]').click();
+  await page.locator('[data-tour="issue-toggle"]').click();
+  await page.getByTestId("sidebar-search").click();
+  await page.getByTestId("search-input").fill("def greet");
+  await page.getByTestId("search-results").locator("button", { hasText: "def greet" }).first().click();
+  await editLine(page, "Hello", "?", "!");
+  await expect(page.getByTestId("sidebar-changes")).toHaveText("Changes (1)");
+  await page.getByTestId("review-submit").click();
+  await expect(page.getByTestId("submit-dialog")).toContainText("Submit your practice patch?");
+  await page.getByTestId("confirm-submit").click();
+  await expect(page.getByRole("heading", { name: "Practice round complete" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue to your first task" }).click();
+  await expect(page.getByTestId("start-task")).toBeVisible();
 }
 
 const FIXES: Record<string, { file: string; line: string; from: string; to: string; nth?: number }> = {
@@ -53,9 +79,25 @@ test("public pages render without signing in", async ({ page }) => {
   await expect(page.getByRole("main").getByTestId("leaderboard-empty")).toContainText("Nobody's ranked yet");
 });
 
+test("first-time players must finish the practice round before a scored test", async ({ page }) => {
+  await signIn(page, `newbie-${Date.now()}`);
+  await expect(page.getByRole("heading", { name: "Take a practice round" })).toBeVisible();
+  await expect(page.getByTestId("start-task")).toHaveCount(0);
+  await completeTour(page);
+});
+
+test("?tour=1 replays the practice round in development without looping", async ({ page }) => {
+  await signIn(page, `replay-${Date.now()}`);
+  await completeTour(page);
+  await page.goto("/play?tour=1");
+  await expect(page.getByRole("heading", { name: "Take a practice round" })).toBeVisible();
+  await completeTour(page);
+});
+
 test("a human fixes an issue, gets scored, and shares the result", async ({ page }) => {
   const login = `e2e-${Date.now()}`;
   await signIn(page, login);
+  await completeTour(page);
 
   // Ready screen: the issue is hidden until the clock starts; repo preloads first.
   await expect(page.getByText("Next up: a real issue from")).toBeVisible();
@@ -151,6 +193,7 @@ test("a human fixes an issue, gets scored, and shares the result", async ({ page
 
 test("giving up records an unresolved attempt and moves on", async ({ page }) => {
   await signIn(page, `quitter-${Date.now()}`);
+  await completeTour(page);
   await page.getByTestId("start-task").click();
   await expect(page.getByTestId("workspace")).toBeVisible();
   await page.getByTestId("review-submit").click();

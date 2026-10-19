@@ -18,6 +18,7 @@ import { FileTree, type TreeEntry } from "./file-tree";
 import { languageFor, looksLikeTestFile } from "./language";
 import { SearchPanel, type SearchPanelHandle } from "./search-panel";
 import { Timer } from "./timer";
+import { TOUR_STEPS, type TourEvent } from "./tutorial";
 
 loader.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.57.0/min/vs" } });
 
@@ -132,18 +133,24 @@ export function Workspace({
   bundle,
   offsetMs,
   onSubmitted,
+  practice,
 }: {
   attempt: ActiveAttempt;
   bundle: SourceBundle;
   offsetMs: number;
   onSubmitted: (info: SubmittedInfo) => void;
+  /** Practice tour: nothing is saved, scored, or sent to the server. */
+  practice?: { onFinish: () => void };
 }) {
   const task = attempt.task!;
   const originals = bundle.files;
   const startedAt = new Date(attempt.started_at).getTime();
   const deadline = new Date(attempt.deadline_at).getTime();
+  const practiceMode = practice !== undefined;
 
-  const [restored] = useState(() => restore(attempt, originals));
+  const [restored] = useState<Restored>(() =>
+    practiceMode ? { current: new Map<string, string>(), created: new Set<string>() } : restore(attempt, originals),
+  );
   const currentRef = useRef(restored.current);
   const createdRef = useRef(restored.created);
   const [createdList, setCreatedList] = useState<string[]>(() => [...restored.created]);
@@ -163,7 +170,7 @@ export function Workspace({
     }
     return s;
   });
-  const [issueOpen, setIssueOpen] = useState(() => window.innerWidth >= 1000);
+  const [issueOpen, setIssueOpen] = useState(() => practiceMode || window.innerWidth >= 1000);
   const [newFile, setNewFile] = useState<string | null>(null);
   const [newFileError, setNewFileError] = useState<string | null>(null);
   const [cursor, setCursor] = useState<{ line: number; col: number } | null>(null);
@@ -180,6 +187,20 @@ export function Workspace({
   const [submitting, setSubmitting] = useState<null | "manual" | "auto">(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const submitted = useRef(false);
+
+  // Practice tour: advance to the next step when the expected action happens.
+  const [tourStep, setTourStep] = useState(0);
+  const tourEvent = useCallback(
+    (e: TourEvent) => {
+      if (!practiceMode) return;
+      setTourStep((s) => (TOUR_STEPS[s]?.event === e ? s + 1 : s));
+    },
+    [practiceMode],
+  );
+  const openReview = useCallback(() => {
+    tourEvent("review-opened");
+    setDialog("review");
+  }, [tourEvent]);
 
   const editorRef = useRef<MonacoEditor.IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<Parameters<OnMount>[1] | null>(null);
@@ -219,13 +240,17 @@ export function Workspace({
   const dirtyPaths = useRef(new Set<string>());
   useEffect(() => {
     const t = setTimeout(() => {
-      setDiff(computeDiff());
-      try {
-        localStorage.setItem(
-          storageKey(attempt.id),
-          JSON.stringify({ files: Object.fromEntries(currentRef.current), created: [...createdRef.current] }),
-        );
-      } catch {}
+      const next = computeDiff();
+      setDiff(next);
+      if (next.stats.files > 0) tourEvent("edited");
+      if (!practiceMode) {
+        try {
+          localStorage.setItem(
+            storageKey(attempt.id),
+            JSON.stringify({ files: Object.fromEntries(currentRef.current), created: [...createdRef.current] }),
+          );
+        } catch {}
+      }
       if (dirtyPaths.current.size) {
         for (const p of dirtyPaths.current) {
           search.update(p, currentRef.current.get(p) ?? originals[p] ?? null);
@@ -235,7 +260,7 @@ export function Workspace({
       }
     }, 300);
     return () => clearTimeout(t);
-  }, [version, computeDiff, attempt.id, originals, search]);
+  }, [version, computeDiff, attempt.id, originals, search, practiceMode, tourEvent]);
 
   const markChanged = useCallback((path: string) => {
     dirtyPaths.current.add(path);
@@ -245,7 +270,7 @@ export function Workspace({
   // --- Saving -------------------------------------------------------------------------
   const saveDraft = useCallback(
     async (opts?: { keepalive?: boolean; force?: boolean }) => {
-      if (submitted.current) return;
+      if (practiceMode || submitted.current) return;
       const d = computeDiff().diff;
       const pastes = pasteEvents.current;
       if (!opts?.force && d === lastSaved.current && pastes.length === lastSavedPastes.current) return;
@@ -266,7 +291,7 @@ export function Workspace({
         setSaveState((s) => ({ ...s, status: "error" }));
       }
     },
-    [attempt.id, computeDiff],
+    [attempt.id, computeDiff, practiceMode],
   );
 
   useEffect(() => {
@@ -275,7 +300,7 @@ export function Workspace({
       if (document.visibilityState === "hidden") void saveDraft({ keepalive: true });
     };
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (submitted.current) return;
+      if (submitted.current || practiceMode) return;
       void saveDraft({ keepalive: true });
       e.preventDefault();
     };
@@ -288,7 +313,7 @@ export function Workspace({
       // Navigating away inside the app: flush so the server has the latest draft.
       void saveDraft({ keepalive: true });
     };
-  }, [saveDraft]);
+  }, [saveDraft, practiceMode]);
 
   // --- Submitting ---------------------------------------------------------------------
   const submit = useCallback(
@@ -336,6 +361,9 @@ export function Workspace({
   );
 
   const onExpire = useCallback(() => void submit(true), [submit]);
+
+  // Practice never touches the server, so there's nothing to clean up here.
+  const finishPractice = () => practice?.onFinish();
 
   // --- Files --------------------------------------------------------------------------
   const revealPending = useCallback(() => {
@@ -481,7 +509,7 @@ export function Workspace({
     ed.addCommand(K.CtrlCmd | C.KeyS, () => void saveDraft({ force: true }));
     ed.addCommand(K.CtrlCmd | C.KeyP, () => focusFileFilter());
     ed.addCommand(K.CtrlCmd | K.Shift | C.KeyF, () => focusSearch());
-    ed.addCommand(K.CtrlCmd | C.Enter, () => setDialog("review"));
+    ed.addCommand(K.CtrlCmd | C.Enter, () => openReview());
     requestAnimationFrame(() => revealPending());
   };
 
@@ -541,12 +569,21 @@ export function Workspace({
         focusSearch();
       } else if (k === "enter") {
         e.preventDefault();
-        setDialog("review");
+        openReview();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [saveDraft]);
+  }, [saveDraft, openReview]);
+
+  // Outline the control the current tour step refers to.
+  useEffect(() => {
+    const target = practiceMode ? TOUR_STEPS[tourStep]?.target : undefined;
+    if (!target) return;
+    const el = document.querySelector<HTMLElement>(`[data-tour="${target}"]`);
+    el?.classList.add("tour-highlight");
+    return () => el?.classList.remove("tour-highlight");
+  }, [practiceMode, tourStep]);
 
   const side = useDragWidth(window.innerWidth < 1200 ? 230 : 280, 180, 520, "left");
   const issue = useDragWidth(Math.round(Math.max(300, Math.min(520, window.innerWidth * 0.3))), 260, 900, "right");
@@ -571,22 +608,36 @@ export function Workspace({
             {task.title}
           </div>
         </div>
-        <Timer deadline={deadline} offsetMs={offsetMs} totalMs={ATTEMPT_MS} onExpire={onExpire} />
-        <div className="hidden w-28 text-right text-[11px] text-faint lg:block" data-testid="save-state">
-          {saveState.status === "saving" && "Saving…"}
-          {saveState.status === "saved" && "Draft saved"}
-          {saveState.status === "error" && <span className="text-warn">Offline, will retry</span>}
-          {saveState.status === "idle" && "Autosaves"}
+        {!practiceMode && <Timer deadline={deadline} offsetMs={offsetMs} totalMs={ATTEMPT_MS} onExpire={onExpire} />}
+        <div
+          className={cx("hidden text-right text-[11px] text-faint lg:block", practiceMode ? "whitespace-nowrap" : "w-28")}
+          data-testid="save-state"
+        >
+          {practiceMode && "Practice · not scored"}
+          {!practiceMode && saveState.status === "saving" && "Saving…"}
+          {!practiceMode && saveState.status === "saved" && "Draft saved"}
+          {!practiceMode && saveState.status === "error" && <span className="text-warn">Offline, will retry</span>}
+          {!practiceMode && saveState.status === "idle" && "Autosaves"}
         </div>
-        <Button variant="ghost" size="sm" onClick={() => setIssueOpen((o) => !o)} aria-pressed={issueOpen}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setIssueOpen(!issueOpen);
+            tourEvent(issueOpen ? "issue-hidden" : "issue-shown");
+          }}
+          aria-pressed={issueOpen}
+          data-tour="issue-toggle"
+        >
           {issueOpen ? "Hide issue" : "Show issue"}
         </Button>
         <Button
           variant="primary"
           size="sm"
-          onClick={() => setDialog("review")}
+          onClick={openReview}
           disabled={Boolean(submitting)}
           data-testid="review-submit"
+          data-tour="review-submit"
         >
           Review & submit
         </Button>
@@ -607,6 +658,7 @@ export function Workspace({
                 key={key}
                 onClick={() => (key === "search" ? focusSearch() : setSidebar(key))}
                 data-testid={`sidebar-${key}`}
+                data-tour={`sidebar-${key}`}
                 className={cx(
                   "h-7 rounded-md px-2.5 text-xs",
                   sidebar === key ? "bg-white/[0.07] text-fg" : "text-muted hover:text-fg",
@@ -661,7 +713,10 @@ export function Workspace({
               ref={searchPanel}
               search={search}
               version={searchVersion}
-              onOpenAt={(path, line, column, length) => openFile(path, { line, column, length })}
+              onOpenAt={(path, line, column, length) => {
+                tourEvent("search-opened");
+                openFile(path, { line, column, length });
+              }}
             />
           </div>
           <div className={cx("min-h-0 flex-1 flex-col", sidebar === "changes" ? "flex" : "hidden")}>
@@ -703,7 +758,7 @@ export function Workspace({
               </div>
             ))}
           </div>
-          <div className="relative min-h-0 flex-1">
+          <div className="relative min-h-0 flex-1" data-tour="editor">
             {active && !activeOmitted ? (
               <Editor
                 path={active}
@@ -793,13 +848,16 @@ export function Workspace({
             data-testid="submit-dialog"
           >
             <div className="border-b border-line px-5 py-4">
-              <div className="text-base font-semibold">{dialog === "diff" ? "Your patch so far" : "Submit your patch?"}</div>
+              <div className="text-base font-semibold">
+                {dialog === "diff" ? "Your patch so far" : practiceMode ? "Submit your practice patch?" : "Submit your patch?"}
+              </div>
               <div className="mt-1 text-sm text-muted">
                 {diff.stats.files > 0 ? (
                   <>
                     {diff.stats.files} file{diff.stats.files === 1 ? "" : "s"} changed,{" "}
                     <span className="text-pass">+{diff.stats.added}</span> <span className="text-fail">−{diff.stats.removed}</span>.
                     {dialog === "review" &&
+                      !practiceMode &&
                       " It will be scored by the official SWE-bench harness on a GitHub runner. You can start the next task right away."}
                   </>
                 ) : (
@@ -808,6 +866,11 @@ export function Workspace({
               </div>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto p-5">
+              {practiceMode && dialog === "review" && (
+                <div className="mb-4 rounded-lg border border-human/30 bg-human/5 p-3 text-xs text-human">
+                  Practice round. Nothing here is scored or saved, and your results won&apos;t change.
+                </div>
+              )}
               {diff.diff ? (
                 <DiffView diff={diff.diff} className="max-h-[50vh]" />
               ) : (
@@ -832,7 +895,16 @@ export function Workspace({
                 Keep editing
               </Button>
               {dialog === "review" &&
-                (diff.stats.files > 0 ? (
+                (practiceMode ? (
+                  <Button
+                    variant="primary"
+                    onClick={finishPractice}
+                    disabled={diff.stats.files === 0}
+                    data-testid="confirm-submit"
+                  >
+                    Submit practice patch
+                  </Button>
+                ) : diff.stats.files > 0 ? (
                   <Button variant="primary" onClick={() => void submit(false)} disabled={Boolean(submitting)} data-testid="confirm-submit">
                     {submitting ? <Spinner /> : null} Submit for scoring
                   </Button>
@@ -846,6 +918,8 @@ export function Workspace({
         </div>
       )}
 
+      {practiceMode && dialog === "none" && <TourCard step={tourStep} onNext={() => setTourStep((s) => s + 1)} />}
+
       {submitting && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 backdrop-blur-sm">
           <div className="flex items-center gap-3 rounded-xl border border-line-strong bg-panel px-5 py-4 text-sm">
@@ -854,6 +928,31 @@ export function Workspace({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function TourCard({ step, onNext }: { step: number; onNext: () => void }) {
+  const current = TOUR_STEPS[step];
+  return (
+    <div
+      className="animate-rise fixed bottom-8 left-4 z-[60] w-80 rounded-xl border border-line-strong bg-panel p-4 shadow-2xl"
+      role="status"
+      data-testid="tour-card"
+    >
+      <div className="text-[11px] text-faint">Practice round · not scored</div>
+      <div className="mt-1 text-sm font-medium">{current?.title ?? "You're ready to submit"}</div>
+      <p className="mt-1.5 text-xs leading-relaxed text-muted">
+        {current?.body ?? "Open Review & submit, then submit the practice patch to finish."}
+      </p>
+      {current && !current.event && (
+        <div className="mt-3 flex justify-end">
+          <Button variant="primary" size="sm" onClick={onNext} data-testid="tour-next">
+            Next
+          </Button>
+        </div>
+      )}
+      {current?.event && <div className="mt-3 text-[11px] text-faint">Try it to continue.</div>}
     </div>
   );
 }

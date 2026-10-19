@@ -28,6 +28,8 @@ export const users = pgTable("users", {
   leaderboardHidden: boolean("leaderboard_hidden").notNull().default(false),
   /** Optional ISO 3166-1 alpha-2 code (e.g. "US"), shown as a flag on the public leaderboard. */
   country: text("country"),
+  /** Set once the practice tour is finished. Required before the first scored attempt. */
+  tourCompletedAt: timestamp("tour_completed_at", { withTimezone: true }),
   createdAt: createdAt(),
   lastSeenAt: timestamp("last_seen_at", { withTimezone: true }),
 });

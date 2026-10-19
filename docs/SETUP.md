@@ -25,7 +25,7 @@ Create it under the `defdevio` org: *Settings → Developer settings → GitHub 
 | **Repository permissions** | Actions: Read & write · Contents: Read & write · Issues: Read & write · Pull requests: Read & write · Metadata: Read |
 | Account permissions | none |
 | Subscribe to events | **Workflow run** |
-| Where can it be installed | Only on this account |
+| Where can it be installed | Any account (public) |
 
 Then:
 
