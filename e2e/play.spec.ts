@@ -86,6 +86,18 @@ test("first-time players must finish the practice round before a scored test", a
   await completeTour(page);
 });
 
+test("finishing the practice round sticks when you leave the page and come back", async ({ page }) => {
+  await signIn(page, `sticky-${Date.now()}`);
+  await completeTour(page);
+  // Client-side navigation keeps the cached session, so a stale tour flag would show the tour again here.
+  await page.locator('a[href="/results"]:visible').first().click();
+  await expect(page).toHaveURL(/\/results$/);
+  await page.locator('a[href="/play"]:visible').first().click();
+  await expect(page).toHaveURL(/\/play$/);
+  await expect(page.getByTestId("start-task")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Take a practice round" })).toHaveCount(0);
+});
+
 // The flag is dev-only, so production builds (E2E_PROD=1) ignore it.
 test("?tour=1 replays the practice round in development without looping", async ({ page }) => {
   test.skip(process.env.E2E_PROD === "1", "?tour=1 is disabled in production builds");

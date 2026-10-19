@@ -52,8 +52,9 @@ function devForcesTour() {
 }
 
 export function PlayClient() {
-  const { me, loading } = useSession();
+  const { me, loading, reload } = useSession();
   const results = useResults();
+  const userId = me?.user?.id;
   const [view, setView] = useState<View>({ kind: "loading" });
   const [offsetMs, setOffsetMs] = useState(0);
   const [progress, setProgress] = useState<Progress | null>(null);
@@ -113,14 +114,18 @@ export function PlayClient() {
     [fetchState, preload],
   );
 
+  // Keeps the tour flag current when the session refreshes, without re-running load() and leaving the tour-done screen.
   useEffect(() => {
-    if (!me?.user) return;
-    tourRef.current = me.tour_completed;
+    if (userId) tourRef.current = me?.tour_completed ?? false;
+  }, [userId, me?.tour_completed]);
+
+  useEffect(() => {
+    if (!userId) return;
     forceTourRef.current = devForcesTour();
     // Deferred and cancellable, so StrictMode's double mount doesn't fetch twice.
     const id = setTimeout(() => void load(), 0);
     return () => clearTimeout(id);
-  }, [me?.user, me?.tour_completed, load]);
+  }, [userId, load]);
 
   // The header switches to its full-width layout only while the workspace is showing.
   useEffect(() => {
@@ -166,6 +171,8 @@ export function PlayClient() {
       await api("/api/me/tour", { method: "POST" });
       tourRef.current = true;
       forceTourRef.current = false;
+      // Without this, the cached session still says the tour is unfinished, so a remount sends the player back to it.
+      await reload();
       setView({ kind: "tour-done" });
     } catch (e) {
       setView({ kind: "error", message: (e as Error).message });
