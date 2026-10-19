@@ -16,7 +16,11 @@ import { getTask, taskIds } from "@/lib/tasks";
 
 let githubId = 1;
 async function newUser(login = `user${githubId}`) {
-  return upsertUser({ id: githubId++, login, name: null, avatar_url: null });
+  const user = await upsertUser({ id: githubId++, login, name: null, avatar_url: null });
+  const tourCompletedAt = new Date();
+  const db = await getDb();
+  await db.update(users).set({ tourCompletedAt }).where(eq(users.id, user.id));
+  return { ...user, tourCompletedAt };
 }
 
 function diffFor(instanceId: string, marker = "") {
@@ -49,6 +53,13 @@ describe("attempt lifecycle", () => {
     // Starting again resumes the same attempt instead of creating a new one.
     const again = await startAttempt(user, expected);
     expect(again.active.id).toBe(started.active.id);
+  });
+
+  it("blocks scored tests until the practice tour is finished", async () => {
+    const user = await upsertUser({ id: githubId++, login: "untoured", name: null, avatar_url: null });
+    expect(user.tourCompletedAt).toBeNull();
+    const { next } = await getPlayState(user);
+    await expect(startAttempt(user, next!.instance_id)).rejects.toMatchObject({ status: 403, code: "tour_required" });
   });
 
   it("scores a submission end to end through the queue", async () => {

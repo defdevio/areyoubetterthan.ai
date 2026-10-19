@@ -9,6 +9,7 @@ export interface Me {
   user: { id: string; login: string; name: string | null; avatar_url: string | null } | null;
   share?: { id: string; display_name: string; public: boolean } | null;
   leaderboard?: { visibility: "github" | "name" | "hidden"; name: string | null; country: string | null };
+  tour_completed: boolean;
   dev_login: boolean;
 }
 
@@ -105,7 +106,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     try {
       setMe(await api<Me>("/api/me"));
     } catch {
-      setMe({ user: null, dev_login: false });
+      setMe({ user: null, tour_completed: false, dev_login: false });
     } finally {
       setLoading(false);
     }
@@ -115,7 +116,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     let cancelled = false;
     api<Me>("/api/me")
       .then((m) => !cancelled && setMe(m))
-      .catch(() => !cancelled && setMe({ user: null, dev_login: false }))
+      .catch(() => !cancelled && setMe({ user: null, tour_completed: false, dev_login: false }))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;

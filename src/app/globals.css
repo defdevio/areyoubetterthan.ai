@@ -185,3 +185,10 @@ body {
 .search-hit-line {
   background: #fbbf240d;
 }
+
+/* Practice tour: outlines the control the current step is about */
+.tour-highlight {
+  outline: 2px solid var(--color-human);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

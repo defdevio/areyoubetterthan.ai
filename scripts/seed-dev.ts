@@ -162,6 +162,7 @@ async function main() {
       country: p.country,
       createdAt,
       lastSeenAt: new Date(now - rand() * 10 * DAY),
+      tourCompletedAt: createdAt,
     });
     if (p.handle !== "hidden" && p.index % 2 === 0) {
       shareRows.push({
