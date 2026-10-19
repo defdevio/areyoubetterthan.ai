@@ -96,7 +96,7 @@ test("?tour=1 replays the practice round in development without looping", async 
   await completeTour(page);
 });
 
-test("a human fixes an issue, gets scored, and shares the result", async ({ page }) => {
+test("a human fixes an issue, gets scored, and shares the result", async ({ browser, page }) => {
   const login = `e2e-${Date.now()}`;
   await signIn(page, login);
   await completeTour(page);
@@ -158,7 +158,39 @@ test("a human fixes an issue, gets scored, and shares the result", async ({ page
   await page.getByTestId("share-save").click();
   const link = page.getByTestId("share-link");
   await expect(link).toBeVisible();
+  // Desktop share sheets can't post an image to Instagram, so the button stays hidden.
+  await expect(page.getByTestId("share-targets")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Instagram / more" })).toHaveCount(0);
   const href = await link.getAttribute("href");
+
+  // On a phone, Instagram is offered and receives the results card as a PNG.
+  const phone = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await phone.addInitScript(() => {
+    const w = window as unknown as { shared: unknown };
+    navigator.canShare = () => true;
+    navigator.share = async (data) => {
+      w.shared = {
+        files: (data?.files ?? []).map((f) => ({ name: f.name, type: f.type })),
+      };
+    };
+  });
+  const phonePage = await phone.newPage();
+  await signIn(phonePage, login);
+  await phonePage.goto("/results");
+  await phonePage.getByTestId("share-name").fill("Ada the Human");
+  await phonePage.getByTestId("share-save").click();
+  const instagram = phonePage.getByRole("button", { name: "Instagram / more" });
+  await expect(instagram).toBeVisible();
+  await instagram.click();
+  await expect
+    .poll(() => phonePage.evaluate(() => (window as unknown as { shared: unknown }).shared))
+    .toMatchObject({ files: [{ name: "areyoubetterthan.png", type: "image/png" }] });
+  await phone.close();
+
   await page.goto(href!);
   await expect(page.getByRole("heading", { name: "Ada the Human" })).toBeVisible();
   // The page itself must not reveal the GitHub login (the header shows the viewer, who is the owner here).

@@ -19,6 +19,21 @@ type Mode = "default" | "all" | "vals";
 
 const SHARE_MESSAGE = "I took the SWE-bench test against AI models. Are you better than AI?";
 
+/** Touch devices whose share sheet accepts image files. Desktop sheets can't post to Instagram. */
+function canShareImageFile() {
+  if (typeof navigator.share !== "function" || typeof navigator.canShare !== "function") return false;
+  if (!window.matchMedia("(pointer: coarse)").matches) return false;
+  return navigator.canShare({ files: [new File(["x"], "share.png", { type: "image/png" })] });
+}
+
+/** Shares the results card as a PNG, so Instagram receives the picture rather than a bare link. */
+async function shareImage(pageUrl: string) {
+  const res = await fetch(`${pageUrl}/opengraph-image`);
+  if (!res.ok) throw new Error(`Share image failed with ${res.status}`);
+  const file = new File([await res.blob()], "areyoubetterthan.png", { type: "image/png" });
+  await navigator.share({ files: [file], title: SHARE_MESSAGE, text: `${SHARE_MESSAGE} ${pageUrl}` });
+}
+
 
 export function ComparisonChart({
   summary,
@@ -255,11 +270,7 @@ function SharePanel() {
     () => window.location.origin,
     () => "",
   );
-  const canNativeShare = useSyncExternalStore(
-    noopSubscribe,
-    () => typeof navigator.share === "function",
-    () => false,
-  );
+  const canShareImage = useSyncExternalStore(noopSubscribe, canShareImageFile, () => false);
   const share = me?.share;
   const path = share ? `/r/${share.id}` : null;
   const url = path ? `${origin}${path}` : "";
@@ -341,17 +352,13 @@ function SharePanel() {
                 >
                   <ShareIcon id={t.id} />
                 </LinkButton>
-                {t.id === "facebook" && canNativeShare && (
+                {t.id === "facebook" && canShareImage && (
                   <Button
                     size="md"
                     className="w-10 cursor-pointer !px-0"
                     aria-label="Instagram / more"
                     title="Instagram / more"
-                    onClick={() =>
-                      void navigator
-                        .share({ title: SHARE_MESSAGE, text: SHARE_MESSAGE, url })
-                        .catch(() => undefined)
-                    }
+                    onClick={() => void shareImage(url).catch(() => undefined)}
                   >
                     <ShareIcon id="instagram" />
                   </Button>
