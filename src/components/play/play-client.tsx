@@ -2,11 +2,12 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useResults, useSession } from "@/components/providers";
 import { GitHubMark } from "@/components/site-header";
 import { Button, Card, cx, LinkButton, PhaseBadge, Spinner } from "@/components/ui";
 import type { ActiveAttempt, SubmittedInfo } from "@/components/workspace/workspace";
+import { TUTORIAL_BUNDLE, tutorialAttempt } from "@/components/workspace/tutorial";
 import type { SourceBundle } from "@/lib/bundle-types";
 import { api, ApiError } from "@/lib/client/api";
 import { formatBytes, loadBundle, type Progress } from "@/lib/client/bundle";
@@ -31,7 +32,10 @@ type View =
   | { kind: "ready"; state: PlayState }
   | { kind: "working"; attempt: ActiveAttempt; bundle: SourceBundle }
   | { kind: "submitted"; attemptId: string; instanceId: string; info: SubmittedInfo }
-  | { kind: "done"; state: PlayState };
+  | { kind: "done"; state: PlayState }
+  | { kind: "tour-intro" }
+  | { kind: "practice"; attempt: ActiveAttempt }
+  | { kind: "tour-done" };
 
 function CenterNote({ children }: { children: React.ReactNode }) {
   return (
@@ -41,6 +45,10 @@ function CenterNote({ children }: { children: React.ReactNode }) {
       </div>
     </div>
   );
+}
+
+function devForcesTour() {
+  return process.env.NODE_ENV !== "production" && new URLSearchParams(window.location.search).get("tour") === "1";
 }
 
 export function PlayClient() {
@@ -54,6 +62,10 @@ export function PlayClient() {
   const [starting, setStarting] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   const [resumeFailed, setResumeFailed] = useState(false);
+  // Read by load() so it doesn't need to be recreated when the session refreshes.
+  const tourRef = useRef(false);
+  // Dev-only `?tour=1` replays the practice round. Cleared once it finishes so Continue doesn't loop back.
+  const forceTourRef = useRef(false);
 
   const fetchState = useCallback(async () => {
     const t0 = Date.now();
@@ -91,6 +103,8 @@ export function PlayClient() {
             }
             return;
           }
+          // First-time users do the practice round before any scored task.
+          if (forceTourRef.current || !tourRef.current) return setView({ kind: "tour-intro" });
           if (!state.next) return setView({ kind: "done", state });
           setView({ kind: "ready", state });
           void preload(state.next.bundle_url);
@@ -101,14 +115,16 @@ export function PlayClient() {
 
   useEffect(() => {
     if (!me?.user) return;
+    tourRef.current = me.tour_completed;
+    forceTourRef.current = devForcesTour();
     // Deferred and cancellable, so StrictMode's double mount doesn't fetch twice.
     const id = setTimeout(() => void load(), 0);
     return () => clearTimeout(id);
-  }, [me?.user, load]);
+  }, [me?.user, me?.tour_completed, load]);
 
   // The header switches to its full-width layout only while the workspace is showing.
   useEffect(() => {
-    setWorkspaceActive(view.kind === "working");
+    setWorkspaceActive(view.kind === "working" || view.kind === "practice");
   }, [view.kind]);
   useEffect(() => () => setWorkspaceActive(false), []);
 
@@ -128,7 +144,10 @@ export function PlayClient() {
     } catch (e) {
       const err = e as ApiError;
       setStartError(err.message);
-      if (err.code === "out_of_order" || err.code === "attempt_in_progress") void load();
+      if (err.code === "out_of_order" || err.code === "attempt_in_progress" || err.code === "tour_required") {
+        if (err.code === "tour_required") tourRef.current = false;
+        void load();
+      }
     } finally {
       setStarting(false);
     }
@@ -141,6 +160,17 @@ export function PlayClient() {
     },
     [results],
   );
+
+  const finishTour = async () => {
+    try {
+      await api("/api/me/tour", { method: "POST" });
+      tourRef.current = true;
+      forceTourRef.current = false;
+      setView({ kind: "tour-done" });
+    } catch (e) {
+      setView({ kind: "error", message: (e as Error).message });
+    }
+  };
 
   if (loading) return <CenterNote>Loading…</CenterNote>;
   if (!me?.user) return <SignInGate devLogin={me?.dev_login ?? false} />;
@@ -203,6 +233,28 @@ export function PlayClient() {
           onSubmitted={onSubmitted(view.attempt)}
         />
       );
+    case "tour-intro":
+      return <TourIntro onStart={() => setView({ kind: "practice", attempt: tutorialAttempt() })} />;
+    case "practice":
+      return (
+        <Workspace
+          key="tutorial"
+          attempt={view.attempt}
+          bundle={TUTORIAL_BUNDLE}
+          offsetMs={0}
+          onSubmitted={() => undefined}
+          practice={{ onFinish: () => void finishTour() }}
+        />
+      );
+    case "tour-done":
+      return (
+        <TourDone
+          onContinue={() => {
+            setView({ kind: "loading" });
+            void load();
+          }}
+        />
+      );
     case "submitted":
       return (
         <SubmittedScreen
@@ -216,6 +268,38 @@ export function PlayClient() {
         />
       );
   }
+}
+
+function TourIntro({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="mx-auto max-w-xl flex-1 px-4 py-20 text-center">
+      <div className="font-mono text-xs uppercase tracking-wider text-human">Before your first real task</div>
+      <h1 className="mt-3 text-3xl font-semibold tracking-tight">Take a practice round</h1>
+      <p className="mt-3 text-muted">
+        A tiny, made-up bug with a guided walkthrough of the issue panel, search, editing, and submitting. There&apos;s no
+        clock, and nothing from this round is scored or saved.
+      </p>
+      <Button className="mt-8" variant="primary" onClick={onStart}>
+        Start practice round
+      </Button>
+    </div>
+  );
+}
+
+function TourDone({ onContinue }: { onContinue: () => void }) {
+  return (
+    <div className="mx-auto max-w-xl flex-1 px-4 py-24 text-center">
+      <div className="text-5xl">✅</div>
+      <h1 className="mt-6 text-3xl font-semibold tracking-tight">Practice round complete</h1>
+      <p className="mt-3 text-muted">
+        Nothing was scored. Your first real task starts when you press Start, and that&apos;s when the 15-minute clock
+        begins.
+      </p>
+      <Button className="mt-8" variant="primary" onClick={onContinue}>
+        Continue to your first task
+      </Button>
+    </div>
+  );
 }
 
 function SignInGate({ devLogin }: { devLogin: boolean }) {

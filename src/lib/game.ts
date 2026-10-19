@@ -180,6 +180,7 @@ export async function startAttempt(user: User, instanceId: string) {
     if (active.instanceId === instanceId) return { server_now: new Date().toISOString(), active: attemptView(active) };
     throw new HttpError(409, "You already have a task in progress.", "attempt_in_progress");
   }
+  if (!user.tourCompletedAt) throw new HttpError(403, "Finish the practice tour first.", "tour_required");
 
   const expected = nextTask(taskIds, user.seed, await attemptedIds(user.id));
   if (!expected) throw new HttpError(409, "You have attempted every task. Legend.", "all_done");
