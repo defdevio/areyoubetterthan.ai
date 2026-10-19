@@ -89,6 +89,12 @@ async function ShareBody({ params }: { params: Promise<{ shareId: string }> }) {
               <div className="truncate text-sm">{t.title}</div>
               <div className="font-mono text-[11px] text-faint">
                 {t.instance_id} · {formatDuration(t.elapsed_ms)} · {t.models_solved}/{t.models_total} models solved it
+                {t.solver_timed > 0 && (
+                  <>
+                    {" "}
+                    · model avg {formatDuration(t.solver_avg_ms)} · fastest {formatDuration(t.solver_fastest_ms)}
+                  </>
+                )}
               </div>
             </div>
             <PhaseBadge phase={t.you} />
