@@ -86,7 +86,9 @@ test("first-time players must finish the practice round before a scored test", a
   await completeTour(page);
 });
 
+// The flag is dev-only, so production builds (E2E_PROD=1) ignore it.
 test("?tour=1 replays the practice round in development without looping", async ({ page }) => {
+  test.skip(process.env.E2E_PROD === "1", "?tour=1 is disabled in production builds");
   await signIn(page, `replay-${Date.now()}`);
   await completeTour(page);
   await page.goto("/play?tour=1");
