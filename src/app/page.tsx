@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { HumanAvatar } from "@/components/human-avatar";
 import { Medal } from "@/components/medal";
 import { Card, LinkButton, RateBar, cx } from "@/components/ui";
+import { ModelLogo } from "@/components/model-logo";
 import { getLeaderboard } from "@/lib/leaderboard";
 import { modelRatesOn, valsSource } from "@/lib/models";
 import { formatDuration } from "@/lib/format";
@@ -12,15 +13,64 @@ import { getHumanStats } from "@/lib/public-stats";
 import { pct } from "@/lib/stats";
 import { getTasksFile, taskIds } from "@/lib/tasks";
 
+function TasksIcon() {
+  return (
+    <svg {...STEP_ICON_PROPS}>
+      <rect x="3" y="2.5" width="10" height="11" rx="1.5" />
+      <path d="M5.5 6h5M5.5 8.5h5M5.5 11h3" />
+    </svg>
+  );
+}
+function ShieldIcon() {
+  return (
+    <svg {...STEP_ICON_PROPS}>
+      <path d="M8 1.8l5 1.9v4.1c0 3-2.1 5.4-5 6.4-2.9-1-5-3.4-5-6.4V3.7z" />
+      <path d="M5.8 8.1l1.5 1.5 2.9-3" />
+    </svg>
+  );
+}
+function FlagIcon() {
+  return (
+    <svg {...STEP_ICON_PROPS}>
+      <path d="M3.5 14.5V2" />
+      <path d="M3.5 2.5h8.5l-1.8 2.5 1.8 2.5H3.5" />
+    </svg>
+  );
+}
+function ClockIcon() {
+  return (
+    <svg {...STEP_ICON_PROPS}>
+      <circle cx="8" cy="8" r="6" />
+      <path d="M8 4.8V8l2.2 1.4" />
+    </svg>
+  );
+}
+function TerminalIcon() {
+  return (
+    <svg {...STEP_ICON_PROPS}>
+      <rect x="2" y="3" width="12" height="10" rx="1.5" />
+      <path d="M4.5 6.5L6.5 8l-2 1.5M8.5 10h3" />
+    </svg>
+  );
+}
+function BulbIcon() {
+  return (
+    <svg {...STEP_ICON_PROPS}>
+      <path d="M6 11.5c-.8-.6-1.5-1.5-1.5-2.8a3.5 3.5 0 1 1 7 0c0 1.3-.7 2.2-1.5 2.8-.3.2-.5.6-.5 1v.2h-3v-.2c0-.4-.2-.8-.5-1z" />
+      <path d="M6.5 14h3" />
+    </svg>
+  );
+}
+
 const SAME = [
-  ["Tasks", "Real GitHub issues from SWE-bench Verified, at the original commit"],
-  ["Grading", "The official SWE-bench harness, same Docker images, same hidden tests"],
-  ["Bar to pass", "Every FAIL_TO_PASS and PASS_TO_PASS test must pass"],
+  { label: "Tasks", text: "Real GitHub issues from SWE-bench Verified, at the original commit", Icon: TasksIcon },
+  { label: "Grading", text: "The official SWE-bench harness, same Docker images, same hidden tests", Icon: ShieldIcon },
+  { label: "Bar to pass", text: "Every FAIL_TO_PASS and PASS_TO_PASS test must pass", Icon: FlagIcon },
 ];
 const DIFFERENT = [
-  ["Time", "You get 15 minutes. Agents ran until they decided they were done."],
-  ["Execution", "You can read, search and edit, but not run code. Agents had a shell."],
-  ["Hints", "Neither side sees hints or the tests. Same as the leaderboard."],
+  { label: "Time", text: "You get 15 minutes. Agents ran until they decided they were done.", Icon: ClockIcon },
+  { label: "Execution", text: "You can read, search and edit, but not run code. Agents had a shell.", Icon: TerminalIcon },
+  { label: "Hints", text: "Neither side sees hints or the tests. Same as the leaderboard.", Icon: BulbIcon },
 ];
 
 const STEP_ICON_PROPS = {
@@ -223,6 +273,7 @@ export default function Home() {
                 <div key={m.row.id} className="space-y-1.5">
                   <div className="flex items-baseline justify-between gap-3 text-sm">
                     <span className="truncate">
+                      <ModelLogo org={m.row.org} />
                       {m.row.model}
                       {m.row.latencyS !== null && (
                         <span className="ml-2 text-[11px] text-faint">{formatDuration(m.row.latencyS * 1000)} / task</span>
@@ -289,10 +340,13 @@ export default function Home() {
             <Card className="p-6">
               <div className="text-sm font-medium text-pass">Identical</div>
               <dl className="mt-4 space-y-3 text-sm">
-                {SAME.map(([k, v]) => (
-                  <div key={k} className="grid grid-cols-[6rem_1fr] gap-3">
-                    <dt className="text-faint">{k}</dt>
-                    <dd className="text-muted">{v}</dd>
+                {SAME.map(({ label, text, Icon }) => (
+                  <div key={label} className="grid grid-cols-[8.5rem_1fr] gap-3">
+                    <dt className="flex items-center gap-2 text-faint">
+                      <Icon />
+                      {label}
+                    </dt>
+                    <dd className="text-muted">{text}</dd>
                   </div>
                 ))}
               </dl>
@@ -300,10 +354,13 @@ export default function Home() {
             <Card className="p-6">
               <div className="text-sm font-medium text-warn">Different</div>
               <dl className="mt-4 space-y-3 text-sm">
-                {DIFFERENT.map(([k, v]) => (
-                  <div key={k} className="grid grid-cols-[6rem_1fr] gap-3">
-                    <dt className="text-faint">{k}</dt>
-                    <dd className="text-muted">{v}</dd>
+                {DIFFERENT.map(({ label, text, Icon }) => (
+                  <div key={label} className="grid grid-cols-[8.5rem_1fr] gap-3">
+                    <dt className="flex items-center gap-2 text-faint">
+                      <Icon />
+                      {label}
+                    </dt>
+                    <dd className="text-muted">{text}</dd>
                   </div>
                 ))}
               </dl>

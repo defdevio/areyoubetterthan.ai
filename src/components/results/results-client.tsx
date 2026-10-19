@@ -5,6 +5,7 @@ import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from "re
 import { CountryFlag } from "@/components/country-flag";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
+import { ModelLogo } from "@/components/model-logo";
 import { COUNTRIES } from "@/lib/countries";
 import { api } from "@/lib/client/api";
 import { shareTargets } from "@/lib/share-links";
@@ -73,6 +74,7 @@ export function ComparisonChart({
           >
             <span className="text-right font-mono text-[11px] text-faint">{tied ? `=${rank}` : rank}</span>
             <span className="text-sm sm:truncate">
+              <ModelLogo org={r.kind === "model" ? r.org : null} human={r.kind === "human"} />
               <span className={cx(isYou && "font-semibold text-human")}>{r.model}</span>
               {r.kind === "model" && (
                 <span className="block text-[11px] text-faint sm:ml-2 sm:inline">{r.bashOnly ? "mini-SWE-agent" : r.agent}</span>

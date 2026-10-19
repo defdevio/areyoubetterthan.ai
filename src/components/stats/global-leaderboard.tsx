@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { cx, SortSelect } from "@/components/ui";
+import { ModelLogo } from "@/components/model-logo";
 import { formatDuration } from "@/lib/format";
 import type { BoardRow } from "@/lib/results";
 import { pct, type Rate } from "@/lib/stats";
@@ -260,6 +261,7 @@ export function GlobalLeaderboard({
                 </td>
                 <td className="max-w-[52vw] px-3 py-2 lg:max-w-72">
                   <div className="truncate">
+                    <ModelLogo org={r.isHuman ? null : r.org} human={r.isHuman} />
                     <span className={cx(r.isHuman && "font-semibold text-human")}>{r.model}</span>
                     {!r.isHuman && (
                       <span className="ml-2 text-[11px] text-faint">

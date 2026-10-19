@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Card, cx, SortSelect } from "@/components/ui";
+import { ModelLogo } from "@/components/model-logo";
 import { formatDuration } from "@/lib/format";
 import { CATEGORIES, CATEGORY_LABEL, type Category, type MetricsSummary } from "@/lib/metrics";
 import { pct, type Rate } from "@/lib/stats";
@@ -305,6 +306,7 @@ export function SpeedTable({
               <tr key={r.id} className={cx(r.isHuman && "bg-human/10")}>
                 <td className="max-w-[60vw] px-3 py-1.5 lg:max-w-56">
                   <div className={cx("truncate", r.isHuman && "font-semibold text-human")}>
+                    <ModelLogo org={r.isHuman ? null : r.org} human={r.isHuman} className="mr-2 size-3.5" />
                     {r.model}
                     {r.org && <span className="ml-2 text-[11px] font-normal text-faint">{r.org}</span>}
                   </div>
