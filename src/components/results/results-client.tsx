@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { CountryFlag } from "@/components/country-flag";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
@@ -329,34 +329,35 @@ function SharePanel() {
           <div className="text-xs text-faint">Share on</div>
           <div className="mt-2 flex flex-wrap gap-2" data-testid="share-targets">
             {shareTargets({ url, message: SHARE_MESSAGE }).map((t) => (
-              <LinkButton
-                key={t.id}
-                href={t.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                size="md"
-                className="w-10 !px-0"
-                aria-label={t.label}
-                title={t.label}
-              >
-                <ShareIcon id={t.id} />
-              </LinkButton>
+              <Fragment key={t.id}>
+                <LinkButton
+                  href={t.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="md"
+                  className="w-10 !px-0"
+                  aria-label={t.label}
+                  title={t.label}
+                >
+                  <ShareIcon id={t.id} />
+                </LinkButton>
+                {t.id === "facebook" && canNativeShare && (
+                  <Button
+                    size="md"
+                    className="w-10 cursor-pointer !px-0"
+                    aria-label="Instagram / more"
+                    title="Instagram / more"
+                    onClick={() =>
+                      void navigator
+                        .share({ title: SHARE_MESSAGE, text: SHARE_MESSAGE, url })
+                        .catch(() => undefined)
+                    }
+                  >
+                    <ShareIcon id="instagram" />
+                  </Button>
+                )}
+              </Fragment>
             ))}
-            {canNativeShare && (
-              <Button
-                size="md"
-                className="w-10 !px-0"
-                aria-label="Instagram / more"
-                title="Instagram / more"
-                onClick={() =>
-                  void navigator
-                    .share({ title: SHARE_MESSAGE, text: SHARE_MESSAGE, url })
-                    .catch(() => undefined)
-                }
-              >
-                <ShareIcon id="instagram" />
-              </Button>
-            )}
           </div>
         </div>
       )}

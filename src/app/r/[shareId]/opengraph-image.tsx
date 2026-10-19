@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
 import { connection } from "next/server";
+import { ogLogoDataUri } from "@/lib/og-logo";
 import { publicShare } from "@/lib/results";
+import { closestModels } from "@/lib/share-links";
 
 export const alt = "areyoubetterthan.ai results";
 export const size = { width: 1200, height: 630 };
@@ -11,13 +13,14 @@ export default async function Image({ params }: { params: Promise<{ shareId: str
   await connection();
   const share = await publicShare(shareId);
   const s = share?.summary;
-  const top = s ? s.models.slice(0, 4) : [];
+  const top = s ? closestModels(s.models, s.human.p, 4) : [];
+  const logo = await ogLogoDataUri();
   return new ImageResponse(
     (
       <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", background: "#09090b", color: "#ececf1", padding: 64, fontFamily: "sans-serif" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 28, color: "#9a9aa8" }}>
-          <div style={{ display: "flex", width: 40, height: 40, borderRadius: 8, background: "#fbbf24", color: "#000", alignItems: "center", justifyContent: "center", fontWeight: 800 }}>?</div>
-          areyoubetterthan<span style={{ color: "#818cf8" }}>.ai</span>
+          <div style={{ display: "flex", width: 40, height: 40, borderRadius: 8, background: "#fbbf24", alignItems: "center", justifyContent: "center" }}><img src={logo} alt="" width={32} height={32} /></div>
+          areyoubetterthan.ai
         </div>
         {s && share ? (
           <div style={{ display: "flex", flex: 1, marginTop: 40, gap: 56 }}>

@@ -15,3 +15,14 @@ export function shareTargets({ url, message }: { url: string; message: string })
     { id: "email", label: "Email", href: `mailto:?${q({ subject: message, body: text })}` },
   ];
 }
+
+/** The n models whose rate is closest to the human's, strongest first, so the share image compares like with like. */
+export function closestModels<T extends { rate: { p: number | null } }>(models: T[], humanP: number | null, n: number): T[] {
+  if (humanP === null) return models.slice(0, n);
+  return models
+    .map((m) => ({ m, distance: Math.abs((m.rate.p ?? 0) - humanP) }))
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, n)
+    .sort((a, b) => (b.m.rate.p ?? 0) - (a.m.rate.p ?? 0))
+    .map((x) => x.m);
+}

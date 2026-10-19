@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { shareTargets } from "@/lib/share-links";
+import { closestModels, shareTargets } from "@/lib/share-links";
 
 const url = "https://areyoubetterthan.ai/r/abc123";
 const message = "Are you better than AI?";
@@ -34,5 +34,17 @@ describe("shareTargets", () => {
 
   it("does not include Instagram, which has no web share URL", () => {
     expect(shareTargets({ url, message }).some((t) => t.label.toLowerCase().includes("instagram"))).toBe(false);
+  });
+});
+
+describe("closestModels", () => {
+  const models = [90, 60, 52, 10, 0].map((p, i) => ({ id: i, rate: { p } }));
+
+  it("picks the models nearest the human rate, strongest first", () => {
+    expect(closestModels(models, 50, 2).map((m) => m.rate.p)).toEqual([60, 52]);
+  });
+
+  it("falls back to the top models when the human has no rate", () => {
+    expect(closestModels(models, null, 2).map((m) => m.rate.p)).toEqual([90, 60]);
   });
 });
