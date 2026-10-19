@@ -579,6 +579,15 @@ export function ResultsClient() {
                     <th className="hidden px-3 py-2 font-normal lg:table-cell">Bug tests</th>
                     <th className="hidden px-3 py-2 font-normal lg:table-cell">Right file</th>
                     <th className="hidden px-3 py-2 font-normal lg:table-cell">Time</th>
+                    <th
+                      className="hidden px-3 py-2 font-normal lg:table-cell"
+                      title="Average band time per task of the vals.ai models that solved it"
+                    >
+                      Avg model time
+                    </th>
+                    <th className="hidden px-3 py-2 font-normal lg:table-cell" title="Fastest vals.ai model that solved it">
+                      Fastest model
+                    </th>
                     <th className="hidden px-5 py-2 font-normal lg:table-cell">Models that solved it</th>
                   </tr>
                 </thead>
@@ -606,6 +615,11 @@ export function ResultsClient() {
                               </span>
                             )}
                             <span className="font-mono">{formatDuration(t.elapsed_ms)}</span>
+                            {t.solver_timed > 0 && (
+                              <span className="font-mono">
+                                model avg {formatDuration(t.solver_avg_ms)} · fastest {formatDuration(t.solver_fastest_ms)}
+                              </span>
+                            )}
                           </div>
                           <div className="flex items-center gap-3 text-[11px]">
                             <RateBar p={t.models_total ? t.models_solved / t.models_total : 0} ci={null} tone="ai" className="flex-1" />
@@ -634,6 +648,12 @@ export function ResultsClient() {
                         )}
                       </td>
                       <td className="hidden px-3 py-3 font-mono text-xs text-muted lg:table-cell">{formatDuration(t.elapsed_ms)}</td>
+                      <td className="hidden px-3 py-3 font-mono text-xs text-muted lg:table-cell">
+                        {t.solver_timed > 0 ? formatDuration(t.solver_avg_ms) : "–"}
+                      </td>
+                      <td className="hidden px-3 py-3 font-mono text-xs text-muted lg:table-cell">
+                        {t.solver_timed > 0 ? formatDuration(t.solver_fastest_ms) : "–"}
+                      </td>
                       <td className="hidden px-5 py-3 lg:table-cell">
                         <div className="flex items-center gap-3">
                           <RateBar p={t.models_total ? t.models_solved / t.models_total : 0} ci={null} tone="ai" className="w-32" />

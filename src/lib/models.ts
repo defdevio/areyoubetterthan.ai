@@ -196,6 +196,21 @@ export function solversOf(instanceId: string, mode: ComparisonMode) {
   return { solved: solved.length, total: entries.length, names: solved.map((e) => e.model) };
 }
 
+/**
+ * vals.ai models that solved a task, by their band-average time per task (seconds).
+ * vals.ai doesn't publish per-task times, so this is not how long a model took on this task.
+ */
+export function solverTimes(instanceId: string) {
+  const set = index().get(instanceId) ?? new Set<string>();
+  const times = valsEntries.flatMap((e) => (set.has(e.id) && e.latency_s !== null ? [e.latency_s] : []));
+  if (!times.length) return { avg_s: null, fastest_s: null, timed: 0 };
+  return {
+    avg_s: times.reduce((a, b) => a + b, 0) / times.length,
+    fastest_s: Math.min(...times),
+    timed: times.length,
+  };
+}
+
 export function modelsSource() {
   return { ...file.source, entries: file.entries.length, default_entries: comparisonEntries("default").length };
 }

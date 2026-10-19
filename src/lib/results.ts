@@ -7,7 +7,7 @@ import { getBackend } from "@/lib/github";
 import { getLeaderboard, leaderboard, standingOf, type Leaderboard } from "@/lib/leaderboard";
 import { metricsOf } from "@/lib/attempt-metrics";
 import { summarize, type AttemptMetrics, type Category } from "@/lib/metrics";
-import { modelRatesOn, solversOf, type ComparisonMode } from "@/lib/models";
+import { modelRatesOn, solversOf, solverTimes, type ComparisonMode } from "@/lib/models";
 import { queuePositions, reconcile, runUrl } from "@/lib/scoring/service";
 import { rate, type Rate } from "@/lib/stats";
 import { debrief, getTask, repoShort, taskIds } from "@/lib/tasks";
@@ -120,6 +120,10 @@ export interface TaskRow {
   elapsed_ms: number | null;
   models_solved: number;
   models_total: number;
+  /** vals.ai solvers' average and fastest band time per task (ms); null when none reported. */
+  solver_avg_ms: number | null;
+  solver_fastest_ms: number | null;
+  solver_timed: number;
   category: Category | null;
   f2p_passed: number | null;
   f2p_total: number | null;
@@ -164,6 +168,7 @@ export async function userSummary(userId: string, mode: ComparisonMode, opts: { 
     .map((a) => {
       const t = getTask(a.instanceId)!;
       const s = solversOf(a.instanceId, mode);
+      const st = solverTimes(a.instanceId);
       const m = metricsById.get(a.id) ?? null;
       return {
         instance_id: a.instanceId,
@@ -173,6 +178,9 @@ export async function userSummary(userId: string, mode: ComparisonMode, opts: { 
         elapsed_ms: a.elapsedMs,
         models_solved: s.solved,
         models_total: s.total,
+        solver_avg_ms: st.avg_s === null ? null : st.avg_s * 1000,
+        solver_fastest_ms: st.fastest_s === null ? null : st.fastest_s * 1000,
+        solver_timed: st.timed,
         category: m?.category ?? null,
         f2p_passed: m?.f2p_passed ?? null,
         f2p_total: m?.f2p_total ?? null,
