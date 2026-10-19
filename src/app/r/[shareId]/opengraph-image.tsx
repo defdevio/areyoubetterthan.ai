@@ -20,7 +20,8 @@ export default async function Image({ params }: { params: Promise<{ shareId: str
       <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", background: "#09090b", color: "#ececf1", padding: 64, fontFamily: "sans-serif" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 28, color: "#9a9aa8" }}>
           <div style={{ display: "flex", width: 40, height: 40, borderRadius: 8, background: "#fbbf24", alignItems: "center", justifyContent: "center" }}><img src={logo} alt="" width={32} height={32} /></div>
-          areyoubetterthan.ai
+          {/* Satori adds a gap at the span boundary, so pull .ai back */}
+          <div style={{ display: "flex" }}>areyoubetterthan<span style={{ color: "#818cf8", marginLeft: -6 }}>.ai</span></div>
         </div>
         {s && share ? (
           <div style={{ display: "flex", flex: 1, marginTop: 40, gap: 56 }}>

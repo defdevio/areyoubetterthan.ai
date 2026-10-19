@@ -12,7 +12,8 @@ export default async function Image() {
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", width: "100%", height: "100%", background: "#09090b", color: "#ececf1", padding: 72, fontFamily: "sans-serif" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 30, color: "#9a9aa8" }}>
           <div style={{ display: "flex", width: 44, height: 44, borderRadius: 8, background: "#fbbf24", alignItems: "center", justifyContent: "center" }}><img src={logo} alt="" width={36} height={36} /></div>
-          areyoubetterthan.ai
+          {/* Satori adds a gap at the span boundary, so pull .ai back */}
+          <div style={{ display: "flex" }}>areyoubetterthan<span style={{ color: "#818cf8", marginLeft: -6 }}>.ai</span></div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 110, fontWeight: 800, lineHeight: 1.05 }}>Are you better</div>
