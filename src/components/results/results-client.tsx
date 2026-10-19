@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { CountryFlag } from "@/components/country-flag";
 import { useResults, useSession } from "@/components/providers";
 import { Button, Card, cx, LinkButton, PhaseBadge, Pill, RateBar, Spinner } from "@/components/ui";
 import { COUNTRIES } from "@/lib/countries";
 import { api } from "@/lib/client/api";
+import { shareTargets } from "@/lib/share-links";
+import { ShareIcon } from "@/components/results/share-icons";
 import { fraction, MetricTiles, OutcomeBar, SolveCurve, SpeedTable } from "@/components/metrics";
 import { formatDuration, isPending, shortId } from "@/lib/format";
 import { CATEGORY_LABEL, speedMarkers } from "@/lib/metrics";
@@ -14,6 +16,8 @@ import type { UserSummary } from "@/lib/results";
 import { pct } from "@/lib/stats";
 
 type Mode = "default" | "all" | "vals";
+
+const SHARE_MESSAGE = "I took the SWE-bench test against AI models. Are you better than AI?";
 
 
 export function ComparisonChart({
@@ -239,13 +243,26 @@ function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
   );
 }
 
+const noopSubscribe = () => () => {};
+
 function SharePanel() {
   const { me, reload } = useSession();
   const [name, setName] = useState(me?.share?.display_name ?? me?.user?.login ?? "");
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
+  const origin = useSyncExternalStore(
+    noopSubscribe,
+    () => window.location.origin,
+    () => "",
+  );
+  const canNativeShare = useSyncExternalStore(
+    noopSubscribe,
+    () => typeof navigator.share === "function",
+    () => false,
+  );
   const share = me?.share;
   const path = share ? `/r/${share.id}` : null;
+  const url = path ? `${origin}${path}` : "";
 
   const save = async (isPublic: boolean) => {
     setSaving(true);
@@ -281,7 +298,7 @@ function SharePanel() {
           maxLength={40}
           placeholder="Display name"
           data-testid="share-name"
-          className="h-9 min-w-0 flex-1 rounded-lg border border-line bg-bg px-3 text-sm focus:border-human/50 focus:outline-none"
+          className="h-10 min-w-0 flex-1 rounded-lg border border-line bg-bg px-3 text-sm focus:border-human/50 focus:outline-none"
         />
         <Button variant="primary" disabled={saving || !name.trim()} onClick={() => void save(true)} data-testid="share-save">
           {share?.public ? "Update" : "Create link"}
@@ -305,6 +322,42 @@ function SharePanel() {
           <Button size="sm" variant="ghost" onClick={() => void remove()} disabled={saving}>
             Delete link
           </Button>
+        </div>
+      )}
+      {share?.public && path && (
+        <div className="mt-4 border-t border-line pt-4">
+          <div className="text-xs text-faint">Share on</div>
+          <div className="mt-2 flex flex-wrap gap-2" data-testid="share-targets">
+            {shareTargets({ url, message: SHARE_MESSAGE }).map((t) => (
+              <LinkButton
+                key={t.id}
+                href={t.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                size="md"
+                className="w-10 !px-0"
+                aria-label={t.label}
+                title={t.label}
+              >
+                <ShareIcon id={t.id} />
+              </LinkButton>
+            ))}
+            {canNativeShare && (
+              <Button
+                size="md"
+                className="w-10 !px-0"
+                aria-label="Instagram / more"
+                title="Instagram / more"
+                onClick={() =>
+                  void navigator
+                    .share({ title: SHARE_MESSAGE, text: SHARE_MESSAGE, url })
+                    .catch(() => undefined)
+                }
+              >
+                <ShareIcon id="instagram" />
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </Card>
@@ -597,7 +650,7 @@ export function ResultsClient() {
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <SharePanel />
-            <Card className="flex flex-col justify-between gap-4 p-5">
+            <Card className="flex flex-col gap-4 self-start p-5">
               <div>
                 <div className="text-sm font-medium">Keep going</div>
                 <p className="mt-1 text-xs leading-relaxed text-muted">
