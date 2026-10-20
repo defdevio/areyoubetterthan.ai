@@ -80,7 +80,7 @@ function ResultsTray() {
         aria-label="Scoring results"
         data-testid="tray-button"
         className={cx(
-          "inline-flex h-8 items-center gap-2 rounded-full border px-2.5 text-xs font-medium transition-colors sm:px-3",
+          "inline-flex h-8 cursor-pointer items-center gap-2 rounded-full border px-2.5 text-xs font-medium transition-colors sm:px-3",
           pending > 0 ? "border-ai/40 bg-ai/10 text-ai" : "border-line-strong text-muted hover:text-fg",
         )}
       >

@@ -123,7 +123,6 @@ function PerTask({ s }: { s: HumanStats }) {
     <Card className="overflow-hidden">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-4 py-3 sm:px-5">
         <div className="text-sm font-medium">Task by task</div>
-        <div className="text-[11px] text-faint">bars: share of humans / models that solved it</div>
       </div>
       <div className="max-h-[560px] overflow-y-auto">
         <table className="w-full text-sm" data-testid="per-task">
