@@ -117,10 +117,7 @@ function buildPersonas(): Persona[] {
       githubId: 900_000_000 + i,
       handle: spec.handle,
       leaderboardName: spec.handle === "name" ? spec.name : null,
-      avatarUrl:
-        spec.handle === "name" || (spec.handle === "github" && i % 5 === 4)
-          ? null
-          : `https://github.com/identicons/${spec.login}.png`,
+      avatarUrl: null,
       country,
       skill: 0.12 + (((i * 37) % 100) / 100) * 0.75,
     };
