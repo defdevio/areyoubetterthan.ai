@@ -328,6 +328,7 @@ export async function humanStats() {
         return {
           instance_id: id,
           repo: repoShort(t.repo),
+          fail_to_pass: t.fail_to_pass.length,
           title: t.title,
           humans: rate(h.k, h.n),
           models_solved: swe.solved,

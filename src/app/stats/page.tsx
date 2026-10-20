@@ -123,13 +123,18 @@ function PerTask({ s }: { s: HumanStats }) {
     <Card className="overflow-hidden">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-4 py-3 sm:px-5">
         <div className="text-sm font-medium">Task by task</div>
-        <div className="text-[11px] text-faint">bars: share of humans / models that solved it</div>
       </div>
       <div className="max-h-[560px] overflow-y-auto">
         <table className="w-full text-sm" data-testid="per-task">
           <thead className="sticky top-0 z-10 bg-panel text-left text-[11px] text-faint">
             <tr className="border-b border-line">
               <th className="px-4 py-2 font-normal sm:px-5">Task</th>
+              <th className="hidden px-3 py-2 font-normal lg:table-cell">
+                Repo
+              </th>
+              <th className="hidden px-3 py-2 font-normal lg:table-cell">
+                Target tests
+              </th>
               <th className="hidden px-3 py-2 font-normal lg:table-cell">Humans</th>
               <th className="hidden px-3 py-2 font-normal lg:table-cell">vals.ai models</th>
               <th className="hidden px-5 py-2 font-normal lg:table-cell">Leaderboard models</th>
@@ -142,11 +147,12 @@ function PerTask({ s }: { s: HumanStats }) {
               return (
                 <tr key={t.instance_id} className={cx(humanEdge && "bg-human/[0.04]")}>
                   <td className="px-4 py-2.5 sm:px-5 lg:max-w-md">
-                    <div className="line-clamp-2 lg:truncate" title={t.title}>
-                      {t.title}
-                    </div>
                     <div className="font-mono text-[11px] break-all text-faint">{t.instance_id}</div>
-                    {/* Phones: the three comparison columns, stacked under the title. */}
+                    <div className="mt-0.5 text-[11px] text-faint lg:hidden">
+                      {t.repo} · {t.fail_to_pass} target{" "}
+                      {t.fail_to_pass === 1 ? "test" : "tests"}
+                    </div>
+                    {/* Phones: the three comparison columns, stacked under the task ID. */}
                     <div className="mt-2 grid grid-cols-[5.5rem_1fr_3.5rem] items-center gap-x-2 gap-y-1.5 text-[11px] lg:hidden">
                       <span className="text-faint">Humans</span>
                       <RateBar p={t.humans.p} ci={null} tone="human" />
@@ -164,6 +170,12 @@ function PerTask({ s }: { s: HumanStats }) {
                         {t.models_solved}/{t.models_total}
                       </span>
                     </div>
+                  </td>
+                  <td className="hidden px-3 py-2.5 text-xs text-muted lg:table-cell">
+                    {t.repo}
+                  </td>
+                  <td className="hidden px-3 py-2.5 font-mono text-xs text-muted lg:table-cell">
+                    {t.fail_to_pass}
                   </td>
                   <td className="hidden w-44 px-3 py-2.5 lg:table-cell">
                     <div className="flex items-center gap-2">

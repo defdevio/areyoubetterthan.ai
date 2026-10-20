@@ -142,6 +142,13 @@ function LeaderboardCard({ standing }: { standing: UserSummary["standing"] }) {
     }
   };
 
+  // The card mounts after the summary loads, after the browser has already tried to jump to the hash.
+  useEffect(() => {
+    if (window.location.hash === "#leaderboard-settings") {
+      document.getElementById("leaderboard-settings")?.scrollIntoView({ block: "start" });
+    }
+  }, []);
+
   const s = standing;
   return (
     <Card className="scroll-mt-20 p-4 sm:p-6" id="leaderboard-settings" data-testid="leaderboard-card">
