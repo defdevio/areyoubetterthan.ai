@@ -24,6 +24,6 @@ async function markDataUri(mark: Mark) {
 
 /** The vendor mark for an org as a data URI for Satori. Unknown or missing orgs get the generic placeholder. */
 export function ogModelLogo(org: string | null | undefined) {
-  const key = org?.trim().toLowerCase();
+  const key = typeof org === "string" ? org.trim().toLowerCase() : undefined;
   return markDataUri(key ? (MARKS[key] ?? GENERIC) : GENERIC);
 }
