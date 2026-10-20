@@ -142,11 +142,8 @@ function PerTask({ s }: { s: HumanStats }) {
               return (
                 <tr key={t.instance_id} className={cx(humanEdge && "bg-human/[0.04]")}>
                   <td className="px-4 py-2.5 sm:px-5 lg:max-w-md">
-                    <div className="line-clamp-2 lg:truncate" title={t.title}>
-                      {t.title}
-                    </div>
                     <div className="font-mono text-[11px] break-all text-faint">{t.instance_id}</div>
-                    {/* Phones: the three comparison columns, stacked under the title. */}
+                    {/* Phones: the three comparison columns, stacked under the task ID. */}
                     <div className="mt-2 grid grid-cols-[5.5rem_1fr_3.5rem] items-center gap-x-2 gap-y-1.5 text-[11px] lg:hidden">
                       <span className="text-faint">Humans</span>
                       <RateBar p={t.humans.p} ci={null} tone="human" />
