@@ -133,7 +133,10 @@ async function HumansSoFar() {
   return (
     <div className="space-y-2">
       <div className="flex items-baseline justify-between text-sm">
-        <span className="font-medium text-human">Humans so far</span>
+        <span className="flex items-center font-medium text-human">
+          <ModelLogo org={null} human className="mr-1.5 size-4" />
+          Humans so far
+        </span>
         <span className="font-mono text-human">{pct(stats.pooled.p)}</span>
       </div>
       <RateBar p={stats.pooled.p} ci={stats.pooled.ci} tone="human" />
