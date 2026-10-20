@@ -73,6 +73,10 @@ const valsEntries: Comparable[] = vals.entries.map((e) => ({
 
 const leaderboardEntries: Comparable[] = file.entries.map((e) => ({
   ...e,
+  // Some upstream submissions list their org as an array; use the first name.
+  model_org: Array.isArray(e.model_org)
+    ? (e.model_org[0] ?? null)
+    : e.model_org,
   source: "swe-bench",
   latency_s: null,
   published_pct: e.verified_resolved_pct,
