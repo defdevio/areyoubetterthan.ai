@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { connection } from "next/server";
 import { ogLogoDataUri } from "@/lib/og-logo";
+import { ogModelLogo } from "@/lib/og-model-logo";
 import { publicShare } from "@/lib/results";
 import { closestModels } from "@/lib/share-links";
 
@@ -14,6 +15,7 @@ export default async function Image({ params }: { params: Promise<{ shareId: str
   const share = await publicShare(shareId);
   const s = share?.summary;
   const top = s ? closestModels(s.models, s.human.p, 4) : [];
+  const topLogos = await Promise.all(top.map((m) => ogModelLogo(m.org)));
   const logo = await ogLogoDataUri();
   return new ImageResponse(
     (
@@ -38,10 +40,13 @@ export default async function Image({ params }: { params: Promise<{ shareId: str
               </div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", width: 420, justifyContent: "center", gap: 22 }}>
-              {top.map((m) => (
+              {top.map((m, i) => (
                 <div key={m.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24 }}>
-                    <span>{m.model}</span>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 24 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <img src={topLogos[i]} alt="" width={28} height={28} />
+                      <span>{m.model}</span>
+                    </div>
                     <span style={{ color: "#818cf8" }}>{`${Math.round((m.rate.p ?? 0) * 100)}%`}</span>
                   </div>
                   <div style={{ display: "flex", height: 12, background: "#ffffff12", borderRadius: 6 }}>

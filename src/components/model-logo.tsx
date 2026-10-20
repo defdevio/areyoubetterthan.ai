@@ -12,14 +12,14 @@ import {
   siQwen,
 } from "simple-icons";
 
-type VectorMark = { path: string; hex: string; viewBox?: string };
-type ImageMark = { src: string };
-type ShapeMark = {
+export type VectorMark = { path: string; hex: string; viewBox?: string };
+export type ImageMark = { src: string };
+export type ShapeMark = {
   viewBox: string;
   shapes: { d: string; fill: string }[];
   evenodd?: boolean;
 };
-type Mark = VectorMark | ImageMark | ShapeMark;
+export type Mark = VectorMark | ImageMark | ShapeMark;
 
 // OpenAI has no simple-icons mark. This is the official Blossom from OpenAI's brand assets.
 const OPENAI: VectorMark = {
@@ -78,7 +78,7 @@ const MICROSOFT: ShapeMark = {
 };
 
 // Used for orgs without a vendor mark. It is a plain ring with a dot, drawn here and not taken from any company.
-const GENERIC: ShapeMark = {
+export const GENERIC: ShapeMark = {
   viewBox: "0 0 24 24",
   shapes: [
     {
@@ -98,7 +98,7 @@ const HUMAN: ShapeMark = {
 };
 
 // Keys are lowercased, trimmed org names. The data isn't normalized, so several spellings map to one mark.
-const MARKS: Record<string, Mark> = {
+export const MARKS: Record<string, Mark> = {
   openai: OPENAI,
   microsoft: MICROSOFT,
   aws: AWS,
@@ -132,9 +132,9 @@ function luminance(hex: string) {
 }
 
 /** Black and white marks would vanish against one of the two backgrounds, so they take the text color. */
-function fillFor({ hex }: VectorMark) {
+export function fillFor({ hex }: VectorMark, mono = "currentColor") {
   const lum = luminance(hex);
-  return lum < 60 || lum > 200 ? "currentColor" : `#${hex}`;
+  return lum < 60 || lum > 200 ? mono : `#${hex}`;
 }
 
 /** The vendor's mark in a fixed square. Empty for humans (no org); orgs without a mark get the generic placeholder. */
